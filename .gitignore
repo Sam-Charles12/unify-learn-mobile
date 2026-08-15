@@ -34,6 +34,10 @@ yarn-error.*
 .env
 .env*.local
 
+# PRD / docs (local only)
+unify\ prd2.md
+unify\ prd2.pdf
+
 # typescript
 *.tsbuildinfo
 
