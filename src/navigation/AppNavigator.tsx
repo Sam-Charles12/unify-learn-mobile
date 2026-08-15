@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import SignUP from '@/screens/auth/SignUp';
 import Login from '@/screens/auth/Login';
 import Dashboard from '@/screens/main/Dashboard';
+import Onboarding from '@/screens/onboarding/Onboarding';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/config/firebaseConfig';
+import { View, ActivityIndicator } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,22 +19,52 @@ const AuthStack = () => (
   </Stack.Navigator>
 );
 
-const MainStack = () => (
+const OnboardingStack = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Dashboard" component={Dashboard} />
+    <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
-const RootNavigator = () => {
+const MainStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
+  </Stack.Navigator>
+);
+
+const SessionGate = () => {
   const { user } = useAuth();
-  return user ? <MainStack /> : <AuthStack />;
+  const [onboarded, setOnboarded] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!user) {
+      setOnboarded(null);
+      return;
+    }
+
+    const unsub = onSnapshot(doc(db, 'users', user.uid), (snap) => {
+      const data = snap.data();
+      setOnboarded(data?.onboarded === true);
+    });
+
+    return () => unsub();
+  }, [user]);
+
+  if (!user) return <AuthStack />;
+  if (onboarded === null) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center">
+        <ActivityIndicator size="large" color="#00A86B" />
+      </View>
+    );
+  }
+  return onboarded ? <MainStack /> : <OnboardingStack />;
 };
 
 export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <RootNavigator />
+        <SessionGate />
       </NavigationContainer>
     </AuthProvider>
   );

@@ -115,7 +115,7 @@ const Onboarding: React.FC = () => {
 
   const renderSlide = ({ item }: { item: Slide }) => (
     <View style={{ width }} className="flex-1 px-8 justify-center items-center">
-      <View className="w-28 h-28 rounded-pill bg-cream items-center justify-center mb-10">
+      <View className="w-28 h-28 rounded-pill bg-primary-light items-center justify-center mb-10">
         <FontAwesome5 name={item.icon} size={44} color={item.iconColor} />
       </View>
       <Text className="font-headline text-[26px] leading-9 text-text-primary text-center mb-3">
@@ -129,7 +129,7 @@ const Onboarding: React.FC = () => {
 
   const renderProfileStep = () => (
     <View style={{ width }} className="flex-1 px-7 pt-8">
-      <View className="w-16 h-16 rounded-pill bg-cream items-center justify-center mb-6">
+      <View className="w-16 h-16 rounded-pill bg-primary-light items-center justify-center mb-6">
         <FontAwesome5 name="user-plus" size={24} color="#00A86B" />
       </View>
       <Text className="font-headline text-[24px] leading-8 text-text-primary mb-2">
