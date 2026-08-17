@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, Alert, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/AuthLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
+import { AuthStackParamList } from '@/navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
 const Login: React.FC = () => {
-  const { signIn, resetPassword } = useAuth();
+  const { signIn } = useAuth();
+  const navigation = useNavigation<NavigationProp>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,19 +34,6 @@ const Login: React.FC = () => {
       Alert.alert('Login Failed', error.message);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleForgotPassword = async () => {
-    if (!email) {
-      Alert.alert('Error', 'Please enter your email address');
-      return;
-    }
-    try {
-      await resetPassword(email);
-      Alert.alert('Success', 'Password reset email sent. Check your inbox.');
-    } catch (error: any) {
-      Alert.alert('Error', error.message);
     }
   };
 
@@ -106,7 +99,7 @@ const Login: React.FC = () => {
           </Text>
         </Pressable>
 
-        <Pressable onPress={handleForgotPassword}>
+        <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
           <Text className="font-body-bold text-[14px] text-text-primary">
             Forgot Password?
           </Text>

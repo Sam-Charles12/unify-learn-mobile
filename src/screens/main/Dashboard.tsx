@@ -212,6 +212,42 @@ const Dashboard: React.FC = () => {
           </Text>
         </View>
 
+        <View className="flex-row gap-3 mx-5 mt-5">
+          <Pressable
+            onPress={() => navigation.navigate('GradePlanner')}
+            className="flex-1 bg-card rounded-[20px] border border-border p-4 shadow-soft items-center"
+          >
+            <View className="w-11 h-11 rounded-[16px] bg-accent-light items-center justify-center mb-2">
+              <FontAwesome5 name="chart-line" size={16} color="#005B96" />
+            </View>
+            <Text className="font-body-semibold text-[13px] text-text-primary text-center">
+              Grade Planner
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate('Notifications')}
+            className="flex-1 bg-card rounded-[20px] border border-border p-4 shadow-soft items-center"
+          >
+            <View className="w-11 h-11 rounded-[16px] bg-[#E5D45A]/50 items-center justify-center mb-2">
+              <FontAwesome5 name="bell" size={16} color="#8B9658" />
+            </View>
+            <Text className="font-body-semibold text-[13px] text-text-primary text-center">
+              Notifications
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate('Profile')}
+            className="flex-1 bg-card rounded-[20px] border border-border p-4 shadow-soft items-center"
+          >
+            <View className="w-11 h-11 rounded-[16px] bg-primary-light items-center justify-center mb-2">
+              <FontAwesome5 name="user" size={16} color="#00895A" />
+            </View>
+            <Text className="font-body-semibold text-[13px] text-text-primary text-center">
+              Profile
+            </Text>
+          </Pressable>
+        </View>
+
         <View className="px-6 mt-7">
           <Text className="font-headline text-[18px] text-text-primary mb-1">Continue learning</Text>
           <Text className="font-body text-[13px] text-muted mb-4">
