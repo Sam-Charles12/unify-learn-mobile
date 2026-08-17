@@ -7,6 +7,7 @@ import Login from '@/screens/auth/Login';
 import Dashboard from '@/screens/main/Dashboard';
 import CourseList from '@/screens/main/CourseList';
 import CoursePage from '@/screens/main/CoursePage';
+import WeekPage from '@/screens/main/WeekPage';
 import Onboarding from '@/screens/onboarding/Onboarding';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
@@ -32,6 +33,7 @@ const MainStack = () => (
     <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
     <Stack.Screen name="CourseList" component={CourseList} options={{ headerShown: false }} />
     <Stack.Screen name="Course" component={CoursePage} options={{ headerShown: false }} />
+    <Stack.Screen name="Week" component={WeekPage} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
