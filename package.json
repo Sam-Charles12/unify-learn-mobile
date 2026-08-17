@@ -46,7 +46,9 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "adm-zip": "^0.6.0",
     "babel-preset-expo": "^54.0.12",
+    "firebase-admin": "^14.2.0",
     "typescript": "~5.9.2"
   },
   "private": true

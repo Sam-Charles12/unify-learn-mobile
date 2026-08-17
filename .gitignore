@@ -41,6 +41,9 @@ unify\ prd2.pdf
 # Firebase service account key (secrets)
 scripts/firebase-admin-key.json
 
+# Uploaded course materials (local only)
+contents/
+
 # typescript
 *.tsbuildinfo
 
