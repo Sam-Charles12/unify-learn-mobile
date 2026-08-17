@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Users: owner-only access
+    match /users/{uid} {
+      allow read, write: if isOwner(uid) || isAdmin();
+    }
+
+    // Progress: owner-only (write on quiz pass)
+    match /users/{uid}/progress/{courseId} {
+      allow read, write: if isOwner(uid) || isAdmin();
+    }
+
+    // Lecturers: any authenticated user reads, admin writes
+    match /lecturers/{lecturerId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // Courses + weeks: any authenticated user reads, admin writes
+    match /courses/{courseId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+
+      match /weeks/{weekId} {
+        allow read: if signedIn();
+        allow write: if isAdmin();
+      }
+    }
+
+    // Timetable: authenticated read, admin + assigned lecturer write
+    match /timetable/{entryId} {
+      allow read: if signedIn();
+      allow write: if isAdmin() || (signedIn() && resource.data.lecturerId == request.auth.uid);
+    }
+
+    // Announcements: authenticated read, admin + assigned lecturer/tutor (course-scoped)
+    match /announcements/{announcementId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // Course registrations: owner or admin read, admin or self-register create
+    match /courseRegistrations/{regId} {
+      allow read: if isOwner(resource.data.userUID) || isAdmin();
+      allow create: if isAdmin() || (signedIn() && request.resource.data.userUID == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+  }
+}

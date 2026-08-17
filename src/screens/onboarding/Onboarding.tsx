@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { useAuth } from '@/context/AuthContext';
 import { DEPARTMENTS, LEVELS } from '@/types';
@@ -88,14 +88,26 @@ const Onboarding: React.FC = () => {
 
     setSaving(true);
     try {
-      await updateDoc(doc(db, 'users', user.uid), {
-        matric: matric.trim(),
-        department,
-        level,
-        onboarded: true,
-      });
+      await Promise.race([
+        setDoc(
+          doc(db, 'users', user.uid),
+          {
+            matric: matric.trim(),
+            department,
+            level,
+            onboarded: true,
+          },
+          { merge: true }
+        ),
+        new Promise((_, reject) =>
+          setTimeout(
+            () => reject(new Error('Timed out. Check your internet connection and try again.')),
+            15000
+          )
+        ),
+      ]);
     } catch (error: any) {
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', error.message || 'Something went wrong');
     } finally {
       setSaving(false);
     }
@@ -105,9 +117,17 @@ const Onboarding: React.FC = () => {
     if (!user) return;
     setSaving(true);
     try {
-      await updateDoc(doc(db, 'users', user.uid), { onboarded: true });
+      await Promise.race([
+        setDoc(doc(db, 'users', user.uid), { onboarded: true }, { merge: true }),
+        new Promise((_, reject) =>
+          setTimeout(
+            () => reject(new Error('Timed out. Check your internet connection and try again.')),
+            15000
+          )
+        ),
+      ]);
     } catch (error: any) {
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', error.message || 'Something went wrong');
     } finally {
       setSaving(false);
     }
