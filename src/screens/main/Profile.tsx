@@ -55,11 +55,11 @@ const Profile: React.FC = () => {
     .join('');
 
   const fields = [
-    { icon: 'id-card', label: 'Matric number', value: profile?.matric || '—' },
-    { icon: 'envelope', label: 'Email', value: user?.email || '—' },
-    { icon: 'sitemap', label: 'Department', value: profile?.department?.toUpperCase() || '—' },
-    { icon: 'layer-group', label: 'Level', value: profile?.level ? `L${profile.level}` : '—' },
-    { icon: 'calendar-alt', label: 'Joined', value: profile?.createdAt ? new Date(profile.createdAt as any).toLocaleDateString() : '—' },
+    { label: 'Matriculation Number', value: profile?.matric || 'Not recorded' },
+    { label: 'University Email', value: user?.email || '—' },
+    { label: 'Department', value: profile?.department?.toUpperCase() || '—' },
+    { label: 'Current Level', value: profile?.level ? `Level ${profile.level}` : '—' },
+    { label: 'Faculty', value: 'Faculty of Engineering (LASU)' },
   ];
 
   const handleLogout = async () => {
@@ -75,89 +75,105 @@ const Profile: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-        <View className="bg-primary rounded-b-[28px] px-6 pt-4 pb-12 shadow-soft">
-          <View className="flex-row items-center justify-between mb-4">
-            <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-              <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
+      <ScrollView contentContainerStyle={{ paddingBottom: 60 }} showsVerticalScrollIndicator={false}>
+        
+        {/* Header */}
+        <View className="px-6 pt-4 pb-4">
+          <View className="flex-row items-center justify-between mb-6">
+            <Pressable
+              onPress={() => navigation.goBack()}
+              className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
+            >
+              <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
             </Pressable>
-            <Text className="font-body-bold text-white text-[15px]">Profile</Text>
-            <View className="w-9" />
+            <Text className="font-body-bold text-text-primary text-[15px]">Student Profile</Text>
+            <View className="w-10" />
           </View>
 
-          <View className="items-center">
-            <View className="w-20 h-20 rounded-pill bg-white/15 items-center justify-center mb-3">
-              <Text className="font-headline text-[28px] text-white">
+          {/* Profile Identity Card */}
+          <View className="flex-row items-center">
+            <View className="w-16 h-16 rounded-full bg-ink items-center justify-center mr-4 shadow-soft">
+              <Text className="font-headline text-[22px] text-white">
                 {loading ? '…' : initials}
               </Text>
             </View>
-            <Text className="font-headline text-[22px] text-white">
-              {profile?.name || 'Student'}
-            </Text>
-            <Text className="font-body text-[13px] text-white/75 mt-1">
-              {profile?.role ? `${profile.role[0].toUpperCase()}${profile.role.slice(1)}` : 'Student'}
-            </Text>
-          </View>
-        </View>
-
-        <View className="-mt-8 mx-5 bg-card rounded-[24px] border border-border p-5 shadow-soft">
-          <Text className="font-headline text-[16px] text-text-primary mb-4">Progress summary</Text>
-          <View className="flex-row justify-around">
-            <View className="items-center">
-              <View className="w-11 h-11 rounded-[16px] bg-primary-light items-center justify-center mb-1.5">
-                <FontAwesome5 name="book-open" size={14} color="#00895A" />
+            <View className="flex-1">
+              <Text className="font-headline text-[22px] text-text-primary leading-7 tracking-tight">
+                {profile?.name || 'LASU Student'}
+              </Text>
+              <View className="flex-row items-center mt-1">
+                <View className="bg-primary-light px-2.5 py-0.5 rounded-full border border-primary-border">
+                  <Text className="font-body-bold text-[11px] text-primary-dark uppercase">
+                    {profile?.role || 'Student'}
+                  </Text>
+                </View>
+                <Text className="font-body text-[12px] text-muted ml-2">
+                  {profile?.department?.toUpperCase() || ''}
+                </Text>
               </View>
-              <Text className="font-headline text-[17px] text-text-primary">{courseCount ?? 0}</Text>
-              <Text className="font-body-medium text-[11px] text-muted">Courses</Text>
-            </View>
-            <View className="items-center">
-              <View className="w-11 h-11 rounded-[16px] bg-accent-light items-center justify-center mb-1.5">
-                <FontAwesome5 name="check-circle" size={14} color="#005B96" />
-              </View>
-              <Text className="font-headline text-[17px] text-text-primary">{weeksDone ?? 0}</Text>
-              <Text className="font-body-medium text-[11px] text-muted">Weeks done</Text>
-            </View>
-            <View className="items-center">
-              <View className="w-11 h-11 rounded-[16px] bg-[#E5D45A]/50 items-center justify-center mb-1.5">
-                <FontAwesome5 name="award" size={14} color="#8B9658" />
-              </View>
-              <Text className="font-headline text-[17px] text-text-primary">{(weeksDone ?? 0) * 10}</Text>
-              <Text className="font-body-medium text-[11px] text-muted">Points</Text>
             </View>
           </View>
         </View>
 
-        <View className="mx-5 mt-5 bg-card rounded-[24px] border border-border p-5 shadow-soft">
-          <Text className="font-headline text-[16px] text-text-primary mb-2">Details</Text>
-          {fields.map((f) => (
-            <View key={f.label} className="flex-row items-center py-3 border-b border-divider/50 last:border-0">
-              <View className="w-9 h-9 rounded-[12px] bg-background items-center justify-center mr-3">
-                <FontAwesome5 name={f.icon} size={13} color="#555555" />
-              </View>
-              <View className="flex-1">
-                <Text className="font-body-medium text-[11px] text-muted">{f.label}</Text>
+        {/* Academic Stats with Tasteful Color Touches */}
+        <View className="px-6 mt-4 flex-row gap-3">
+          <View className="flex-1 bg-cobalt-light border border-cobalt-border rounded-2xl p-4 items-center shadow-soft">
+            <Text className="font-headline text-[22px] text-cobalt">
+              {courseCount ?? 0}
+            </Text>
+            <Text className="font-body-bold text-[11px] text-cobalt mt-0.5">Enrolled</Text>
+          </View>
+
+          <View className="flex-1 bg-primary-light border border-primary-border rounded-2xl p-4 items-center shadow-soft">
+            <Text className="font-headline text-[22px] text-primary">
+              {weeksDone ?? 0}
+            </Text>
+            <Text className="font-body-bold text-[11px] text-primary mt-0.5">Weeks Done</Text>
+          </View>
+
+          <View className="flex-1 bg-amber-light border border-amber-border rounded-2xl p-4 items-center shadow-soft">
+            <Text className="font-headline text-[22px] text-amber">
+              {(weeksDone ?? 0) * 10}
+            </Text>
+            <Text className="font-body-bold text-[11px] text-amber mt-0.5">Study Pts</Text>
+          </View>
+        </View>
+
+        {/* Details Card */}
+        <View className="px-6 mt-6">
+          <View className="bg-surface rounded-2xl border border-border/80 p-6 shadow-soft">
+            <Text className="font-body-bold text-[12px] text-muted uppercase tracking-wider mb-3">
+              Academic Registration
+            </Text>
+            {fields.map((f, idx) => (
+              <View
+                key={f.label}
+                className={`py-3.5 ${idx < fields.length - 1 ? 'border-b border-divider' : ''}`}
+              >
+                <Text className="font-body text-[12px] text-muted">{f.label}</Text>
                 <Text className="font-body-semibold text-[14px] text-text-primary mt-0.5">{f.value}</Text>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
 
-        <View className="mx-5 mt-5">
+        {/* Sign Out Button */}
+        <View className="px-6 mt-6">
           <Pressable
             onPress={handleLogout}
             disabled={signingOut}
-            className="bg-[#FDE8E8] border border-[#DC2626]/30 rounded-[20px] py-4 items-center flex-row justify-center"
+            className="bg-surface border border-border rounded-2xl py-4 items-center flex-row justify-center active:bg-soft shadow-soft"
           >
             {signingOut ? (
-              <ActivityIndicator size="small" color="#B91C1C" />
+              <ActivityIndicator size="small" color="#BE123C" />
             ) : (
-              <>
-                <FontAwesome5 name="sign-out-alt" size={14} color="#B91C1C" />
-                <Text className="ml-2 font-body-semibold text-[15px] text-[#B91C1C]">Log out</Text>
-              </>
+              <Text className="font-body-semibold text-[14px] text-error">
+                Sign Out of Account
+              </Text>
             )}
           </Pressable>
         </View>
+
       </ScrollView>
     </SafeAreaView>
   );

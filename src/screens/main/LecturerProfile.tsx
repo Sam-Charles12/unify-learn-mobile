@@ -8,6 +8,7 @@ import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Lecturer } from '@/hooks/useLecturers';
 import { RootStackParamList } from '@/navigation/types';
+import { Button } from '@/components/ui/button';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type LecturerRouteProp = RouteProp<RootStackParamList, 'Lecturer'>;
@@ -38,18 +39,19 @@ const LecturerProfile: React.FC = () => {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 bg-background items-center justify-center" edges={['top']}>
-        <ActivityIndicator size="large" color="#00A86B" />
+        <ActivityIndicator size="large" color="#059669" />
+        <Text className="font-body text-[13px] text-muted mt-2">Loading faculty profile...</Text>
       </SafeAreaView>
     );
   }
 
   if (!lecturer) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center px-10" edges={['top']}>
-        <Text className="font-headline text-[18px] text-text-primary">Lecturer not found</Text>
-        <Pressable onPress={() => navigation.goBack()} className="mt-4 bg-primary rounded-pill px-6 py-3">
-          <Text className="font-body-semibold text-[14px] text-white">Go back</Text>
-        </Pressable>
+      <SafeAreaView className="flex-1 bg-background items-center justify-center px-8" edges={['top']}>
+        <Text className="font-headline text-[18px] text-text-primary mb-2">Lecturer Not Found</Text>
+        <Button variant="default" size="sm" onPress={() => navigation.goBack()}>
+          Return Back
+        </Button>
       </SafeAreaView>
     );
   }
@@ -62,51 +64,64 @@ const LecturerProfile: React.FC = () => {
     .join('');
 
   const details = [
-    { icon: 'briefcase', label: 'Title', value: lecturer.title },
-    { icon: 'building', label: 'Faculty', value: lecturer.faculty },
+    { icon: 'briefcase', label: 'Academic Title', value: lecturer.title },
+    { icon: 'university', label: 'Faculty', value: lecturer.faculty },
     { icon: 'sitemap', label: 'Department', value: lecturer.department?.toUpperCase() },
   ].filter((d) => d.value);
 
   const handleEmail = () => {
     if (!lecturer.email) return;
     Linking.openURL(`mailto:${lecturer.email}`).catch(() =>
-      Alert.alert('Error', 'Could not open email app.')
+      Alert.alert('Error', 'Could not open email client on device.')
     );
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-        <View className="bg-accent rounded-b-[28px] px-6 pt-4 pb-14 shadow-soft">
+        
+        {/* Header */}
+        <View className="px-5 pt-3 pb-5 bg-surface border-b border-border">
           <View className="flex-row items-center justify-between mb-4">
-            <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-              <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
+            <Pressable
+              onPress={() => navigation.goBack()}
+              className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+            >
+              <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
             </Pressable>
-            <Text className="font-body-bold text-white text-[15px]">Lecturer</Text>
-            <View className="w-9" />
+            <Text className="font-body-bold text-text-primary text-[16px]">Faculty Profile</Text>
+            <View className="w-10" />
+          </View>
+
+          <View className="items-center py-2">
+            {lecturer.photoURL ? (
+              <Image
+                source={{ uri: lecturer.photoURL }}
+                className="w-20 h-20 rounded-2xl border border-border shadow-card mb-3"
+              />
+            ) : (
+              <View className="w-20 h-20 rounded-2xl bg-accent-light border border-accent-border items-center justify-center shadow-card mb-3">
+                <Text className="font-headline text-[26px] text-accent">{initials}</Text>
+              </View>
+            )}
+            <Text className="font-headline text-[22px] text-text-primary text-center">
+              {lecturer.name}
+            </Text>
+            <Text className="font-body-medium text-[13px] text-text-secondary mt-0.5">
+              {lecturer.title}
+            </Text>
           </View>
         </View>
 
-        <View className="-mt-12 mx-5 items-center">
-          {lecturer.photoURL ? (
-            <Image source={{ uri: lecturer.photoURL }} className="w-24 h-24 rounded-pill border-4 border-white shadow-soft" />
-          ) : (
-            <View className="w-24 h-24 rounded-pill bg-primary border-4 border-white items-center justify-center shadow-soft">
-              <Text className="font-headline text-[32px] text-white">{initials}</Text>
-            </View>
-          )}
-          <Text className="font-headline text-[22px] text-text-primary mt-3">{lecturer.name}</Text>
-          <Text className="font-body-medium text-[14px] text-muted mt-1">{lecturer.title}</Text>
-        </View>
-
+        {/* Office Hours Bento Card */}
         {lecturer.officeHours ? (
-          <View className="mx-5 mt-6 bg-primary-light rounded-[20px] border border-primary/30 p-4 flex-row items-center">
-            <View className="w-10 h-10 rounded-[14px] bg-primary items-center justify-center mr-3">
-              <FontAwesome5 name="clock" size={15} color="#ffffff" />
+          <View className="mx-4 mt-4 bg-primary-light border border-primary-border rounded-2xl p-4 flex-row items-center shadow-soft">
+            <View className="w-10 h-10 rounded-xl bg-primary items-center justify-center mr-3.5">
+              <FontAwesome5 name="clock" size={16} color="#ffffff" />
             </View>
             <View className="flex-1">
-              <Text className="font-body-medium text-[11px] text-primary-dark uppercase tracking-wide">
-                Office hours
+              <Text className="font-body-bold text-[11px] text-primary-dark uppercase tracking-wider">
+                Official Office Hours
               </Text>
               <Text className="font-body-semibold text-[14px] text-primary-dark mt-0.5">
                 {lecturer.officeHours}
@@ -115,38 +130,46 @@ const LecturerProfile: React.FC = () => {
           </View>
         ) : null}
 
+        {/* Faculty Details */}
         {details.length > 0 && (
-          <View className="mx-5 mt-5 bg-card rounded-[24px] border border-border p-5 shadow-soft">
-            <Text className="font-headline text-[16px] text-text-primary mb-2">About</Text>
-            {details.map((d) => (
-              <View key={d.label} className="flex-row items-center py-2.5 border-b border-divider/50 last:border-0">
-                <View className="w-9 h-9 rounded-[12px] bg-background items-center justify-center mr-3">
-                  <FontAwesome5 name={d.icon} size={13} color="#555555" />
+          <View className="mx-4 mt-4 bg-surface rounded-2xl border border-border p-4 shadow-card">
+            <Text className="font-headline text-[15px] text-text-primary mb-2">Faculty Information</Text>
+            {details.map((d, idx) => (
+              <View
+                key={d.label}
+                className={`flex-row items-center py-2.5 ${idx < details.length - 1 ? 'border-b border-divider' : ''}`}
+              >
+                <View className="w-9 h-9 rounded-xl bg-background border border-border items-center justify-center mr-3">
+                  <FontAwesome5 name={d.icon} size={13} color="#475569" />
                 </View>
                 <View className="flex-1">
                   <Text className="font-body-medium text-[11px] text-muted">{d.label}</Text>
-                  <Text className="font-body-semibold text-[14px] text-text-primary mt-0.5">{d.value}</Text>
+                  <Text className="font-body-bold text-[14px] text-text-primary mt-0.5">{d.value}</Text>
                 </View>
               </View>
             ))}
           </View>
         )}
 
+        {/* Biography */}
         {lecturer.bio ? (
-          <View className="mx-5 mt-5 bg-card rounded-[24px] border border-border p-5 shadow-soft">
-            <Text className="font-headline text-[16px] text-text-primary mb-2">Biography</Text>
+          <View className="mx-4 mt-4 bg-surface rounded-2xl border border-border p-4 shadow-card">
+            <Text className="font-headline text-[15px] text-text-primary mb-2">Academic Biography</Text>
             <Text className="font-body text-[14px] text-text-secondary leading-6">{lecturer.bio}</Text>
           </View>
         ) : null}
 
+        {/* Contact Lecturer */}
         {lecturer.contactEnabled && lecturer.email ? (
-          <Pressable
-            onPress={handleEmail}
-            className="mx-5 mt-5 bg-primary rounded-[20px] py-4 items-center flex-row justify-center shadow-soft"
-          >
-            <FontAwesome5 name="envelope" size={15} color="#ffffff" />
-            <Text className="ml-2 font-body-semibold text-[15px] text-white">Contact lecturer</Text>
-          </Pressable>
+          <View className="mx-4 mt-4">
+            <Button
+              variant="default"
+              size="lg"
+              onPress={handleEmail}
+            >
+              Contact via University Email
+            </Button>
+          </View>
         ) : null}
       </ScrollView>
     </SafeAreaView>

@@ -4,12 +4,12 @@ import { Pressable, Text, ActivityIndicator } from 'react-native';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'flex items-center justify-center rounded-xl disabled:opacity-50',
+  'flex items-center justify-center rounded-2xl disabled:opacity-40',
   {
     variants: {
       variant: {
-        default: 'bg-primary active:bg-primary-dark shadow-soft',
-        dark: 'bg-ink active:bg-ink-light shadow-soft',
+        default: 'bg-ink active:bg-ink-secondary shadow-soft',
+        primary: 'bg-primary active:bg-primary-dark shadow-soft',
         secondary: 'bg-soft active:bg-border text-text-primary',
         outline: 'border border-border bg-surface active:bg-soft',
         destructive: 'bg-error active:opacity-90',
@@ -17,10 +17,10 @@ const buttonVariants = cva(
         link: 'underline-offset-4',
       },
       size: {
-        default: 'h-12 px-6 py-3',
+        default: 'h-13 px-6 py-3.5',
         sm: 'h-10 px-4 py-2',
         lg: 'h-14 px-8 py-4',
-        icon: 'h-10 w-10',
+        icon: 'h-11 w-11',
       },
     },
     defaultVariants: {
@@ -30,11 +30,11 @@ const buttonVariants = cva(
   }
 );
 
-const buttonTextVariants = cva('font-body-bold text-center', {
+const buttonTextVariants = cva('font-body-semibold text-center tracking-tight', {
   variants: {
     variant: {
       default: 'text-white',
-      dark: 'text-white',
+      primary: 'text-white',
       secondary: 'text-text-primary',
       outline: 'text-text-primary',
       destructive: 'text-white',
@@ -63,17 +63,17 @@ type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> &
 
 const Button = React.forwardRef<React.ElementRef<typeof Pressable>, ButtonProps>(
   ({ className, variant = 'default', size = 'default', loading, labelClassName, disabled, children, ...props }, ref) => {
-    const isLightText = variant === 'default' || variant === 'dark' || variant === 'destructive';
+    const isLightText = variant === 'default' || variant === 'primary' || variant === 'destructive';
 
     return (
       <Pressable
-        className={cn(buttonVariants({ variant, size }), className, disabled && 'opacity-50')}
+        className={cn(buttonVariants({ variant, size }), className, disabled && 'opacity-40')}
         ref={ref}
         disabled={disabled || loading}
         {...props}
       >
         {loading ? (
-          <ActivityIndicator color={isLightText ? '#FFFFFF' : '#0F172A'} />
+          <ActivityIndicator color={isLightText ? '#FFFFFF' : '#09090B'} />
         ) : (
           <Text className={cn(buttonTextVariants({ variant, size }), labelClassName)}>
             {children}

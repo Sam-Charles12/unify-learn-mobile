@@ -8,15 +8,14 @@ import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { useUserProfile } from '@/hooks/useUserProfile';
-import { useAnnouncements, Announcement, AnnouncementScope, scopeStyle } from '@/hooks/useAnnouncements';
+import { useAnnouncements, Announcement, AnnouncementScope } from '@/hooks/useAnnouncements';
 import { RootStackParamList } from '@/navigation/types';
-import { cn } from '@/lib/utils';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const TABS: { key: AnnouncementScope | 'all'; label: string }[] = [
-  { key: 'all', label: 'All Updates' },
-  { key: 'course', label: 'Course Notes' },
+  { key: 'all', label: 'All' },
+  { key: 'course', label: 'Course' },
   { key: 'department', label: 'Department' },
   { key: 'faculty', label: 'Faculty' },
   { key: 'university', label: 'University' },
@@ -66,99 +65,57 @@ const Notifications: React.FC = () => {
   };
 
   const renderItem = ({ item }: { item: Announcement }) => {
-    const style = scopeStyle(item.scope);
     const isRead = readIds.includes(item.id);
 
     return (
       <View
-        className={cn(
-          'mb-3 rounded-2xl border p-4 shadow-soft',
-          isRead ? 'bg-surface border-border opacity-85' : 'bg-surface border-primary-border shadow-card'
-        )}
+        className={`mb-4 rounded-2xl border p-5 shadow-soft ${
+          isRead ? 'bg-surface border-border/80 opacity-70' : 'bg-surface border-ink/20 shadow-card'
+        }`}
       >
-        <View className="flex-row items-start">
-          <View
-            style={{ backgroundColor: style.bg, borderColor: style.border || '#E2E8F0' }}
-            className="w-10 h-10 rounded-xl items-center justify-center mr-3 border"
+        <View className="flex-row items-center justify-between mb-2">
+          <View className="flex-row items-center gap-2">
+            {!isRead && <View className="w-2 h-2 rounded-full bg-primary" />}
+            <Text className="font-body-bold text-[11px] text-primary uppercase tracking-wider">
+              {item.scope}
+            </Text>
+            {item.courseCode ? (
+              <Text className="font-body-semibold text-[12px] text-text-primary">
+                • {item.courseCode}
+              </Text>
+            ) : null}
+            {item.weekNumber ? (
+              <Text className="font-body text-[12px] text-muted">
+                (Week {item.weekNumber})
+              </Text>
+            ) : null}
+          </View>
+          <Text className="font-body text-[11px] text-muted">
+            {formatTime(item.createdAt?.seconds)}
+          </Text>
+        </View>
+
+        <Text className="font-headline text-[16px] text-text-primary leading-6 mb-1">
+          {item.title}
+        </Text>
+
+        <Text className="font-body text-[14px] text-text-secondary leading-5 mb-4">
+          {item.body}
+        </Text>
+
+        <View className="flex-row items-center justify-between pt-3 border-t border-divider">
+          <Text className="font-body-medium text-[12px] text-muted">
+            {item.lecturerName ?? item.senderName ?? 'Faculty Office'}
+          </Text>
+
+          <Pressable
+            onPress={() => markAsRead(item.id, !isRead)}
+            className="py-1 px-2.5 rounded-lg bg-soft active:bg-border"
           >
-            <FontAwesome5 name={style.icon} size={15} color={style.color} />
-          </View>
-          
-          <View className="flex-1">
-            <View className="flex-row items-center mb-1 flex-wrap gap-1.5">
-              {!isRead && <View className="w-2 h-2 rounded-full bg-primary mr-1" />}
-              <View
-                style={{ backgroundColor: style.bg }}
-                className="rounded-full px-2.5 py-0.5"
-              >
-                <Text style={{ color: style.color }} className="font-body-bold text-[10px] uppercase tracking-wider">
-                  {item.scope}
-                </Text>
-              </View>
-              {item.courseCode ? (
-                <Text className="font-body-bold text-[11px] text-text-primary">
-                  {item.courseCode}
-                </Text>
-              ) : null}
-              {item.weekNumber ? (
-                <Text className="font-body-medium text-[11px] text-muted">
-                  • Week {item.weekNumber}
-                </Text>
-              ) : null}
-            </View>
-
-            <Text
-              className={cn(
-                'text-[15px] leading-6',
-                isRead ? 'font-body-medium text-text-secondary' : 'font-headline text-text-primary'
-              )}
-            >
-              {item.title}
+            <Text className="font-body-semibold text-[11px] text-text-secondary">
+              {isRead ? 'Mark as Unread' : 'Mark as Read'}
             </Text>
-
-            <Text className="font-body text-[13px] text-text-secondary leading-5 mt-1">
-              {item.body}
-            </Text>
-
-            <View className="flex-row items-center justify-between mt-3 pt-2.5 border-t border-divider">
-              <View className="flex-row items-center">
-                {item.lecturerName || item.senderName ? (
-                  <Text className="font-body-bold text-[11px] text-text-primary">
-                    {item.lecturerName ?? item.senderName}
-                  </Text>
-                ) : null}
-                {formatTime(item.createdAt?.seconds) ? (
-                  <Text className="font-body text-[11px] text-muted ml-2">
-                    • {formatTime(item.createdAt?.seconds)}
-                  </Text>
-                ) : null}
-              </View>
-
-              <Pressable
-                onPress={() => markAsRead(item.id, !isRead)}
-                className={cn(
-                  'h-7 px-2.5 rounded-lg items-center justify-center flex-row border',
-                  isRead
-                    ? 'bg-soft border-border'
-                    : 'bg-primary-light border-primary-border'
-                )}
-              >
-                <FontAwesome5
-                  name={isRead ? 'undo' : 'check'}
-                  size={10}
-                  color={isRead ? '#64748B' : '#059669'}
-                />
-                <Text
-                  className={cn(
-                    'ml-1 font-body-bold text-[11px]',
-                    isRead ? 'text-muted' : 'text-primary-dark'
-                  )}
-                >
-                  {isRead ? 'Unread' : 'Mark Read'}
-                </Text>
-              </Pressable>
-            </View>
-          </View>
+          </Pressable>
         </View>
       </View>
     );
@@ -167,79 +124,62 @@ const Notifications: React.FC = () => {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       {/* Header */}
-      <View className="px-5 pt-3 pb-4 bg-surface border-b border-border">
-        <View className="flex-row items-center justify-between mb-3">
+      <View className="px-6 pt-4 pb-4">
+        <View className="flex-row items-center justify-between mb-4">
           <Pressable
             onPress={() => navigation.goBack()}
-            className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+            className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
           >
-            <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
+            <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
           </Pressable>
-          <Text className="font-body-bold text-text-primary text-[16px]">Academic Updates</Text>
+          <Text className="font-body-bold text-text-primary text-[15px]">Academic Feed</Text>
           <Pressable
             onPress={markAllAsRead}
             disabled={unreadCount === 0}
-            className={cn(
-              'rounded-xl px-3 py-1.5 border',
-              unreadCount > 0
-                ? 'bg-primary-light border-primary-border'
-                : 'bg-soft border-border opacity-50'
-            )}
+            className="opacity-90"
           >
-            <Text
-              className={cn(
-                'font-body-bold text-[11px]',
-                unreadCount > 0 ? 'text-primary-dark' : 'text-muted'
-              )}
-            >
+            <Text className="font-body-semibold text-[12px] text-primary">
               Mark all read
             </Text>
           </Pressable>
         </View>
 
-        <Text className="font-headline text-[24px] text-text-primary leading-8">
-          Faculty Feed
+        <Text className="font-headline text-[26px] text-text-primary leading-8 tracking-tight">
+          Notices & Broadcasts
         </Text>
-        <Text className="font-body text-[13px] text-text-secondary mt-0.5">
+        <Text className="font-body text-[14px] text-text-secondary mt-1">
           {unreadCount > 0
-            ? `${unreadCount} unread academic notice${unreadCount > 1 ? 's' : ''}`
-            : 'All caught up with your announcements'}
+            ? `${unreadCount} unread academic updates`
+            : 'All notices are up to date'}
         </Text>
       </View>
 
       {/* Filter Tabs */}
-      <View className="py-2.5 bg-surface border-b border-border">
+      <View className="px-6 py-2">
         <FlatList
           data={TABS}
           keyExtractor={(t) => t.key}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
+          contentContainerStyle={{ gap: 8 }}
           renderItem={({ item }) => {
             const active = tab === item.key;
             return (
               <Pressable
                 onPress={() => setTab(item.key)}
-                className={cn(
-                  'rounded-full px-3.5 py-1.5 border flex-row items-center',
+                className={`rounded-full px-4 py-2 border ${
                   active
                     ? 'bg-ink border-ink'
-                    : 'bg-surface border-border'
-                )}
+                    : 'bg-surface border-border/80'
+                }`}
               >
                 <Text
-                  className={cn(
-                    'font-body-bold text-[12px]',
+                  className={`font-body-semibold text-[13px] ${
                     active ? 'text-white' : 'text-text-secondary'
-                  )}
+                  }`}
                 >
                   {item.label}
                 </Text>
-                {item.key === 'all' && unreadCount > 0 && (
-                  <View className="ml-1.5 min-w-[16px] h-[16px] rounded-full bg-error items-center justify-center px-1">
-                    <Text className="font-body-bold text-[9px] text-white">{unreadCount}</Text>
-                  </View>
-                )}
               </Pressable>
             );
           }}
@@ -248,19 +188,15 @@ const Notifications: React.FC = () => {
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#059669" />
-          <Text className="font-body text-[13px] text-muted mt-2">Loading announcements...</Text>
+          <ActivityIndicator size="small" color="#0F5132" />
         </View>
       ) : visible.length === 0 ? (
         <View className="flex-1 items-center justify-center px-8">
-          <View className="w-16 h-16 rounded-2xl bg-soft border border-border items-center justify-center mb-3">
-            <FontAwesome5 name="bell-slash" size={22} color="#94A3B8" />
-          </View>
           <Text className="font-headline text-[17px] text-text-primary mb-1 text-center">
             No Notices in this Channel
           </Text>
           <Text className="font-body text-[13px] text-muted text-center">
-            Announcements from your lecturers and department will appear here.
+            Announcements from your faculty and course lecturers will appear here.
           </Text>
         </View>
       ) : (
@@ -268,7 +204,7 @@ const Notifications: React.FC = () => {
           data={visible}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
-          contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 16, paddingBottom: 60 }}
           showsVerticalScrollIndicator={false}
         />
       )}

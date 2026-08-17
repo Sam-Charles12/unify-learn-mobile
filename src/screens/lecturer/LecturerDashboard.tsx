@@ -3,7 +3,6 @@ import { View, Text, Pressable, ActivityIndicator, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { LinearGradient } from 'expo-linear-gradient';
 import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -65,109 +64,135 @@ const LecturerDashboard: React.FC = () => {
 
   const firstName = name?.split(' ')[0] ?? 'Lecturer';
 
-  const stats = [
-    { icon: 'book-open', label: 'My courses', value: courseCount, color: '#00895A', bg: '#CFF5E6' },
-    { icon: 'bullhorn', label: 'Announcements', value: announcementCount, color: '#005B96', bg: '#DCEEFF' },
-    { icon: 'chalkboard-teacher', label: "Today's classes", value: todayClasses, color: '#8B9658', bg: '#E5D45A' },
-  ];
-
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-        <LinearGradient
-          colors={['#0B6E8F', '#005B96']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="rounded-b-[28px] px-6 pt-4 pb-12"
-        >
-          <View className="flex-row items-center mb-5">
-            <View className="w-11 h-11 rounded-[14px] bg-white items-center justify-center mr-3">
-              <FontAwesome5 name="chalkboard-teacher" size={18} color="#005B96" />
+        
+        {/* Top Header */}
+        <View className="px-5 pt-3 pb-5 bg-surface border-b border-border">
+          <View className="flex-row items-center justify-between mb-4">
+            <View className="flex-row items-center">
+              <View className="w-10 h-10 rounded-xl bg-accent-light border border-accent-border items-center justify-center mr-3">
+                <FontAwesome5 name="chalkboard-teacher" size={16} color="#4F46E5" />
+              </View>
+              <View>
+                <Text className="font-headline text-[16px] text-text-primary leading-5">Lecturer Workspace</Text>
+                <Text className="font-body-medium text-[12px] text-accent">Faculty of Engineering</Text>
+              </View>
             </View>
-            <View>
-              <Text className="font-headline text-[16px] text-white leading-5">Lecturer Hub</Text>
-              <Text className="font-body text-[11px] text-white/70">Unify Learn</Text>
+
+            <View className="w-10 h-10 rounded-xl bg-ink items-center justify-center shadow-soft">
+              <Text className="font-headline text-[13px] text-white">
+                {firstName.charAt(0)}
+              </Text>
             </View>
           </View>
 
-          <Text className="font-headline text-[26px] text-white leading-9">
-            Hello, {firstName}
+          <Text className="font-headline text-[24px] text-text-primary leading-8">
+            Hello, {name || 'Faculty Member'} 👋
           </Text>
-          <Text className="font-body text-[13px] text-white/75 mt-1">
-            Manage your courses and reach your students
+          <Text className="font-body text-[13px] text-text-secondary mt-0.5">
+            Manage your courses, timetable, and broadcast updates to your students.
           </Text>
-        </LinearGradient>
+        </View>
 
-        <View className="-mt-7 mx-5 bg-card rounded-[24px] border border-border p-4 shadow-soft">
+        {/* Bento Metrics Row */}
+        <View className="px-5 mt-4">
           {loading ? (
-            <View className="py-4 items-center">
-              <ActivityIndicator size="small" color="#005B96" />
+            <View className="bg-surface rounded-2xl border border-border p-6 items-center shadow-soft">
+              <ActivityIndicator size="small" color="#4F46E5" />
             </View>
           ) : (
-            <View className="flex-row justify-around">
-              {stats.map((stat) => (
-                <View key={stat.label} className="items-center">
-                  <View style={{ backgroundColor: stat.bg }} className="w-11 h-11 rounded-[16px] items-center justify-center mb-1.5">
-                    <FontAwesome5 name={stat.icon} size={14} color={stat.color} />
-                  </View>
-                  <Text className="font-headline text-[17px] text-text-primary">{stat.value ?? 0}</Text>
-                  <Text className="font-body-medium text-[11px] text-muted">{stat.label}</Text>
+            <View className="flex-row gap-2.5">
+              {/* Tile 1: Assigned Courses */}
+              <View className="flex-1 bg-primary-light border border-primary-border rounded-2xl p-4 shadow-soft">
+                <View className="w-9 h-9 rounded-xl bg-white border border-primary-border items-center justify-center mb-2.5 shadow-soft">
+                  <FontAwesome5 name="book-open" size={13} color="#059669" />
                 </View>
-              ))}
+                <Text className="font-headline text-[20px] text-primary-dark">
+                  {courseCount ?? 0}
+                </Text>
+                <Text className="font-body-bold text-[11px] text-primary-dark mt-0.5">
+                  My Courses
+                </Text>
+              </View>
+
+              {/* Tile 2: Announcements */}
+              <View className="flex-1 bg-indigo-bg border border-indigo-border rounded-2xl p-4 shadow-soft">
+                <View className="w-9 h-9 rounded-xl bg-white border border-indigo-border items-center justify-center mb-2.5 shadow-soft">
+                  <FontAwesome5 name="bullhorn" size={13} color="#4F46E5" />
+                </View>
+                <Text className="font-headline text-[20px] text-indigo-text">
+                  {announcementCount ?? 0}
+                </Text>
+                <Text className="font-body-bold text-[11px] text-indigo-text mt-0.5">
+                  Broadcasts
+                </Text>
+              </View>
+
+              {/* Tile 3: Today's Classes */}
+              <View className="flex-1 bg-amber-bg border border-amber-border rounded-2xl p-4 shadow-soft">
+                <View className="w-9 h-9 rounded-xl bg-white border border-amber-border items-center justify-center mb-2.5 shadow-soft">
+                  <FontAwesome5 name="clock" size={13} color="#D97706" />
+                </View>
+                <Text className="font-headline text-[20px] text-amber-text">
+                  {todayClasses}
+                </Text>
+                <Text className="font-body-bold text-[11px] text-amber-text mt-0.5">
+                  Today's Classes
+                </Text>
+              </View>
             </View>
           )}
         </View>
 
-        <View className="px-6 mt-7">
-          <Text className="font-headline text-[18px] text-text-primary mb-1">Workspace</Text>
-          <Text className="font-body text-[13px] text-muted mb-4">
-            Quick access to your teaching tools.
+        {/* Quick Tools */}
+        <View className="px-5 mt-5">
+          <Text className="font-headline text-[17px] text-text-primary mb-3">
+            Teaching Tools
           </Text>
 
           <Pressable
             onPress={() => navigation.navigate('LecturerCoursesTab')}
-            className="bg-card rounded-[24px] border border-border p-5 shadow-soft mb-4"
+            className="bg-surface rounded-2xl border border-border p-4 flex-row items-center justify-between shadow-card mb-3 active:bg-soft"
           >
-            <View className="flex-row items-center">
-              <View className="w-14 h-14 rounded-[18px] bg-accent-light items-center justify-center mr-4">
-                <FontAwesome5 name="book-open" size={20} color="#005B96" />
+            <View className="flex-row items-center flex-1">
+              <View className="w-12 h-12 rounded-xl bg-primary-light border border-primary-border items-center justify-center mr-3.5">
+                <FontAwesome5 name="book-open" size={16} color="#059669" />
               </View>
               <View className="flex-1">
-                <Text className="font-body-semibold text-[16px] text-text-primary">My courses</Text>
-                <Text className="font-body text-[12px] text-muted mt-0.5">
-                  View courses and open their workspaces
+                <Text className="font-body-bold text-[15px] text-text-primary">
+                  Course Workspaces
+                </Text>
+                <Text className="font-body text-[12px] text-text-secondary mt-0.5">
+                  View week syllabus, upload notes & monitor student progress
                 </Text>
               </View>
-              <View className="w-9 h-9 rounded-full bg-accent items-center justify-center">
-                <FontAwesome5 name="arrow-right" size={13} color="#ffffff" />
-              </View>
             </View>
+            <FontAwesome5 name="chevron-right" size={13} color="#94A3B8" />
           </Pressable>
 
-          <LinearGradient
-            colors={['#00A86B', '#0E8A72']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            className="rounded-[24px] p-5 shadow-soft"
+          <Pressable
+            onPress={() => navigation.navigate('LecturerCoursesTab')}
+            className="bg-surface rounded-2xl border border-border p-4 flex-row items-center justify-between shadow-card active:bg-soft"
           >
-            <Pressable onPress={() => navigation.navigate('LecturerCoursesTab')}>
-              <View className="flex-row items-center">
-                <View className="w-14 h-14 rounded-[18px] bg-white/15 items-center justify-center mr-4">
-                  <FontAwesome5 name="bullhorn" size={20} color="#ffffff" />
-                </View>
-                <View className="flex-1">
-                  <Text className="font-body-semibold text-[16px] text-white">Post announcement</Text>
-                  <Text className="font-body text-[12px] text-white/75 mt-0.5">
-                    Notify students in your course
-                  </Text>
-                </View>
-                <View className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-                  <FontAwesome5 name="arrow-right" size={13} color="#ffffff" />
-                </View>
+            <View className="flex-row items-center flex-1">
+              <View className="w-12 h-12 rounded-xl bg-rose-bg border border-rose-border items-center justify-center mr-3.5">
+                <FontAwesome5 name="bullhorn" size={16} color="#E11D48" />
               </View>
-            </Pressable>
-          </LinearGradient>
+              <View className="flex-1">
+                <Text className="font-body-bold text-[15px] text-text-primary">
+                  Post Course Announcement
+                </Text>
+                <Text className="font-body text-[12px] text-text-secondary mt-0.5">
+                  Push instant notifications to enrolled students
+                </Text>
+              </View>
+            </View>
+            <FontAwesome5 name="chevron-right" size={13} color="#94A3B8" />
+          </Pressable>
         </View>
+
       </ScrollView>
     </SafeAreaView>
   );

@@ -58,52 +58,56 @@ const LecturerCourses: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <View className="bg-accent rounded-b-[28px] px-6 pt-4 pb-8 shadow-soft">
-        <View className="flex-row items-center justify-between mb-3">
-          <View className="w-9" />
-          <Text className="font-body-bold text-white text-[15px]">My Courses</Text>
-          <View className="w-9" />
+      {/* Header */}
+      <View className="px-5 pt-3 pb-5 bg-surface border-b border-border">
+        <View className="flex-row items-center justify-between mb-2">
+          <View className="bg-primary-light px-3 py-1 rounded-full border border-primary-border">
+            <Text className="font-body-bold text-[12px] text-primary-dark">
+              LASU Engineering
+            </Text>
+          </View>
         </View>
-        <Text className="font-headline text-[22px] text-white leading-7">
-          Faculty of Engineering
+        <Text className="font-headline text-[24px] text-text-primary leading-8">
+          Assigned Courses
         </Text>
-        <Text className="font-body text-[13px] text-white/75 mt-1">
-          {courses.length} course{courses.length === 1 ? '' : 's'} assigned to you
+        <Text className="font-body text-[13px] text-text-secondary mt-0.5">
+          {courses.length} curriculum course{courses.length === 1 ? '' : 's'} under your management
         </Text>
       </View>
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#005B96" />
+          <ActivityIndicator size="large" color="#059669" />
+          <Text className="font-body text-[13px] text-muted mt-2">Loading assigned courses...</Text>
         </View>
       ) : courses.length === 0 ? (
-        <View className="flex-1 items-center justify-center px-10">
-          <View className="w-20 h-20 rounded-pill bg-accent-light items-center justify-center mb-4">
-            <FontAwesome5 name="chalkboard-teacher" size={26} color="#005B96" />
+        <View className="flex-1 items-center justify-center px-8">
+          <View className="w-16 h-16 rounded-2xl bg-soft border border-border items-center justify-center mb-3">
+            <FontAwesome5 name="chalkboard-teacher" size={24} color="#94A3B8" />
           </View>
-          <Text className="font-headline text-[20px] text-text-primary mb-2 text-center">
-            No courses assigned
+          <Text className="font-headline text-[18px] text-text-primary mb-1 text-center">
+            No Assigned Courses
           </Text>
-          <Text className="font-body text-[14px] text-muted text-center leading-5">
-            Courses you are assigned to will appear here once an admin adds them.
+          <Text className="font-body text-[13px] text-muted text-center">
+            Courses assigned to your faculty profile by the department will appear here.
           </Text>
         </View>
       ) : (
         <FlatList
           data={grouped}
           keyExtractor={(g) => g.level}
-          contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+          contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item: group }) => (
-            <View className="mb-6">
+            <View className="mb-5">
               <View className="flex-row items-center mb-3">
-                <View className="w-8 h-8 rounded-[10px] bg-primary-light items-center justify-center mr-2">
+                <View className="w-8 h-8 rounded-lg bg-primary-light border border-primary-border items-center justify-center mr-2">
                   <Text className="font-headline text-[13px] text-primary-dark">
                     L{group.level}
                   </Text>
                 </View>
                 <Text className="font-headline text-[16px] text-text-primary">
-                  {group.level} Level
+                  {group.level} Level Modules
                 </Text>
               </View>
               {group.items.map((course) => (
@@ -112,22 +116,24 @@ const LecturerCourses: React.FC = () => {
                   onPress={() =>
                     navigation.navigate('LecturerCourseWorkspace', { courseId: course.id })
                   }
-                  className="bg-card rounded-[20px] border border-border p-4 shadow-soft mb-3"
+                  className="bg-surface rounded-2xl border border-border p-4 shadow-card mb-3 active:bg-soft"
                 >
-                  <View className="flex-row items-center">
-                    <View className="w-12 h-12 rounded-[16px] bg-accent-light items-center justify-center mr-3">
-                      <FontAwesome5 name="book-open" size={17} color="#005B96" />
+                  <View className="flex-row items-center justify-between">
+                    <View className="flex-row items-center flex-1 pr-3">
+                      <View className="w-11 h-11 rounded-xl bg-accent-light border border-accent-border items-center justify-center mr-3">
+                        <FontAwesome5 name="book-open" size={15} color="#4F46E5" />
+                      </View>
+                      <View className="flex-1">
+                        <Text className="font-body-bold text-[15px] text-primary-dark">
+                          {course.code}
+                        </Text>
+                        <Text className="font-body-medium text-[13px] text-text-primary mt-0.5" numberOfLines={1}>
+                          {course.title}
+                        </Text>
+                      </View>
                     </View>
-                    <View className="flex-1">
-                      <Text className="font-body-bold text-[15px] text-primary-dark">
-                        {course.code}
-                      </Text>
-                      <Text className="font-body-medium text-[13px] text-text-primary mt-0.5" numberOfLines={1}>
-                        {course.title}
-                      </Text>
-                    </View>
-                    <View className="w-8 h-8 rounded-full bg-accent items-center justify-center">
-                      <FontAwesome5 name="chevron-right" size={12} color="#ffffff" />
+                    <View className="w-8 h-8 rounded-full bg-soft items-center justify-center">
+                      <FontAwesome5 name="chevron-right" size={11} color="#0F172A" />
                     </View>
                   </View>
                 </Pressable>

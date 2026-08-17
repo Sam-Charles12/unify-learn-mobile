@@ -27,26 +27,26 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, activeTab, chi
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <SafeAreaView className="flex-1 bg-background">
-        <View className="px-6 pt-3 pb-6">
-          <View className="flex-row items-center justify-between mb-5">
+        <View className="px-6 pt-4 pb-4">
+          <View className="flex-row items-center justify-between mb-6">
             <Pressable
-              className="w-10 h-10 rounded-xl bg-surface border border-border items-center justify-center shadow-soft"
+              className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
               onPress={() => navigation.goBack()}
             >
-              <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
+              <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
             </Pressable>
             <View className="flex-row items-center bg-primary-light px-3 py-1.5 rounded-full border border-primary-border">
-              <FontAwesome5 name="graduation-cap" size={13} color="#059669" />
-              <Text className="ml-2 font-body-bold text-[12px] text-primary-dark">
+              <FontAwesome5 name="graduation-cap" size={12} color="#0F5132" />
+              <Text className="ml-2 font-body-bold text-[11px] text-primary-dark">
                 LASU Engineering
               </Text>
             </View>
           </View>
 
-          <Text className="font-headline text-[26px] leading-[34px] text-text-primary mb-2">
+          <Text className="font-headline text-[28px] leading-[36px] text-text-primary tracking-tight mb-2">
             {title}
           </Text>
-          <Text className="font-body text-[14px] leading-5 text-text-secondary">
+          <Text className="font-body text-[15px] leading-6 text-text-secondary">
             {subtitle}
           </Text>
         </View>
@@ -57,13 +57,13 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, activeTab, chi
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="flex-1 px-6 pt-2 pb-12">
-            {/* Segmented Control Pill */}
-            <View className="flex-row bg-soft rounded-xl p-1 mb-6 border border-border/50">
+          <View className="flex-1 px-6 pt-4 pb-12">
+            {/* Segmented Tab Pill */}
+            <View className="flex-row bg-soft rounded-2xl p-1 mb-8">
               <Pressable
                 className={cn(
-                  'flex-1 py-2.5 items-center rounded-lg',
-                  activeTab === 'login' && 'bg-surface shadow-soft border border-border/40'
+                  'flex-1 py-3 items-center rounded-xl',
+                  activeTab === 'login' && 'bg-surface shadow-soft'
                 )}
                 onPress={() => goTo('Login')}
               >
@@ -78,8 +78,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, activeTab, chi
               </Pressable>
               <Pressable
                 className={cn(
-                  'flex-1 py-2.5 items-center rounded-lg',
-                  activeTab === 'signup' && 'bg-surface shadow-soft border border-border/40'
+                  'flex-1 py-3 items-center rounded-xl',
+                  activeTab === 'signup' && 'bg-surface shadow-soft'
                 )}
                 onPress={() => goTo('SignUp')}
               >

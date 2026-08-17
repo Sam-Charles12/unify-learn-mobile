@@ -8,7 +8,7 @@ import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { LecturerNavigatorParamList } from '@/navigation/types';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 type NavigationProp = NativeStackNavigationProp<LecturerNavigatorParamList>;
 type WorkspaceRouteProp = RouteProp<LecturerNavigatorParamList, 'LecturerCourseWorkspace'>;
@@ -51,7 +51,7 @@ const LecturerCourseWorkspace: React.FC = () => {
 
   const handlePost = async () => {
     if (!title.trim() || !body.trim()) {
-      Alert.alert('Missing details', 'Give your announcement a title and a message.');
+      Alert.alert('Incomplete Form', 'Please provide both a title and message for your announcement.');
       return;
     }
     if (!user) return;
@@ -66,14 +66,14 @@ const LecturerCourseWorkspace: React.FC = () => {
         courseId,
         courseCode: course?.code,
         weekNumber: weekNum && !isNaN(weekNum) ? weekNum : undefined,
-        lecturerName: user.displayName ?? 'Lecturer',
-        senderName: user.displayName ?? 'Lecturer',
+        lecturerName: user.displayName ?? 'Course Lecturer',
+        senderName: user.displayName ?? 'Course Lecturer',
         senderRole: 'lecturer',
         lecturerId: user.uid,
         isActive: true,
         createdAt: serverTimestamp(),
       });
-      Alert.alert('Posted', 'Your announcement is now visible to students.');
+      Alert.alert('Broadcast Sent', 'Announcement published and notification pushed to enrolled students.');
       setTitle('');
       setBody('');
       setWeekNumber('');
@@ -87,7 +87,8 @@ const LecturerCourseWorkspace: React.FC = () => {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 bg-background items-center justify-center" edges={['top']}>
-        <ActivityIndicator size="large" color="#005B96" />
+        <ActivityIndicator size="large" color="#059669" />
+        <Text className="font-body text-[13px] text-muted mt-2">Loading course workspace...</Text>
       </SafeAreaView>
     );
   }
@@ -98,94 +99,99 @@ const LecturerCourseWorkspace: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1"
       >
-        <View className="bg-accent rounded-b-[28px] px-6 pt-4 pb-8 shadow-soft">
+        {/* Header */}
+        <View className="px-5 pt-3 pb-5 bg-surface border-b border-border">
           <View className="flex-row items-center justify-between mb-3">
-            <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-              <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
+            <Pressable
+              onPress={() => navigation.goBack()}
+              className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+            >
+              <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
             </Pressable>
-            <Text className="font-body-bold text-white text-[15px]">Course Workspace</Text>
-            <View className="w-9" />
+            <View className="bg-primary-light px-3 py-1 rounded-full border border-primary-border">
+              <Text className="font-body-bold text-[12px] text-primary-dark">
+                {course?.code}
+              </Text>
+            </View>
+            <View className="w-10" />
           </View>
-          <Text className="font-headline text-[22px] text-white leading-7">
-            {course?.code} — {course?.title}
+          <Text className="font-headline text-[22px] text-text-primary leading-7" numberOfLines={2}>
+            {course?.title}
           </Text>
-          <Text className="font-body text-[13px] text-white/75 mt-1">
-            Post announcements for your students
+          <Text className="font-body text-[13px] text-text-secondary mt-0.5">
+            Faculty Course Management & Student Broadcasts
           </Text>
         </View>
 
-        <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-          <View className="bg-card rounded-[24px] border border-border p-5 shadow-soft">
+        <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+          <View className="bg-surface rounded-2xl border border-border p-5 shadow-card">
             <View className="flex-row items-center mb-4">
-              <View className="w-10 h-10 rounded-[14px] bg-primary-light items-center justify-center mr-3">
-                <FontAwesome5 name="bullhorn" size={15} color="#00895A" />
+              <View className="w-10 h-10 rounded-xl bg-primary-light border border-primary-border items-center justify-center mr-3">
+                <FontAwesome5 name="bullhorn" size={15} color="#059669" />
               </View>
               <View className="flex-1">
-                <Text className="font-headline text-[16px] text-text-primary">New announcement</Text>
+                <Text className="font-headline text-[16px] text-text-primary">Post Announcement</Text>
                 <Text className="font-body text-[12px] text-muted">
-                  Students see this in their notifications instantly
+                  Instant push broadcast to all registered students
                 </Text>
               </View>
             </View>
 
-            <Text className="font-body-medium text-[13px] text-text-secondary mb-2">Title</Text>
+            <Text className="font-body-semibold text-[13px] text-text-primary mb-1.5">Announcement Title</Text>
             <TextInput
               value={title}
               onChangeText={setTitle}
-              placeholder="e.g. Assignment deadline moved"
-              placeholderTextColor="#8A817C"
-              className="bg-soft rounded-pill px-4 py-3.5 font-body-medium text-[15px] text-text-primary mb-4"
+              placeholder="e.g. Assignment deadline rescheduled"
+              placeholderTextColor="#94A3B8"
+              className="bg-surface rounded-xl px-4 py-3 font-body text-[15px] text-text-primary border border-border mb-4"
             />
 
-            <Text className="font-body-medium text-[13px] text-text-secondary mb-2">Message</Text>
+            <Text className="font-body-semibold text-[13px] text-text-primary mb-1.5">Announcement Message</Text>
             <TextInput
               value={body}
               onChangeText={setBody}
-              placeholder="Write the announcement for your students…"
-              placeholderTextColor="#8A817C"
+              placeholder="Provide full instructions or academic notices..."
+              placeholderTextColor="#94A3B8"
               multiline
               numberOfLines={5}
               textAlignVertical="top"
-              className="bg-soft rounded-[16px] px-4 py-3.5 font-body-medium text-[15px] text-text-primary min-h-[110px] mb-4"
+              className="bg-surface rounded-xl px-4 py-3 font-body text-[15px] text-text-primary border border-border min-h-[110px] mb-4"
             />
 
-            <Text className="font-body-medium text-[13px] text-text-secondary mb-2">
-              Week number (optional)
+            <Text className="font-body-semibold text-[13px] text-text-primary mb-1.5">
+              Specific Week Number (Optional)
             </Text>
             <TextInput
               value={weekNumber}
               onChangeText={setWeekNumber}
-              placeholder="e.g. 2"
-              placeholderTextColor="#8A817C"
+              placeholder="e.g. 4"
+              placeholderTextColor="#94A3B8"
               keyboardType="numeric"
-              className="bg-soft rounded-pill px-4 py-3.5 font-body-medium text-[15px] text-text-primary mb-5"
+              className="bg-surface rounded-xl px-4 py-3 font-body text-[15px] text-text-primary border border-border mb-5"
             />
 
-            <Pressable
+            <Button
+              variant="default"
+              size="lg"
+              loading={posting}
               onPress={handlePost}
-              disabled={posting}
-              className={cn('rounded-pill py-4 items-center', posting ? 'bg-border' : 'bg-accent')}
             >
-              {posting ? (
-                <ActivityIndicator color="#ffffff" />
-              ) : (
-                <Text className="font-body-semibold text-[15px] text-white">Post announcement</Text>
-              )}
-            </Pressable>
+              Broadcast Announcement
+            </Button>
           </View>
 
           {course?.tutors && course.tutors.length > 0 && (
-            <View className="mt-5 bg-card rounded-[24px] border border-border p-5 shadow-soft">
-              <Text className="font-headline text-[16px] text-text-primary mb-3">
-                Tutors ({course.tutors.length})
+            <View className="mt-4 bg-surface rounded-2xl border border-border p-5 shadow-card">
+              <Text className="font-headline text-[15px] text-text-primary mb-3">
+                Assigned Course Tutors ({course.tutors.length})
               </Text>
               {course.tutors.map((tutorId, i) => (
-                <View key={tutorId} className="flex-row items-center py-2.5 border-b border-divider/50 last:border-0">
-                  <View className="w-10 h-10 rounded-pill bg-accent-light items-center justify-center mr-3">
-                    <FontAwesome5 name="user-graduate" size={14} color="#005B96" />
+                <View key={tutorId} className="flex-row items-center py-2.5 border-b border-divider last:border-0">
+                  <View className="w-9 h-9 rounded-xl bg-accent-light border border-accent-border items-center justify-center mr-3">
+                    <FontAwesome5 name="user-graduate" size={13} color="#4F46E5" />
                   </View>
-                  <Text className="flex-1 font-body-medium text-[14px] text-text-primary">
-                    {i + 1}. {tutorId}
+                  <Text className="flex-1 font-body-semibold text-[13px] text-text-primary">
+                    Tutor #{i + 1}: {tutorId}
                   </Text>
                 </View>
               ))}

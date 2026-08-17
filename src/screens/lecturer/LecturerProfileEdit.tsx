@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { LecturerNavigatorParamList } from '@/navigation/types';
+import { Button } from '@/components/ui/button';
 
 type NavigationProp = NativeStackNavigationProp<LecturerNavigatorParamList>;
 
@@ -54,7 +55,7 @@ const LecturerProfileEdit: React.FC = () => {
         { title: title.trim(), officeHours: officeHours.trim(), bio: bio.trim(), contactEnabled },
         { merge: true }
       );
-      Alert.alert('Saved', 'Your profile has been updated.');
+      Alert.alert('Profile Saved', 'Your faculty credentials and office hours have been updated.');
     } catch (e: any) {
       Alert.alert('Error', e?.message ?? 'Failed to save profile.');
     } finally {
@@ -86,111 +87,119 @@ const LecturerProfileEdit: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1"
       >
-        <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-          <View className="bg-accent rounded-b-[28px] px-6 pt-4 pb-12 shadow-soft">
-            <View className="flex-row items-center justify-between mb-4">
-              <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-                <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
-              </Pressable>
-              <Text className="font-body-bold text-white text-[15px]">My Profile</Text>
-              <View className="w-9" />
+        {/* Header */}
+        <View className="px-5 pt-3 pb-5 bg-surface border-b border-border">
+          <View className="flex-row items-center justify-between mb-4">
+            <Pressable
+              onPress={() => navigation.goBack()}
+              className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+            >
+              <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
+            </Pressable>
+            <Text className="font-body-bold text-text-primary text-[16px]">Faculty Settings</Text>
+            <View className="w-10" />
+          </View>
+
+          <View className="flex-row items-center">
+            <View className="w-16 h-16 rounded-2xl bg-accent-light border border-accent-border items-center justify-center mr-4 shadow-card">
+              <Text className="font-headline text-[22px] text-accent">{initials}</Text>
             </View>
-            <View className="items-center">
-              <View className="w-20 h-20 rounded-pill bg-white/15 items-center justify-center mb-3">
-                <Text className="font-headline text-[28px] text-white">{initials}</Text>
-              </View>
-              <Text className="font-headline text-[22px] text-white">
-                {profile?.name ?? user?.displayName ?? 'Lecturer'}
+            <View className="flex-1">
+              <Text className="font-headline text-[20px] text-text-primary leading-7">
+                {profile?.name ?? user?.displayName ?? 'Faculty Member'}
               </Text>
-              <Text className="font-body text-[13px] text-white/75 mt-1">
+              <Text className="font-body text-[13px] text-text-secondary mt-0.5">
                 {user?.email}
               </Text>
             </View>
           </View>
+        </View>
 
-          <View className="mx-5 -mt-6 bg-card rounded-[24px] border border-border p-5 shadow-soft">
+        <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+          <View className="bg-surface rounded-2xl border border-border p-5 shadow-card">
             {loading ? (
               <View className="py-6 items-center">
-                <ActivityIndicator size="small" color="#005B96" />
+                <ActivityIndicator size="small" color="#059669" />
               </View>
             ) : (
               <>
-                <Text className="font-body-medium text-[13px] text-text-secondary mb-2">Title</Text>
+                <Text className="font-body-semibold text-[13px] text-text-primary mb-1.5">Academic Title</Text>
                 <TextInput
                   value={title}
                   onChangeText={setTitle}
-                  placeholder="e.g. Senior Lecturer"
-                  placeholderTextColor="#8A817C"
-                  className="bg-soft rounded-pill px-4 py-3.5 font-body-medium text-[15px] text-text-primary mb-4"
+                  placeholder="e.g. Associate Professor / Senior Lecturer"
+                  placeholderTextColor="#94A3B8"
+                  className="bg-surface rounded-xl px-4 py-3 font-body text-[15px] text-text-primary border border-border mb-4"
                 />
 
-                <Text className="font-body-medium text-[13px] text-text-secondary mb-2">Office hours</Text>
+                <Text className="font-body-semibold text-[13px] text-text-primary mb-1.5">Office Hours</Text>
                 <TextInput
                   value={officeHours}
                   onChangeText={setOfficeHours}
-                  placeholder="e.g. Mon & Wed, 10:00 – 12:00"
-                  placeholderTextColor="#8A817C"
-                  className="bg-soft rounded-pill px-4 py-3.5 font-body-medium text-[15px] text-text-primary mb-4"
+                  placeholder="e.g. Tuesdays & Thursdays, 11:00 AM – 1:00 PM"
+                  placeholderTextColor="#94A3B8"
+                  className="bg-surface rounded-xl px-4 py-3 font-body text-[15px] text-text-primary border border-border mb-4"
                 />
 
-                <Text className="font-body-medium text-[13px] text-text-secondary mb-2">Biography</Text>
+                <Text className="font-body-semibold text-[13px] text-text-primary mb-1.5">Faculty Biography</Text>
                 <TextInput
                   value={bio}
                   onChangeText={setBio}
-                  placeholder="Tell students about yourself…"
-                  placeholderTextColor="#8A817C"
+                  placeholder="Share your research interests and academic background..."
+                  placeholderTextColor="#94A3B8"
                   multiline
-                  numberOfLines={5}
+                  numberOfLines={4}
                   textAlignVertical="top"
-                  className="bg-soft rounded-[16px] px-4 py-3.5 font-body-medium text-[15px] text-text-primary min-h-[110px] mb-4"
+                  className="bg-surface rounded-xl px-4 py-3 font-body text-[15px] text-text-primary border border-border min-h-[100px] mb-4"
                 />
 
-                <View className="flex-row items-center justify-between py-3 border-b border-divider/50 mb-4">
-                  <View className="flex-1">
-                    <Text className="font-body-semibold text-[14px] text-text-primary">
-                      Allow student contact
+                <View className="flex-row items-center justify-between py-3 border-t border-divider mb-5">
+                  <View className="flex-1 pr-3">
+                    <Text className="font-body-bold text-[14px] text-text-primary">
+                      Student Direct Email Access
                     </Text>
                     <Text className="font-body text-[12px] text-muted mt-0.5">
-                      Students see a "Contact lecturer" button
+                      Displays a verified contact button on your public course profile
                     </Text>
                   </View>
                   <Switch
                     value={contactEnabled}
                     onValueChange={setContactEnabled}
-                    trackColor={{ false: '#E7DDD5', true: '#00A86B' }}
-                    thumbColor="#ffffff"
+                    trackColor={{ false: '#E2E8F0', true: '#A7F3D0' }}
+                    thumbColor={contactEnabled ? '#059669' : '#FFFFFF'}
                   />
                 </View>
 
-                <Pressable
+                <Button
+                  variant="default"
+                  size="lg"
+                  loading={saving}
                   onPress={handleSave}
-                  disabled={saving}
-                  className="bg-accent rounded-pill py-4 items-center"
                 >
-                  {saving ? (
-                    <ActivityIndicator color="#ffffff" />
-                  ) : (
-                    <Text className="font-body-semibold text-[15px] text-white">Save changes</Text>
-                  )}
-                </Pressable>
+                  Save Faculty Profile
+                </Button>
               </>
             )}
           </View>
 
-          <Pressable
-            onPress={handleLogout}
-            disabled={signingOut}
-            className="mx-5 mt-5 bg-[#FDE8E8] border border-[#DC2626]/30 rounded-[20px] py-4 items-center flex-row justify-center"
-          >
-            {signingOut ? (
-              <ActivityIndicator size="small" color="#B91C1C" />
-            ) : (
-              <>
-                <FontAwesome5 name="sign-out-alt" size={14} color="#B91C1C" />
-                <Text className="ml-2 font-body-semibold text-[15px] text-[#B91C1C]">Log out</Text>
-              </>
-            )}
-          </Pressable>
+          <View className="mt-4">
+            <Pressable
+              onPress={handleLogout}
+              disabled={signingOut}
+              className="bg-rose-bg border border-rose-border rounded-2xl py-3.5 items-center flex-row justify-center active:bg-rose-100"
+            >
+              {signingOut ? (
+                <ActivityIndicator size="small" color="#E11D48" />
+              ) : (
+                <>
+                  <FontAwesome5 name="sign-out-alt" size={14} color="#E11D48" />
+                  <Text className="ml-2 font-body-bold text-[14px] text-rose-text">
+                    Sign Out of Faculty Account
+                  </Text>
+                </>
+              )}
+            </Pressable>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

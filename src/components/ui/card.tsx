@@ -7,7 +7,7 @@ const Card = React.forwardRef<React.ElementRef<typeof View>, ViewProps & { class
     <View
       ref={ref}
       className={cn(
-        'rounded-2xl bg-surface p-5 border border-border shadow-card',
+        'rounded-2xl bg-surface p-6 border border-border/80 shadow-soft',
         className
       )}
       {...props}
@@ -18,7 +18,7 @@ Card.displayName = 'Card';
 
 const CardHeader = React.forwardRef<React.ElementRef<typeof View>, ViewProps & { className?: string }>(
   ({ className, ...props }, ref) => (
-    <View ref={ref} className={cn('flex flex-col space-y-1.5 pb-2', className)} {...props} />
+    <View ref={ref} className={cn('flex flex-col space-y-2 pb-3', className)} {...props} />
   )
 );
 CardHeader.displayName = 'CardHeader';
@@ -27,7 +27,7 @@ const CardTitle = React.forwardRef<React.ElementRef<typeof View>, ViewProps & { 
   ({ className, ...props }, ref) => (
     <View
       ref={ref}
-      className={cn('font-headline text-xl leading-7 text-text-primary', className)}
+      className={cn('font-headline text-xl leading-7 text-text-primary tracking-tight', className)}
       {...props}
     />
   )
@@ -36,7 +36,7 @@ CardTitle.displayName = 'CardTitle';
 
 const CardDescription = React.forwardRef<React.ElementRef<typeof View>, ViewProps & { className?: string }>(
   ({ className, ...props }, ref) => (
-    <View ref={ref} className={cn('font-body text-sm text-text-secondary', className)} {...props} />
+    <View ref={ref} className={cn('font-body text-sm text-text-secondary leading-5', className)} {...props} />
   )
 );
 CardDescription.displayName = 'CardDescription';
@@ -50,7 +50,7 @@ CardContent.displayName = 'CardContent';
 
 const CardFooter = React.forwardRef<React.ElementRef<typeof View>, ViewProps & { className?: string }>(
   ({ className, ...props }, ref) => (
-    <View ref={ref} className={cn('flex flex-row items-center pt-2', className)} {...props} />
+    <View ref={ref} className={cn('flex flex-row items-center pt-3', className)} {...props} />
   )
 );
 CardFooter.displayName = 'CardFooter';

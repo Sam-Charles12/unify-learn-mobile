@@ -58,11 +58,11 @@ const SignUp: React.FC = () => {
 
   return (
     <AuthLayout
-      title="Create Student Account"
-      subtitle="Access weekly curriculum materials, quizzes, and lecturer updates."
+      title="Create Account"
+      subtitle="Join your faculty semester cohort and unlock syllabus modules."
       activeTab="signup"
     >
-      <View className="flex-row gap-3 mb-4">
+      <View className="flex-row gap-3 mb-5">
         <View className="flex-1">
           <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
             First Name
@@ -85,9 +85,9 @@ const SignUp: React.FC = () => {
         </View>
       </View>
 
-      <View className="mb-4">
+      <View className="mb-5">
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
-          Email Address
+          University Email
         </Text>
         <Input
           placeholder="e.g. student@lasu.edu.ng"
@@ -98,47 +98,47 @@ const SignUp: React.FC = () => {
         />
       </View>
 
-      <View className="mb-4">
+      <View className="mb-5">
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Password
         </Text>
-        <View className="flex-row items-center bg-surface rounded-xl border border-border">
+        <View className="flex-row items-center bg-surface rounded-2xl border border-border">
           <TextInput
-            className="flex-1 pl-4 pr-2 py-3.5 font-body text-[15px] text-text-primary"
+            className="flex-1 pl-4 pr-2 py-4 font-body text-[15px] text-text-primary"
             placeholder="Minimum 6 characters"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor="#A1A1AA"
             value={formData.password}
             onChangeText={(val) => handleInputChange('password', val)}
             secureTextEntry={!showPassword}
           />
-          <Pressable className="px-4 py-3.5" onPress={() => setShowPassword(!showPassword)}>
+          <Pressable className="px-4 py-4" onPress={() => setShowPassword(!showPassword)}>
             <FontAwesome5
               name={showPassword ? 'eye-slash' : 'eye'}
               size={15}
-              color="#64748B"
+              color="#71717A"
             />
           </Pressable>
         </View>
       </View>
 
-      <View className="mb-6">
+      <View className="mb-8">
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Confirm Password
         </Text>
-        <View className="flex-row items-center bg-surface rounded-xl border border-border">
+        <View className="flex-row items-center bg-surface rounded-2xl border border-border">
           <TextInput
-            className="flex-1 pl-4 pr-2 py-3.5 font-body text-[15px] text-text-primary"
+            className="flex-1 pl-4 pr-2 py-4 font-body text-[15px] text-text-primary"
             placeholder="Repeat password"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor="#A1A1AA"
             value={formData.confirmPassword}
             onChangeText={(val) => handleInputChange('confirmPassword', val)}
             secureTextEntry={!showConfirm}
           />
-          <Pressable className="px-4 py-3.5" onPress={() => setShowConfirm(!showConfirm)}>
+          <Pressable className="px-4 py-4" onPress={() => setShowConfirm(!showConfirm)}>
             <FontAwesome5
               name={showConfirm ? 'eye-slash' : 'eye'}
               size={15}
-              color="#64748B"
+              color="#71717A"
             />
           </Pressable>
         </View>
@@ -147,32 +147,32 @@ const SignUp: React.FC = () => {
       <Button
         variant="default"
         size="lg"
-        className="mb-6"
+        className="mb-8"
         loading={loading}
         onPress={handleSignUp}
       >
-        Create Account
+        Create Student Account
       </Button>
 
       {/* Clean Divider */}
-      <View className="flex-row items-center mb-6">
+      <View className="flex-row items-center mb-8">
         <View className="flex-1 h-[1px] bg-border" />
-        <Text className="font-body text-[12px] text-muted mx-3 uppercase tracking-wider">
+        <Text className="font-body text-[12px] text-muted mx-4 uppercase tracking-wider">
           Or sign up with
         </Text>
         <View className="flex-1 h-[1px] bg-border" />
       </View>
 
       <View className="flex-row gap-3">
-        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-xl py-3.5 gap-2 border border-border shadow-soft active:bg-soft">
-          <FontAwesome5 name="google" size={15} color="#EA4335" />
-          <Text className="font-body-bold text-[14px] text-text-primary">
+        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-2xl py-4 gap-2.5 border border-border shadow-soft active:bg-soft">
+          <FontAwesome5 name="google" size={15} color="#09090B" />
+          <Text className="font-body-semibold text-[14px] text-text-primary">
             Google
           </Text>
         </Pressable>
-        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-xl py-3.5 gap-2 border border-border shadow-soft active:bg-soft">
-          <FontAwesome5 name="facebook-f" size={15} color="#1877F2" />
-          <Text className="font-body-bold text-[14px] text-text-primary">
+        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-2xl py-4 gap-2.5 border border-border shadow-soft active:bg-soft">
+          <FontAwesome5 name="facebook-f" size={15} color="#09090B" />
+          <Text className="font-body-semibold text-[14px] text-text-primary">
             Facebook
           </Text>
         </Pressable>

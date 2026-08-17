@@ -11,7 +11,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 const ICONS: Record<string, string> = {
   DashboardTab: 'home',
   CoursesTab: 'book-open',
-  PlannerTab: 'chart-line',
+  PlannerTab: 'chart-pie',
   NotificationsTab: 'bell',
   ProfileTab: 'user',
 };
@@ -50,7 +50,7 @@ const PremiumTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, naviga
   const { unreadCount } = useAnnouncements({ courseIds });
 
   return (
-    <View className="bg-surface border-t border-border px-3 pt-2 pb-6 flex-row justify-around items-center shadow-soft">
+    <View className="bg-surface border-t border-border/70 px-4 pt-3 pb-7 flex-row justify-around items-center">
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
         const icon = ICONS[route.name] ?? 'circle';
@@ -68,34 +68,30 @@ const PremiumTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, naviga
         };
 
         return (
-          <Pressable key={route.key} onPress={onPress} className="items-center px-3 py-1">
-            <View
-              className={
-                isFocused
-                  ? 'w-12 h-8 rounded-full bg-primary-light items-center justify-center'
-                  : 'w-12 h-8 items-center justify-center'
-              }
-            >
+          <Pressable
+            key={route.key}
+            onPress={onPress}
+            className="items-center justify-center flex-1 py-1"
+          >
+            <View className="items-center justify-center relative w-10 h-7">
               <FontAwesome5
                 name={icon}
-                size={17}
-                color={isFocused ? '#059669' : '#64748B'}
+                size={18}
+                color={isFocused ? '#0F5132' : '#A1A1AA'}
                 solid={isFocused}
               />
               {isNotifications && unreadCount > 0 && (
-                <View className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-error items-center justify-center px-1 border-2 border-surface">
-                  <Text className="font-body-bold text-[9px] text-white">
+                <View className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-error items-center justify-center px-1 border border-surface">
+                  <Text className="font-body-bold text-[8px] text-white">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </Text>
                 </View>
               )}
             </View>
             <Text
-              className={
-                isFocused
-                  ? 'font-body-bold text-[11px] text-primary-dark mt-1'
-                  : 'font-body-medium text-[11px] text-muted mt-1'
-              }
+              className={`font-body-medium text-[11px] mt-1 tracking-tight ${
+                isFocused ? 'font-body-bold text-primary' : 'text-muted'
+              }`}
             >
               {descriptors[route.key].options.tabBarLabel as string}
             </Text>

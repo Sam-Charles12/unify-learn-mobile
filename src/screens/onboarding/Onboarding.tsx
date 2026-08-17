@@ -6,7 +6,6 @@ import {
   Pressable,
   TextInput,
   Alert,
-  ActivityIndicator,
   useWindowDimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
@@ -23,9 +22,6 @@ import { cn } from '@/lib/utils';
 
 interface Slide {
   icon: string;
-  iconColor: string;
-  badgeBg: string;
-  badgeBorder: string;
   tag: string;
   title: string;
   subtitle: string;
@@ -34,33 +30,24 @@ interface Slide {
 const SLIDES: Slide[] = [
   {
     icon: 'graduation-cap',
-    iconColor: '#059669',
-    badgeBg: '#ECFDF5',
-    badgeBorder: '#A7F3D0',
-    tag: 'Curriculum-Aligned',
-    title: 'Your Faculty Syllabus,\nWeek by Week',
+    tag: 'Academic Syllabus',
+    title: 'LASU Engineering,\nWeek by Week',
     subtitle:
-      'Engineered specifically for LASU Engineering students. No more scattered WhatsApp notes or outdated PDFs.',
+      'Structured curriculum modules curated for your department. Built to eliminate scattered notes.',
   },
   {
     icon: 'brain',
-    iconColor: '#4F46E5',
-    badgeBg: '#EEF2FF',
-    badgeBorder: '#C7D2FE',
     tag: 'Active Recall',
-    title: 'Learn Faster with\nInteractive Checks',
+    title: 'Interactive\nKnowledge Checks',
     subtitle:
-      'Test your comprehension right inside reading sessions with Mini Checks, Pulse Checks, and End-of-Week Quizzes.',
+      'Verify understanding with interactive questions and pass gates before proceeding to the next week.',
   },
   {
-    icon: 'chart-line',
-    iconColor: '#D97706',
-    badgeBg: '#FFFBEB',
-    badgeBorder: '#FDE68A',
+    icon: 'chart-pie',
     tag: 'Academic Transparency',
-    title: 'Track Milestones &\nGrade Projections',
+    title: 'Track Milestones &\nGrade Standing',
     subtitle:
-      'Pass each week to unlock the next. Use the built-in Grade Planner to calculate continuous assessment scores.',
+      'Plan Continuous Assessment scores and forecast exam targets with the built-in Grade Planner.',
   },
 ];
 
@@ -95,7 +82,7 @@ const Onboarding: React.FC = () => {
     if (!user) return;
 
     if (!matric.trim() || !department || !level) {
-      Alert.alert('Incomplete Profile', 'Please enter your Matric number, Department, and Level to view your courses.');
+      Alert.alert('Incomplete Details', 'Please complete your Matric number, Department, and Level.');
       return;
     }
 
@@ -114,7 +101,7 @@ const Onboarding: React.FC = () => {
         ),
         new Promise((_, reject) =>
           setTimeout(
-            () => reject(new Error('Connection timeout. Please check your internet connection.')),
+            () => reject(new Error('Connection timed out. Please try again.')),
             15000
           )
         ),
@@ -134,7 +121,7 @@ const Onboarding: React.FC = () => {
         setDoc(doc(db, 'users', user.uid), { onboarded: true }, { merge: true }),
         new Promise((_, reject) =>
           setTimeout(
-            () => reject(new Error('Connection timeout. Please check your internet connection.')),
+            () => reject(new Error('Connection timed out. Please try again.')),
             15000
           )
         ),
@@ -148,22 +135,13 @@ const Onboarding: React.FC = () => {
 
   const renderSlide = ({ item }: { item: Slide }) => (
     <View style={{ width }} className="flex-1 px-8 justify-center items-center">
-      {/* Bento Card Tile */}
-      <View
-        style={{ backgroundColor: item.badgeBg, borderColor: item.badgeBorder }}
-        className="w-24 h-24 rounded-3xl items-center justify-center mb-6 border shadow-card"
-      >
-        <FontAwesome5 name={item.icon} size={38} color={item.iconColor} />
+      <View className="w-20 h-20 rounded-full bg-soft border border-border items-center justify-center mb-8 shadow-soft">
+        <FontAwesome5 name={item.icon} size={28} color="#09090B" />
       </View>
-      <View
-        style={{ backgroundColor: item.badgeBg, borderColor: item.badgeBorder }}
-        className="px-3.5 py-1 rounded-full border mb-4"
-      >
-        <Text style={{ color: item.iconColor }} className="font-body-bold text-[12px] uppercase tracking-wider">
-          {item.tag}
-        </Text>
-      </View>
-      <Text className="font-headline text-[26px] leading-[34px] text-text-primary text-center mb-3">
+      <Text className="font-body-bold text-[12px] text-primary uppercase tracking-wider mb-3">
+        {item.tag}
+      </Text>
+      <Text className="font-headline text-[28px] leading-[36px] text-text-primary text-center mb-4 tracking-tight">
         {item.title}
       </Text>
       <Text className="font-body text-[15px] leading-6 text-text-secondary text-center max-w-[320px]">
@@ -173,26 +151,23 @@ const Onboarding: React.FC = () => {
   );
 
   const renderProfileStep = () => (
-    <View style={{ width }} className="flex-1 px-6 pt-4">
-      <View className="w-14 h-14 rounded-2xl bg-primary-light border border-primary-border items-center justify-center mb-4">
-        <FontAwesome5 name="user-graduate" size={22} color="#059669" />
-      </View>
-      <Text className="font-headline text-[24px] leading-8 text-text-primary mb-1">
-        Setup Your Academic Profile
+    <View style={{ width }} className="flex-1 px-7 pt-4">
+      <Text className="font-headline text-[26px] leading-8 text-text-primary mb-2 tracking-tight">
+        Academic Profile Setup
       </Text>
-      <Text className="font-body text-[14px] leading-5 text-text-secondary mb-6">
-        This configures your timetable, lecturers, and department courses.
+      <Text className="font-body text-[14px] leading-5 text-text-secondary mb-8">
+        This configures your timetable, course modules, and faculty announcements.
       </Text>
 
-      <View className="mb-4">
+      <View className="mb-5">
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
-          Matric Number
+          Matriculation Number
         </Text>
-        <View className="bg-surface rounded-xl px-4 border border-border">
+        <View className="bg-surface rounded-2xl px-4 border border-border">
           <TextInput
-            className="py-3.5 font-body text-[15px] text-text-primary"
+            className="py-4 font-body text-[15px] text-text-primary"
             placeholder="e.g. 21/52CB001"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor="#A1A1AA"
             value={matric}
             onChangeText={setMatric}
             autoCapitalize="characters"
@@ -200,18 +175,18 @@ const Onboarding: React.FC = () => {
         </View>
       </View>
 
-      <View className="mb-4">
+      <View className="mb-5">
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Department
         </Text>
-        <View className="bg-surface rounded-xl overflow-hidden border border-border">
+        <View className="bg-surface rounded-2xl overflow-hidden border border-border">
           <Picker
             selectedValue={department}
             onValueChange={setDepartment}
-            style={{ backgroundColor: '#FFFFFF', color: '#0F172A' }}
-            dropdownIconColor="#64748B"
+            style={{ backgroundColor: '#FFFFFF', color: '#09090B' }}
+            dropdownIconColor="#71717A"
           >
-            <Picker.Item label="Select your department" value="" color="#94A3B8" />
+            <Picker.Item label="Select your department" value="" color="#A1A1AA" />
             {DEPARTMENTS.map((dept) => (
               <Picker.Item key={dept.id} label={dept.name} value={dept.id} />
             ))}
@@ -219,18 +194,18 @@ const Onboarding: React.FC = () => {
         </View>
       </View>
 
-      <View className="mb-6">
+      <View className="mb-8">
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Level
         </Text>
-        <View className="bg-surface rounded-xl overflow-hidden border border-border">
+        <View className="bg-surface rounded-2xl overflow-hidden border border-border">
           <Picker
             selectedValue={level}
             onValueChange={setLevel}
-            style={{ backgroundColor: '#FFFFFF', color: '#0F172A' }}
-            dropdownIconColor="#64748B"
+            style={{ backgroundColor: '#FFFFFF', color: '#09090B' }}
+            dropdownIconColor="#71717A"
           >
-            <Picker.Item label="Select current level" value="" color="#94A3B8" />
+            <Picker.Item label="Select current level" value="" color="#A1A1AA" />
             {LEVELS.map((l) => (
               <Picker.Item key={l.value} label={l.label} value={l.value} />
             ))}
@@ -241,11 +216,11 @@ const Onboarding: React.FC = () => {
       <Button
         variant="default"
         size="lg"
-        className="mb-3"
+        className="mb-4"
         loading={saving}
         onPress={handleFinish}
       >
-        Enter Dashboard
+        Complete Registration
       </Button>
 
       <Pressable className="items-center py-2" onPress={handleSkip} disabled={saving}>
@@ -262,21 +237,21 @@ const Onboarding: React.FC = () => {
   return (
     <SafeAreaView className="flex-1 bg-background">
       {/* Top Bar */}
-      <View className="flex-row justify-between items-center px-6 pt-3 pb-2">
+      <View className="flex-row justify-between items-center px-7 pt-4 pb-2">
         <Pressable
           onPress={handleSkip}
           disabled={saving}
           className="py-2 pr-4"
         >
-          <Text className="font-body-bold text-[13px] text-muted">Skip</Text>
+          <Text className="font-body-semibold text-[13px] text-muted">Skip</Text>
         </Pressable>
-        <View className="flex-row items-center gap-1.5">
+        <View className="flex-row items-center gap-2">
           {[...Array(SLIDES.length + 1)].map((_, i) => (
             <View
               key={i}
               className={cn(
-                'h-2 rounded-full',
-                i === index ? 'w-6 bg-primary' : 'w-2 bg-border-strong'
+                'h-1.5 rounded-full',
+                i === index ? 'w-6 bg-ink' : 'w-1.5 bg-border'
               )}
             />
           ))}
@@ -298,7 +273,7 @@ const Onboarding: React.FC = () => {
       />
 
       {!isLastSlide && (
-        <View className="px-6 pb-8">
+        <View className="px-7 pb-10">
           <Button
             variant="default"
             size="lg"
