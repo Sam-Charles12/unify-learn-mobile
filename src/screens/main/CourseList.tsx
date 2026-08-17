@@ -19,6 +19,8 @@ interface Course {
   lecturers?: string[];
   tutors?: string[];
   credits?: number;
+  departments?: string[];
+  levels?: string[];
 }
 
 const CARD_THEMES = [
@@ -36,21 +38,26 @@ const CourseList: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [indexError, setIndexError] = useState(false);
 
   const fetchCourses = async () => {
     if (!profile?.department || !profile?.level) return;
     try {
       const q = query(
         collection(db, 'courses'),
-        where('departments', 'array-contains', profile.department),
-        where('levels', 'array-contains', profile.level)
+        where('departments', 'array-contains', profile.department)
       );
       const snap = await getDocs(q);
-      setCourses(
-        snap.docs.map((d) => ({ id: d.id, ...d.data() } as Course))
-      );
-    } catch (e) {
-      console.warn('Failed to load courses:', e);
+      const filtered = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() } as Course))
+        .filter((c) => !Array.isArray(c.levels) || c.levels.includes(profile.level ?? ''));
+      setCourses(filtered);
+    } catch (e: any) {
+      if (e?.code === 'failed-precondition' && String(e?.message ?? '').includes('index')) {
+        setIndexError(true);
+      } else {
+        console.warn('Failed to load courses:', e);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -155,6 +162,19 @@ const CourseList: React.FC = () => {
       {loading ? (
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#00A86B" />
+        </View>
+      ) : indexError ? (
+        <View className="flex-1 items-center justify-center px-10">
+          <View className="w-20 h-20 rounded-pill bg-[#FDE8E8] items-center justify-center mb-4">
+            <FontAwesome5 name="database" size={26} color="#B91C1C" />
+          </View>
+          <Text className="font-headline text-[20px] text-text-primary mb-2 text-center">
+            Database index needed
+          </Text>
+          <Text className="font-body text-[14px] text-muted text-center leading-5">
+            Firestore needs a composite index for this query. In the Firebase console, go to
+            Firestore Database → Indexes and create the suggested index, then pull to refresh.
+          </Text>
         </View>
       ) : courses.length === 0 ? (
         <View className="flex-1 items-center justify-center px-10">
