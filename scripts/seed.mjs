@@ -1,4 +1,5 @@
-import admin from 'firebase-admin';
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 import fs from 'fs';
 import path from 'path';
 
@@ -10,8 +11,8 @@ if (!fs.existsSync(KEY_PATH)) {
   process.exit(1);
 }
 
-admin.initializeApp({ credential: admin.credential.cert(KEY_PATH) });
-const db = admin.firestore();
+initializeApp({ credential: cert(KEY_PATH) });
+const db = getFirestore();
 
 const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
 
