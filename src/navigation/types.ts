@@ -3,6 +3,7 @@ export type RootStackParamList = {
   CourseList: undefined;
   Course: { courseId: string };
   Week: { courseId: string; weekId: string };
+  Notifications: undefined;
 };
 
 export type AuthStackParamList = {

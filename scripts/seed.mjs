@@ -124,6 +124,58 @@ async function seed() {
   await lecturerRef.set(lecturer);
   console.log('Lecturer upserted: dr-adeyemi');
 
+  const now = Date.now();
+  const announcements = [
+    {
+      id: 'ann-university-1',
+      title: 'Second Semester Registration Deadline',
+      body: 'Course registration for the 2025/2026 second semester closes on Friday. Ensure you complete your registration on the school portal before then.',
+      scope: 'university',
+      senderName: 'LASU Registry',
+      senderRole: 'admin',
+      createdAt: { seconds: Math.floor(now / 1000) - 3600 * 26 },
+    },
+    {
+      id: 'ann-faculty-1',
+      title: 'Faculty of Engineering Week',
+      body: 'Engineering Week kicks off next Monday with the faculty orientation, lab demonstrations and the project defense schedule. Check the timetable for details.',
+      scope: 'faculty',
+      faculty: 'engineering',
+      senderName: 'Faculty Office',
+      senderRole: 'faculty-officer',
+      createdAt: { seconds: Math.floor(now / 1000) - 3600 * 5 },
+    },
+    {
+      id: 'ann-dept-1',
+      title: 'ECE Departmental Seminar',
+      body: 'The department seminar on "Semiconductor Industry in Nigeria" holds Thursday at 2pm in the ECE seminar room. Attendance is compulsory for 300 level.',
+      scope: 'department',
+      department: 'ece',
+      senderName: 'HOD, ECE',
+      senderRole: 'hod',
+      createdAt: { seconds: Math.floor(now / 1000) - 3600 * 2 },
+    },
+    {
+      id: 'ann-course-1',
+      title: 'Quiz Rescheduled',
+      body: 'The Week 1 mini quiz for ECE 301 has been moved to Wednesday. Review the Optical Materials notes before then.',
+      scope: 'course',
+      courseId: 'ece301',
+      courseCode: 'ECE 301',
+      lecturerName: 'Dr. A. Adeyemi',
+      weekNumber: 1,
+      senderName: 'Dr. A. Adeyemi',
+      senderRole: 'lecturer',
+      createdAt: { seconds: Math.floor(now / 1000) - 3600 },
+    },
+  ];
+
+  for (const ann of announcements) {
+    const { id, ...annData } = ann;
+    await db.collection('announcements').doc(id).set({ ...annData, isActive: true });
+    console.log('Announcement upserted:', id);
+  }
+
   for (const week of data.weeks) {
     const weekRef = courseRef.collection('weeks').doc(week.id);
     const { id, ...weekData } = week;

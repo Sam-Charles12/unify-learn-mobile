@@ -9,6 +9,7 @@ import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { useUserProfile } from '@/hooks/useUserProfile';
+import { useAnnouncements, scopeStyle } from '@/hooks/useAnnouncements';
 import { RootStackParamList } from '@/navigation/types';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -23,6 +24,9 @@ const Dashboard: React.FC = () => {
   const [weeksDone, setWeeksDone] = useState<number | null>(null);
   const [totalWeeks, setTotalWeeks] = useState<number | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
+  const [dismissed, setDismissed] = useState<string[]>([]);
+  const [courseIds, setCourseIds] = useState<string[]>([]);
+  const { announcements } = useAnnouncements({ dismissed, courseIds });
 
   useEffect(() => {
     const load = async () => {
@@ -52,6 +56,7 @@ const Dashboard: React.FC = () => {
         setCourseCount(courses.length);
         setWeeksDone(done);
         setTotalWeeks(total);
+        setCourseIds(courses.map((c) => c.id));
       } catch (e) {
         console.warn('Failed to load dashboard stats:', e);
       } finally {
@@ -101,6 +106,19 @@ const Dashboard: React.FC = () => {
               <Text className="font-body-semibold text-[13px] text-white/85">Unify Learn</Text>
             </View>
             <Pressable
+              onPress={() => navigation.navigate('Notifications')}
+              className="w-9 h-9 rounded-full bg-white/15 items-center justify-center mr-2"
+            >
+              <FontAwesome5 name="bell" size={15} color="#ffffff" />
+              {announcements.length > 0 && (
+                <View className="absolute -top-1 -right-1 min-w-5 h-5 rounded-pill bg-white px-1.5 items-center justify-center">
+                  <Text className="font-body-bold text-[10px] text-primary-dark">
+                    {announcements.length > 9 ? '9+' : announcements.length}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
+            <Pressable
               onPress={handleLogout}
               disabled={signingOut}
               className="w-9 h-9 rounded-full bg-white/15 items-center justify-center"
@@ -147,6 +165,34 @@ const Dashboard: React.FC = () => {
             </View>
           )}
         </View>
+
+        {announcements.length > 0 && (
+          <Pressable
+            onPress={() => navigation.navigate('Notifications')}
+            className="mx-5 mt-4 rounded-[20px] p-4 flex-row items-center bg-[#FFF8E1] border border-[#E5D45A]"
+          >
+            {(() => {
+              const latest = announcements[0];
+              const style = scopeStyle(latest.scope);
+              return (
+                <>
+                  <View style={{ backgroundColor: style.bg }} className="w-10 h-10 rounded-[14px] items-center justify-center mr-3">
+                    <FontAwesome5 name={style.icon} size={15} color={style.color} />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="font-body-semibold text-[14px] text-text-primary" numberOfLines={1}>
+                      {latest.title}
+                    </Text>
+                    <Text className="font-body text-[12px] text-muted" numberOfLines={1}>
+                      {latest.body}
+                    </Text>
+                  </View>
+                  <FontAwesome5 name="chevron-right" size={12} color="#8A817C" />
+                </>
+              );
+            })()}
+          </Pressable>
+        )}
 
         <View className="mx-5 mt-5 bg-card rounded-[24px] border border-border p-5 shadow-soft">
           <View className="flex-row justify-between mb-2">
