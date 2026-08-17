@@ -10,6 +10,10 @@ service cloud.firestore {
     function isOwner(uid) {
       return signedIn() && request.auth.uid == uid;
     }
+    function isAssignedLecturer(courseId) {
+      return signedIn() && courseId != null &&
+        get(/databases/$(database)/documents/courses/$(courseId)).data.lecturers.hasAny([request.auth.uid]);
+    }
 
     // Users: owner-only access
     match /users/{uid} {
@@ -21,10 +25,12 @@ service cloud.firestore {
       allow read, write: if isOwner(uid) || isAdmin();
     }
 
-    // Lecturers: any authenticated user reads, admin writes
+    // Lecturers: any authenticated user reads; admin creates; lecturer edits own profile
     match /lecturers/{lecturerId} {
       allow read: if signedIn();
-      allow write: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin() || isOwner(lecturerId);
+      allow delete: if isAdmin();
     }
 
     // Courses + weeks: any authenticated user reads, admin writes
@@ -44,10 +50,14 @@ service cloud.firestore {
       allow write: if isAdmin() || (signedIn() && resource.data.lecturerId == request.auth.uid);
     }
 
-    // Announcements: authenticated read, admin + assigned lecturer/tutor (course-scoped)
+    // Announcements: authenticated read; admin or assigned lecturer (course-scoped) write
     match /announcements/{announcementId} {
       allow read: if signedIn();
-      allow write: if isAdmin();
+      allow create: if isAdmin() ||
+        (signedIn() && request.resource.data.scope == 'course' &&
+         isAssignedLecturer(request.resource.data.courseId));
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
     }
 
     // Course registrations: owner or admin read, admin or self-register create

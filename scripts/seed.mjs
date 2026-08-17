@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 import fs from 'fs';
 import path from 'path';
 
@@ -11,8 +12,9 @@ if (!fs.existsSync(KEY_PATH)) {
   process.exit(1);
 }
 
-initializeApp({ credential: cert(KEY_PATH) });
-const db = getFirestore();
+const app = initializeApp({ credential: cert(KEY_PATH) });
+const db = getFirestore(app);
+const adminAuth = getAuth(app);
 
 const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
 
@@ -117,14 +119,55 @@ const lecturer = {
   contactEnabled: true,
 };
 
-async function seed() {
-  const courseRef = db.collection('courses').doc(data.course.id);
-  await courseRef.set(data.course);
-  console.log('Course upserted:', data.course.id);
+const LECTURER_EMAIL = 'lecturer@unifylearn.com';
+const LECTURER_PASSWORD = 'Lecturer123!';
 
-  const lecturerRef = db.collection('lecturers').doc('dr-adeyemi');
-  await lecturerRef.set(lecturer);
-  console.log('Lecturer upserted: dr-adeyemi');
+async function upsertLecturerUser() {
+  let uid;
+  try {
+    const user = await adminAuth.getUserByEmail(LECTURER_EMAIL);
+    uid = user.uid;
+  } catch (e) {
+    const created = await adminAuth.createUser({
+      email: LECTURER_EMAIL,
+      password: LECTURER_PASSWORD,
+      displayName: 'Dr. A. Adeyemi',
+    });
+    uid = created.uid;
+    console.log('Lecturer auth account created:', LECTURER_EMAIL, '/', LECTURER_PASSWORD);
+  }
+
+  const lecturerDoc = {
+    ...lecturer,
+    uid,
+  };
+
+  const courseDoc = {
+    ...data.course,
+    lecturers: [uid],
+    weekAssignments: [{ lecturerId: uid, weeks: [1, 2] }],
+  };
+
+  await db.collection('lecturers').doc(uid).set(lecturerDoc);
+  await db.collection('courses').doc(data.course.id).set(courseDoc);
+  await db.collection('users').doc(uid).set({
+    uid,
+    email: LECTURER_EMAIL,
+    name: 'Dr. A. Adeyemi',
+    role: 'lecturer',
+    onboarded: true,
+    createdAt: new Date(),
+  });
+  console.log('Lecturer doc upserted:', uid);
+  console.log('Lecturer user doc upserted');
+  console.log('Course assigned to lecturer:', uid);
+  return uid;
+}
+
+async function seed() {
+  const lecturerUid = await upsertLecturerUser();
+
+  const courseRef = db.collection('courses').doc(data.course.id);
 
   const now = Date.now();
   const announcements = [

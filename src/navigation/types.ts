@@ -14,6 +14,16 @@ export type RootStackParamList = {
   ProfileTab: undefined;
 };
 
+export type LecturerNavigatorParamList = {
+  LecturerDashboardTab: undefined;
+  LecturerCoursesTab: undefined;
+  LecturerProfileTab: undefined;
+  LecturerDashboard: undefined;
+  LecturerCourses: undefined;
+  LecturerCourseWorkspace: { courseId: string };
+  LecturerProfileEdit: undefined;
+};
+
 export type AuthStackParamList = {
   Login: undefined;
   SignUp: undefined;

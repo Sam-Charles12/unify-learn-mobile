@@ -16,7 +16,8 @@ import Profile from '@/screens/main/Profile';
 import LecturerProfile from '@/screens/main/LecturerProfile';
 import Onboarding from '@/screens/onboarding/Onboarding';
 import PremiumTabBar from '@/components/PremiumTabBar';
-import { doc, onSnapshot } from 'firebase/firestore';
+import LecturerTabs from '@/navigation/LecturerNavigator';
+import { doc, onSnapshot, getDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { View, ActivityIndicator } from 'react-native';
 
@@ -85,31 +86,48 @@ const MainTabs = () => (
 
 const SessionGate = () => {
   const { user } = useAuth();
-  const [onboarded, setOnboarded] = useState<boolean | null>(null);
+  const [gate, setGate] = useState<'loading' | 'lecturer' | 'onboarding' | 'main'>('loading');
 
   useEffect(() => {
     if (!user) {
-      setOnboarded(null);
+      setGate('loading');
       return;
     }
 
-    const unsub = onSnapshot(doc(db, 'users', user.uid), (snap) => {
-      const data = snap.data();
-      setOnboarded(data?.onboarded === true);
-    });
+    let unsub: () => void;
+    const check = async () => {
+      const lecturerSnap = await getDoc(doc(db, 'lecturers', user.uid));
+      const isLecturer = lecturerSnap.exists();
 
-    return () => unsub();
+      unsub = onSnapshot(doc(db, 'users', user.uid), (snap) => {
+        const data = snap.data();
+        if (data?.role === 'lecturer' || isLecturer) {
+          setGate('lecturer');
+        } else if (data?.onboarded === true) {
+          setGate('main');
+        } else {
+          setGate('onboarding');
+        }
+      });
+    };
+    check();
+
+    return () => {
+      if (unsub) unsub();
+    };
   }, [user]);
 
   if (!user) return <AuthStack />;
-  if (onboarded === null) {
+  if (gate === 'loading') {
     return (
       <View className="flex-1 bg-background items-center justify-center">
         <ActivityIndicator size="large" color="#00A86B" />
       </View>
     );
   }
-  return onboarded ? <MainTabs /> : <OnboardingStack />;
+  if (gate === 'lecturer') return <LecturerTabs />;
+  if (gate === 'onboarding') return <OnboardingStack />;
+  return <MainTabs />;
 };
 
 export default function App() {
