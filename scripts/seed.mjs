@@ -1,0 +1,141 @@
+import admin from 'firebase-admin';
+import fs from 'fs';
+import path from 'path';
+
+const KEY_PATH = path.resolve('scripts/firebase-admin-key.json');
+const DATA_PATH = path.resolve('scripts/seed-data.json');
+
+if (!fs.existsSync(KEY_PATH)) {
+  console.error('Missing scripts/firebase-admin-key.json — download it from Firebase Console > Project settings > Service accounts > Generate new private key.');
+  process.exit(1);
+}
+
+admin.initializeApp({ credential: admin.credential.cert(KEY_PATH) });
+const db = admin.firestore();
+
+const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+
+const WEEK1_PULSE = {
+  type: 'pulse_check',
+  data: {
+    title: 'Pulse Check: Optical Materials',
+    questions: [
+      { question: 'Which material is fundamental to fiber optic networks?', options: ['Copper', 'Glass', 'Graphite', 'Aluminium'], correctIndex: 1 },
+      { question: 'Refraction bends light according to which law?', options: ["Coulomb's law", "Ohm's law", "Snell's law", "Faraday's law"], correctIndex: 2 },
+      { question: 'Acrylic (PMMA) belongs to which class of optical materials?', options: ['Glass', 'Crystals', 'Polymers', 'Metals'], correctIndex: 2 },
+    ],
+  },
+};
+
+const WEEK1_EOQ = {
+  type: 'eoq',
+  data: {
+    questions: [
+      { question: 'Optical materials are substances that:', options: ['conduct electricity', 'interact with or manipulate light', 'resist mechanical stress', 'store magnetic charge'], correctIndex: 1 },
+      { question: 'Which of the following is a natural optical crystal?', options: ['Calcium fluoride', 'Lithium niobate', 'Quartz', 'Borosilicate'], correctIndex: 2 },
+      { question: 'The ratio of the permittivity of a material to the permittivity of free space is the:', options: ['dielectric strength', 'loss tangent', 'dielectric constant', 'polarization'], correctIndex: 2 },
+      { question: 'The maximum electric field a dielectric can withstand without breaking down is its:', options: ['dielectric strength', 'refractive index', 'permittivity', 'dispersion'], correctIndex: 0 },
+      { question: 'A low loss tangent value in a dielectric means:', options: ['high energy lost as heat', 'little energy lost as heat', 'high conductivity', 'poor insulation'], correctIndex: 1 },
+      { question: 'Piezoelectricity generates an electric charge in response to:', options: ['temperature change', 'mechanical stress', 'light exposure', 'magnetic field'], correctIndex: 1 },
+      { question: 'Which of these materials exhibits piezoelectricity naturally?', options: ['Quartz', 'Copper', 'Glass', 'Neodymium'], correctIndex: 0 },
+      { question: 'The inverse piezoelectric effect means an electric field causes:', options: ['heat generation', 'light emission', 'mechanical deformation', 'magnetization'], correctIndex: 2 },
+      { question: 'Materials that retain magnetization after the external field is removed are:', options: ['diamagnetic', 'paramagnetic', 'ferromagnetic', 'non-magnetic'], correctIndex: 2 },
+      { question: 'Neodymium magnets (NdFeB) are examples of:', options: ['soft magnetic materials', 'hard magnetic materials', 'diamagnetic materials', 'optical polymers'], correctIndex: 1 },
+    ],
+  },
+};
+
+const WEEK2_PULSE = {
+  type: 'pulse_check',
+  data: {
+    title: 'Pulse Check: Manufacturing Steps',
+    questions: [
+      { question: 'What is the main material used to make semiconductors?', options: ['Copper', 'Silicon', 'Quartz', 'Aluminium'], correctIndex: 1 },
+      { question: 'Which step creates the oxide film on the wafer surface?', options: ['Etching', 'Photolithography', 'Oxidation', 'Packaging'], correctIndex: 2 },
+      { question: 'The process that draws the circuit design onto the wafer is:', options: ['Photolithography', 'EDS', 'Metal wiring', 'Deposition'], correctIndex: 0 },
+    ],
+  },
+};
+
+const WEEK2_EOQ = {
+  type: 'eoq',
+  data: {
+    questions: [
+      { question: 'Semiconductor chips are manufactured mainly from:', options: ['silicon', 'copper', 'carbon', 'glass'], correctIndex: 0 },
+      { question: 'Sand is heated into high-purity liquid and solidified by crystallization into a:', options: ['wafer', 'ingot', 'mask', 'die'], correctIndex: 1 },
+      { question: 'Which step creates the oxide film that protects the wafer surface?', options: ['Etching', 'Oxidation', 'Packaging', 'EDS'], correctIndex: 1 },
+      { question: 'Photolithography uses a light-sensitive material called:', options: ['photoresist', 'oxide', 'etchant', 'dopant'], correctIndex: 0 },
+      { question: 'Wet etching uses which of the following?', options: ['plasma', 'chemical solutions', 'lasers', 'ion beams'], correctIndex: 1 },
+      { question: 'Adding impurities to silicon to make it conduct is called:', options: ['oxidation', 'etching', 'doping', 'polishing'], correctIndex: 2 },
+      { question: 'Why is copper avoided in semiconductor manufacturing?', options: ['it is too expensive', 'it diffuses into silicon and changes its properties', 'it does not conduct electricity', 'it cannot be deposited'], correctIndex: 1 },
+      { question: 'EDS in chip manufacturing stands for:', options: ['Energy Dispersive Spectroscopy', 'Electrical Design System', 'Electron Deposition Stage', 'Engineering Data Source'], correctIndex: 0 },
+      { question: 'Yield in semiconductor manufacturing is:', options: ['the testing time', 'percentage of prime chips relative to maximum chip count on a wafer', 'the wafer diameter', 'the number of packaging steps'], correctIndex: 1 },
+      { question: 'The final step that cuts the wafer into individual chips is:', options: ['EDS', 'metal wiring', 'packaging', 'photolithography'], correctIndex: 2 },
+    ],
+  },
+};
+
+const WEEK1_FITB = { type: 'fitb', data: { prompt: 'The ratio of the permittivity of a material to the permittivity of free space is called the ______ constant.', answer: 'dielectric' } };
+const WEEK2_FITB = { type: 'fitb', data: { prompt: 'The silicon rod produced by crystallization is called an ______.', answer: 'ingot' } };
+
+const cleanQ = (s) => s.replace(/^\(?Q?\d+[a-z]*\)?/i, '').replace(/^\((i+|ii+|iii+|iv+|v+)\)\s*/i, '').trim();
+const cleanA = (s) => (s || '').replace(/^[a-z]+\s*i{1,3}\.?/i, '').replace(/^\.\s*/, '').trim();
+
+const practiceReveals = data.questions.slice(0, 12).map((q, i) => ({
+  type: 'reveal',
+  data: {
+    statement: `${i + 1}. ${cleanQ(q.question)}`,
+    explanation: cleanA(q.answer) || 'Refer to the notes above.',
+  },
+}));
+
+data.weeks[0].contentBlocks = [
+  ...data.weeks[0].contentBlocks,
+  WEEK1_FITB,
+  WEEK1_PULSE,
+  { type: 'heading', data: { text: 'Practice Questions' } },
+  ...practiceReveals,
+  WEEK1_EOQ,
+];
+
+data.weeks[1].contentBlocks = [
+  ...data.weeks[1].contentBlocks,
+  WEEK2_FITB,
+  WEEK2_PULSE,
+  WEEK2_EOQ,
+];
+
+const lecturer = {
+  name: 'Dr. A. Adeyemi',
+  title: 'Senior Lecturer',
+  faculty: 'Engineering',
+  department: 'ece',
+  email: 'adeyemi@lasu.edu.ng',
+  officeHours: 'Mon & Wed, 10:00 – 12:00',
+  bio: 'Senior lecturer in Electrical and Computer Engineering at LASU, specialising in electrical engineering materials.',
+};
+
+async function seed() {
+  const courseRef = db.collection('courses').doc(data.course.id);
+  await courseRef.set(data.course);
+  console.log('Course upserted:', data.course.id);
+
+  const lecturerRef = db.collection('lecturers').doc('dr-adeyemi');
+  await lecturerRef.set(lecturer);
+  console.log('Lecturer upserted: dr-adeyemi');
+
+  for (const week of data.weeks) {
+    const weekRef = courseRef.collection('weeks').doc(week.id);
+    const { id, ...weekData } = week;
+    await weekRef.set(weekData);
+    console.log('Week upserted:', week.id, '—', weekData.contentBlocks.length, 'blocks');
+  }
+
+  console.log('\nSeed complete.');
+  process.exit(0);
+}
+
+seed().catch((err) => {
+  console.error('Seed failed:', err.message);
+  process.exit(1);
+});

@@ -38,6 +38,9 @@ yarn-error.*
 unify\ prd2.md
 unify\ prd2.pdf
 
+# Firebase service account key (secrets)
+scripts/firebase-admin-key.json
+
 # typescript
 *.tsbuildinfo
 
