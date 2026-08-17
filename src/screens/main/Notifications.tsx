@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Pressable, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { doc, getDoc, setDoc, arrayUnion, arrayRemove, collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
@@ -27,20 +27,12 @@ const Notifications: React.FC = () => {
   const { user } = useAuth();
   const { profile } = useUserProfile();
   const [tab, setTab] = useState<AnnouncementScope | 'all'>('all');
-  const [dismissed, setDismissed] = useState<string[]>([]);
   const [courseIds, setCourseIds] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !profile?.department) return;
     (async () => {
       try {
-        const userSnap = await getDoc(doc(db, 'users', user.uid));
-        const data = userSnap.data();
-        if (Array.isArray(data?.dismissedAnnouncements)) {
-          setDismissed(data.dismissedAnnouncements);
-        }
-
-        if (!profile?.department) return;
         const q = query(
           collection(db, 'courses'),
           where('departments', 'array-contains', profile.department)
@@ -58,31 +50,11 @@ const Notifications: React.FC = () => {
     })();
   }, [user, profile?.department, profile?.level]);
 
-  const { announcements, loading } = useAnnouncements({ dismissed, courseIds });
+  const { announcements, readIds, unreadCount, markAsRead, markAllAsRead, loading } =
+    useAnnouncements({ courseIds });
 
   const visible = tab === 'all' ? announcements : announcements.filter((a) => a.scope === tab);
-
-  const toggleDismiss = async (announcement: Announcement) => {
-    if (!user) return;
-    try {
-      const userRef = doc(db, 'users', user.uid);
-      const isDismissed = dismissed.includes(announcement.id);
-      await setDoc(
-        userRef,
-        {
-          dismissedAnnouncements: isDismissed
-            ? arrayRemove(announcement.id)
-            : arrayUnion(announcement.id),
-        },
-        { merge: true }
-      );
-      setDismissed((prev) =>
-        isDismissed ? prev.filter((id) => id !== announcement.id) : [...prev, announcement.id]
-      );
-    } catch (e: any) {
-      Alert.alert('Error', e?.message ?? 'Something went wrong');
-    }
-  };
+  const unreadInTab = visible.filter((a) => !readIds.includes(a.id)).length;
 
   const formatTime = (seconds?: number) => {
     if (!seconds) return '';
@@ -96,16 +68,22 @@ const Notifications: React.FC = () => {
 
   const renderItem = ({ item }: { item: Announcement }) => {
     const style = scopeStyle(item.scope);
-    const dismissedItem = dismissed.includes(item.id);
+    const isRead = readIds.includes(item.id);
 
     return (
-      <View className={cn('mb-3 rounded-[20px] border p-4', dismissedItem ? 'bg-surface border-border opacity-60' : 'bg-card border-border shadow-soft')}>
+      <View
+        className={cn(
+          'mb-3 rounded-[20px] border p-4',
+          isRead ? 'bg-surface border-border' : 'bg-card border-border shadow-soft'
+        )}
+      >
         <View className="flex-row items-start">
           <View style={{ backgroundColor: style.bg }} className="w-10 h-10 rounded-[14px] items-center justify-center mr-3">
             <FontAwesome5 name={style.icon} size={15} color={style.color} />
           </View>
           <View className="flex-1">
             <View className="flex-row items-center mb-1">
+              {!isRead && <View className="w-2 h-2 rounded-pill bg-error mr-2" />}
               <View style={{ backgroundColor: style.bg }} className="rounded-pill px-2 py-0.5 mr-2">
                 <Text style={{ color: style.color }} className="font-body-bold text-[10px] uppercase tracking-wide">
                   {item.scope}
@@ -122,7 +100,12 @@ const Notifications: React.FC = () => {
                 </Text>
               ) : null}
             </View>
-            <Text className="font-body-semibold text-[15px] text-text-primary leading-6">
+            <Text
+              className={cn(
+                'text-[15px] leading-6',
+                isRead ? 'font-body-medium text-text-secondary' : 'font-body-semibold text-text-primary'
+              )}
+            >
               {item.title}
             </Text>
             <Text className="font-body text-[13px] text-text-secondary leading-5 mt-1">
@@ -141,12 +124,26 @@ const Notifications: React.FC = () => {
                   </Text>
                 ) : null}
               </View>
-              <Pressable onPress={() => toggleDismiss(item)} className="w-8 h-8 rounded-full bg-background items-center justify-center">
+              <Pressable
+                onPress={() => markAsRead(item.id, !isRead)}
+                className={cn(
+                  'h-8 px-3 rounded-pill items-center justify-center flex-row',
+                  isRead ? 'bg-background' : 'bg-primary'
+                )}
+              >
                 <FontAwesome5
-                  name={dismissedItem ? 'undo' : 'times'}
-                  size={13}
-                  color="#8A817C"
+                  name={isRead ? 'undo' : 'check'}
+                  size={11}
+                  color={isRead ? '#8A817C' : '#ffffff'}
                 />
+                <Text
+                  className={cn(
+                    'ml-1.5 font-body-semibold text-[11px]',
+                    isRead ? 'text-muted' : 'text-white'
+                  )}
+                >
+                  {isRead ? 'Unread' : 'Mark read'}
+                </Text>
               </Pressable>
             </View>
           </View>
@@ -163,13 +160,23 @@ const Notifications: React.FC = () => {
             <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
           </Pressable>
           <Text className="font-body-bold text-white text-[15px]">Notifications</Text>
-          <View className="w-9" />
+          <Pressable
+            onPress={markAllAsRead}
+            disabled={unreadCount === 0}
+            className={cn('rounded-pill px-3 py-1.5', unreadCount > 0 ? 'bg-white' : 'bg-white/30')}
+          >
+            <Text className={cn('font-body-semibold text-[11px]', unreadCount > 0 ? 'text-accent' : 'text-white/60')}>
+              Mark all read
+            </Text>
+          </Pressable>
         </View>
         <Text className="font-headline text-[22px] text-white leading-7">
           Academic feed
         </Text>
         <Text className="font-body text-[13px] text-white/75 mt-1">
-          Updates from your university, faculty, department and courses
+          {unreadCount > 0
+            ? `${unreadCount} unread announcement${unreadCount > 1 ? 's' : ''}`
+            : 'You are all caught up'}
         </Text>
       </View>
 
@@ -183,13 +190,18 @@ const Notifications: React.FC = () => {
           <Pressable
             onPress={() => setTab(item.key)}
             className={cn(
-              'rounded-pill px-4 py-2 mr-2',
+              'rounded-pill px-4 py-2 mr-2 flex-row items-center',
               tab === item.key ? 'bg-accent' : 'bg-card border border-border'
             )}
           >
             <Text className={cn('font-body-semibold text-[13px]', tab === item.key ? 'text-white' : 'text-muted')}>
               {item.label}
             </Text>
+            {item.key === 'all' && unreadCount > 0 && (
+              <View className="ml-2 min-w-5 h-5 rounded-pill bg-error items-center justify-center px-1.5">
+                <Text className="font-body-bold text-[10px] text-white">{unreadCount}</Text>
+              </View>
+            )}
           </Pressable>
         )}
       />

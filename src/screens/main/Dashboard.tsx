@@ -23,9 +23,8 @@ const Dashboard: React.FC = () => {
   const [weeksDone, setWeeksDone] = useState<number | null>(null);
   const [totalWeeks, setTotalWeeks] = useState<number | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
-  const [dismissed, setDismissed] = useState<string[]>([]);
   const [courseIds, setCourseIds] = useState<string[]>([]);
-  const { announcements } = useAnnouncements({ dismissed, courseIds });
+  const { announcements, unreadCount } = useAnnouncements({ courseIds });
 
   useEffect(() => {
     const load = async () => {
@@ -108,10 +107,10 @@ const Dashboard: React.FC = () => {
                 className="w-11 h-11 rounded-[14px] bg-white items-center justify-center mr-3 shadow-soft"
               >
                 <FontAwesome5 name="bell" size={17} color="#005B96" />
-                {announcements.length > 0 && (
+                {unreadCount > 0 && (
                   <View className="absolute -top-1.5 -right-1.5 min-w-5 h-5 rounded-pill bg-error border-2 border-white px-1.5 items-center justify-center">
                     <Text className="font-body-bold text-[10px] text-white">
-                      {announcements.length > 9 ? '9+' : announcements.length}
+                      {unreadCount > 9 ? '9+' : unreadCount}
                     </Text>
                   </View>
                 )}

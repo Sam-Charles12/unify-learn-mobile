@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { useEffect, useState, useCallback } from 'react';
+import { collection, onSnapshot, query, where, doc, setDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { useAuth } from '@/context/AuthContext';
 import { useUserProfile } from '@/hooks/useUserProfile';
@@ -24,11 +24,6 @@ export interface Announcement {
   createdAt?: { seconds: number };
 }
 
-interface AnnouncementFilters {
-  dismissed: string[];
-  courseIds: string[];
-}
-
 const SCOPES: Record<string, { icon: string; bg: string; color: string }> = {
   university: { icon: 'university', bg: '#DCEEFF', color: '#005B96' },
   faculty: { icon: 'building', bg: '#CFF5E6', color: '#00895A' },
@@ -40,18 +35,33 @@ const SCOPES: Record<string, { icon: string; bg: string; color: string }> = {
 export const scopeStyle = (scope: AnnouncementScope) =>
   SCOPES[scope] ?? { icon: 'bullhorn', bg: '#F2F2F2', color: '#8A817C' };
 
-export const useAnnouncements = ({ dismissed, courseIds }: AnnouncementFilters) => {
+interface AnnouncementFilters {
+  courseIds: string[];
+}
+
+export const useAnnouncements = ({ courseIds }: AnnouncementFilters) => {
   const { user } = useAuth();
   const { profile } = useUserProfile();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [readIds, setReadIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
 
-    const q = query(collection(db, 'announcements'), where('isActive', '==', true));
-    const unsub = onSnapshot(
-      q,
+    const unsubRead = onSnapshot(
+      doc(db, 'users', user.uid),
+      (snap) => {
+        const data = snap.data();
+        if (Array.isArray(data?.readAnnouncements)) {
+          setReadIds(data.readAnnouncements);
+        }
+      },
+      (err) => console.warn('Read-state listener failed:', err)
+    );
+
+    const unsubAnn = onSnapshot(
+      query(collection(db, 'announcements'), where('isActive', '==', true)),
       (snap) => {
         const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Announcement);
 
@@ -89,8 +99,49 @@ export const useAnnouncements = ({ dismissed, courseIds }: AnnouncementFilters) 
       }
     );
 
-    return () => unsub();
-  }, [user, profile?.department, profile?.level, courseIds.join(','), dismissed.length]);
+    return () => {
+      unsubRead();
+      unsubAnn();
+    };
+  }, [user, profile?.department, profile?.level, courseIds.join(',')]);
 
-  return { announcements, loading };
+  const markAsRead = useCallback(
+    async (announcementId: string, read: boolean) => {
+      if (!user) return;
+      try {
+        await setDoc(
+          doc(db, 'users', user.uid),
+          {
+            readAnnouncements: read ? arrayUnion(announcementId) : arrayRemove(announcementId),
+          },
+          { merge: true }
+        );
+        setReadIds((prev) =>
+          read ? [...prev, announcementId] : prev.filter((id) => id !== announcementId)
+        );
+      } catch (e) {
+        console.warn('Failed to update read state:', e);
+      }
+    },
+    [user]
+  );
+
+  const markAllAsRead = useCallback(async () => {
+    if (!user || announcements.length === 0) return;
+    try {
+      await setDoc(
+        doc(db, 'users', user.uid),
+        { readAnnouncements: announcements.map((a) => a.id) },
+        { merge: true }
+      );
+      setReadIds(announcements.map((a) => a.id));
+    } catch (e) {
+      console.warn('Failed to mark all as read:', e);
+    }
+  }, [user, announcements]);
+
+  const unreadIds = announcements.filter((a) => !readIds.includes(a.id)).map((a) => a.id);
+  const unreadCount = unreadIds.length;
+
+  return { announcements, readIds, unreadCount, markAsRead, markAllAsRead, loading };
 };
