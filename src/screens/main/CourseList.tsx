@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { RootStackParamList } from '@/navigation/types';
 import { cn } from '@/lib/utils';
+import LecturerAvatarStack from '@/components/week/LecturerAvatarStack';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -110,30 +111,16 @@ const CourseList: React.FC = () => {
               </Text>
             </View>
             <View className="items-end">
-              {lecturerCount > 0 ? (
-                <View className="flex-row -space-x-2 mb-1">
-                  {[...Array(Math.min(lecturerCount, 3))].map((_, i) => (
-                    <View
-                      key={i}
-                      className="w-7 h-7 rounded-full bg-primary border-2 border-card items-center justify-center"
-                    >
-                      <Text className="font-body-bold text-[10px] text-white">
-                        {item.lecturers?.[i]?.charAt(0) ?? '?'}
-                      </Text>
-                    </View>
-                  ))}
-                  {lecturerCount > 3 && (
-                    <View className="w-7 h-7 rounded-full bg-surface border-2 border-card items-center justify-center">
-                      <Text className="font-body-bold text-[10px] text-muted">
-                        +{lecturerCount - 3}
-                      </Text>
-                    </View>
-                  )}
-                </View>
+              {item.lecturers && item.lecturers.length > 0 ? (
+                <>
+                  <View className="mb-1">
+                    <LecturerAvatarStack lecturerIds={item.lecturers} />
+                  </View>
+                  <Text className="font-body-medium text-[11px] text-muted">
+                    {item.lecturers.length} Lecturer{item.lecturers.length > 1 ? 's' : ''}
+                  </Text>
+                </>
               ) : null}
-              <Text className="font-body-medium text-[11px] text-muted">
-                {lecturerCount > 0 ? `${lecturerCount} Lecturer${lecturerCount > 1 ? 's' : ''}` : ''}
-              </Text>
             </View>
           </View>
         </View>

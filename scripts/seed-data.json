@@ -10,7 +10,16 @@
       "300"
     ],
     "lecturers": [
-      "Dr. A. Adeyemi"
+      "dr-adeyemi"
+    ],
+    "weekAssignments": [
+      {
+        "lecturerId": "dr-adeyemi",
+        "weeks": [
+          1,
+          2
+        ]
+      }
     ],
     "tutors": []
   },

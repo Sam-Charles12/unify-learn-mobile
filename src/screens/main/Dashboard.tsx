@@ -18,7 +18,6 @@ const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth();
   const { profile, loading: profileLoading } = useUserProfile();
   const navigation = useNavigation<NavigationProp>();
-  const [signingOut, setSigningOut] = useState(false);
 
   const [courseCount, setCourseCount] = useState<number | null>(null);
   const [weeksDone, setWeeksDone] = useState<number | null>(null);
@@ -66,19 +65,14 @@ const Dashboard: React.FC = () => {
     load();
   }, [user, profile?.department, profile?.level]);
 
-  const handleLogout = async () => {
-    setSigningOut(true);
-    try {
-      await signOut();
-    } catch (error: any) {
-      console.error('Logout failed:', error);
-    } finally {
-      setSigningOut(false);
-    }
-  };
-
   const firstName =
     profile?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'there';
+  const initials = (profile?.name ?? user?.email ?? 'U')
+    .split(/[\s@.]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((s) => s[0].toUpperCase())
+    .join('');
   const points = (weeksDone ?? 0) * 10;
   const progressPct =
     totalWeeks && totalWeeks > 0 ? Math.min(100, Math.round(((weeksDone ?? 0) / totalWeeks) * 100)) : 0;
@@ -98,37 +92,39 @@ const Dashboard: React.FC = () => {
           end={{ x: 1, y: 1 }}
           className="rounded-b-[28px] px-6 pt-4 pb-12"
         >
-          <View className="flex-row items-center justify-between mb-5">
+          <View className="flex-row items-center justify-between mb-6">
             <View className="flex-row items-center">
-              <View className="w-10 h-10 rounded-full bg-white/15 items-center justify-center mr-3">
-                <FontAwesome5 name="graduation-cap" size={17} color="#ffffff" />
+              <View className="w-11 h-11 rounded-[14px] bg-white items-center justify-center mr-3 shadow-soft">
+                <FontAwesome5 name="graduation-cap" size={18} color="#00895A" />
               </View>
-              <Text className="font-body-semibold text-[13px] text-white/85">Unify Learn</Text>
+              <View>
+                <Text className="font-headline text-[16px] text-white leading-5">Unify Learn</Text>
+                <Text className="font-body text-[11px] text-white/70">LASU Engineering</Text>
+              </View>
             </View>
-            <Pressable
-              onPress={() => navigation.navigate('Notifications')}
-              className="w-9 h-9 rounded-full bg-white/15 items-center justify-center mr-2"
-            >
-              <FontAwesome5 name="bell" size={15} color="#ffffff" />
-              {announcements.length > 0 && (
-                <View className="absolute -top-1 -right-1 min-w-5 h-5 rounded-pill bg-white px-1.5 items-center justify-center">
-                  <Text className="font-body-bold text-[10px] text-primary-dark">
-                    {announcements.length > 9 ? '9+' : announcements.length}
-                  </Text>
-                </View>
-              )}
-            </Pressable>
-            <Pressable
-              onPress={handleLogout}
-              disabled={signingOut}
-              className="w-9 h-9 rounded-full bg-white/15 items-center justify-center"
-            >
-              {signingOut ? (
-                <ActivityIndicator size="small" color="#ffffff" />
-              ) : (
-                <FontAwesome5 name="sign-out-alt" size={14} color="#ffffff" />
-              )}
-            </Pressable>
+            <View className="flex-row items-center">
+              <Pressable
+                onPress={() => navigation.navigate('Notifications')}
+                className="w-11 h-11 rounded-[14px] bg-white items-center justify-center mr-3 shadow-soft"
+              >
+                <FontAwesome5 name="bell" size={17} color="#005B96" />
+                {announcements.length > 0 && (
+                  <View className="absolute -top-1.5 -right-1.5 min-w-5 h-5 rounded-pill bg-error border-2 border-white px-1.5 items-center justify-center">
+                    <Text className="font-body-bold text-[10px] text-white">
+                      {announcements.length > 9 ? '9+' : announcements.length}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
+              <Pressable
+                onPress={() => navigation.navigate('Profile')}
+                className="w-11 h-11 rounded-[14px] bg-white items-center justify-center shadow-soft"
+              >
+                <Text className="font-headline text-[15px] text-primary-dark">
+                  {initials}
+                </Text>
+              </Pressable>
+            </View>
           </View>
 
           <Text className="font-headline text-[26px] text-white leading-9">

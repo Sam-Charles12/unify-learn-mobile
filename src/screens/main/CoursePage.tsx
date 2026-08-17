@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { RootStackParamList } from '@/navigation/types';
 import { cn } from '@/lib/utils';
+import { useLecturers, Lecturer } from '@/hooks/useLecturers';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type CourseRouteProp = RouteProp<RootStackParamList, 'Course'>;
@@ -21,6 +22,7 @@ interface CourseDoc {
   levels?: string[];
   lecturers?: string[];
   tutors?: string[];
+  weekAssignments?: { lecturerId: string; weeks: number[] }[];
 }
 
 interface WeekDoc {
@@ -41,6 +43,7 @@ const CoursePage: React.FC = () => {
   const [weeks, setWeeks] = useState<WeekDoc[]>([]);
   const [completedWeeks, setCompletedWeeks] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const { lecturers } = useLecturers(course?.lecturers ?? []);
 
   useEffect(() => {
     const load = async () => {
@@ -159,7 +162,15 @@ const CoursePage: React.FC = () => {
     );
   }
 
-  const lecturerCount = course?.lecturers?.length ?? 0;
+  const lecturerCount = lecturers.length;
+
+  const weeksFor = (lecturerId: string): string => {
+    const assignment = course?.weekAssignments?.find((a) => a.lecturerId === lecturerId);
+    if (!assignment || !assignment.weeks?.length) return '';
+    return assignment.weeks.length > 1
+      ? `Weeks ${assignment.weeks[0]}–${assignment.weeks[assignment.weeks.length - 1]}`
+      : `Week ${assignment.weeks[0]}`;
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
@@ -177,20 +188,20 @@ const CoursePage: React.FC = () => {
         </Text>
 
         <View className="flex-row items-center mt-3">
-          {lecturerCount > 0 ? (
+          {lecturers.length > 0 ? (
             <View className="flex-row -space-x-2 mr-3">
-              {[...Array(Math.min(lecturerCount, 3))].map((_, i) => (
-                <View key={i} className="w-7 h-7 rounded-full bg-white/25 border-2 border-primary items-center justify-center">
+              {lecturers.slice(0, 3).map((l) => (
+                <View key={l.id} className="w-7 h-7 rounded-full bg-white/25 border-2 border-primary items-center justify-center">
                   <Text className="font-body-bold text-[10px] text-white">
-                    {course?.lecturers?.[i]?.charAt(0) ?? '?'}
+                    {l.name?.charAt(0) ?? '?'}
                   </Text>
                 </View>
               ))}
             </View>
           ) : null}
           <Text className="font-body-medium text-[12px] text-white/80">
-            {lecturerCount > 0
-              ? `${lecturerCount} Lecturer${lecturerCount > 1 ? 's' : ''}`
+            {lecturers.length > 0
+              ? `${lecturers.length} Lecturer${lecturers.length > 1 ? 's' : ''}`
               : 'Course'}
           </Text>
         </View>
@@ -213,7 +224,41 @@ const CoursePage: React.FC = () => {
         contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <Text className="font-headline text-[18px] text-text-primary mb-4">Course weeks</Text>
+          <>
+            {lecturers.length > 0 && (
+              <View className="bg-card rounded-[24px] border border-border p-5 shadow-soft mb-5">
+                <Text className="font-headline text-[18px] text-text-primary mb-4">
+                  Meet Your Lecturer{lecturers.length > 1 ? 's' : ''}
+                </Text>
+                {lecturers.map((l, i) => {
+                  const range = weeksFor(l.id);
+                  return (
+                    <Pressable
+                      key={l.id}
+                      onPress={() => navigation.navigate('Lecturer', { lecturerId: l.id })}
+                      className={i < lecturers.length - 1 ? 'flex-row items-center py-2 border-b border-divider/50' : 'flex-row items-center py-2'}
+                    >
+                      <View className="w-12 h-12 rounded-pill bg-accent-light items-center justify-center mr-3">
+                        <Text className="font-headline text-[16px] text-accent">
+                          {l.name?.split(' ').slice(0, 2).map((s) => s[0]).join('') ?? '?'}
+                        </Text>
+                      </View>
+                      <View className="flex-1">
+                        <Text className="font-body-semibold text-[15px] text-text-primary">{l.name}</Text>
+                        <Text className="font-body-medium text-[12px] text-muted mt-0.5">
+                          {[l.title, range].filter(Boolean).join(' · ')}
+                        </Text>
+                      </View>
+                      <View className="w-8 h-8 rounded-full bg-accent items-center justify-center">
+                        <FontAwesome5 name="chevron-right" size={12} color="#ffffff" />
+                      </View>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            )}
+            <Text className="font-headline text-[18px] text-text-primary mb-4">Course weeks</Text>
+          </>
         }
         ListEmptyComponent={
           <View className="items-center py-16 px-10">

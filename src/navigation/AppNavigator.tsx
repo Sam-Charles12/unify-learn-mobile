@@ -12,6 +12,7 @@ import WeekPage from '@/screens/main/WeekPage';
 import Notifications from '@/screens/main/Notifications';
 import GradePlanner from '@/screens/main/GradePlanner';
 import Profile from '@/screens/main/Profile';
+import LecturerProfile from '@/screens/main/LecturerProfile';
 import Onboarding from '@/screens/onboarding/Onboarding';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
@@ -42,6 +43,7 @@ const MainStack = () => (
     <Stack.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
     <Stack.Screen name="GradePlanner" component={GradePlanner} options={{ headerShown: false }} />
     <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+    <Stack.Screen name="Lecturer" component={LecturerProfile} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 

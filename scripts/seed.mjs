@@ -112,7 +112,8 @@ const lecturer = {
   department: 'ece',
   email: 'adeyemi@lasu.edu.ng',
   officeHours: 'Mon & Wed, 10:00 – 12:00',
-  bio: 'Senior lecturer in Electrical and Computer Engineering at LASU, specialising in electrical engineering materials.',
+  bio: 'Senior lecturer in Electrical and Computer Engineering at LASU, specialising in electrical engineering materials. Research interests include dielectric materials, optical systems and semiconductor devices.',
+  contactEnabled: true,
 };
 
 async function seed() {

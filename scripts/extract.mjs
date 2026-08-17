@@ -75,7 +75,8 @@ const course = {
   title: 'Electrical Engineering Materials',
   departments: ['ece'],
   levels: ['300'],
-  lecturers: ['Dr. A. Adeyemi'],
+  lecturers: ['dr-adeyemi'],
+  weekAssignments: [{ lecturerId: 'dr-adeyemi', weeks: [1, 2] }],
   tutors: [],
 };
 

@@ -6,6 +6,7 @@ export type RootStackParamList = {
   Notifications: undefined;
   GradePlanner: undefined;
   Profile: undefined;
+  Lecturer: { lecturerId: string };
 };
 
 export type AuthStackParamList = {
