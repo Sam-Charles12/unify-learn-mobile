@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import SignUP from '@/screens/auth/SignUp';
 import Login from '@/screens/auth/Login';
@@ -14,11 +15,13 @@ import GradePlanner from '@/screens/main/GradePlanner';
 import Profile from '@/screens/main/Profile';
 import LecturerProfile from '@/screens/main/LecturerProfile';
 import Onboarding from '@/screens/onboarding/Onboarding';
+import PremiumTabBar from '@/components/PremiumTabBar';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { View, ActivityIndicator } from 'react-native';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const AuthStack = () => (
   <Stack.Navigator initialRouteName="Login">
@@ -34,17 +37,50 @@ const OnboardingStack = () => (
   </Stack.Navigator>
 );
 
-const MainStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
-    <Stack.Screen name="CourseList" component={CourseList} options={{ headerShown: false }} />
-    <Stack.Screen name="Course" component={CoursePage} options={{ headerShown: false }} />
-    <Stack.Screen name="Week" component={WeekPage} options={{ headerShown: false }} />
-    <Stack.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
-    <Stack.Screen name="GradePlanner" component={GradePlanner} options={{ headerShown: false }} />
-    <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-    <Stack.Screen name="Lecturer" component={LecturerProfile} options={{ headerShown: false }} />
+const HomeStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Dashboard" component={Dashboard} />
   </Stack.Navigator>
+);
+
+const CoursesStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="CourseList" component={CourseList} />
+    <Stack.Screen name="Course" component={CoursePage} />
+    <Stack.Screen name="Week" component={WeekPage} />
+    <Stack.Screen name="Lecturer" component={LecturerProfile} />
+  </Stack.Navigator>
+);
+
+const PlannerStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="GradePlanner" component={GradePlanner} />
+  </Stack.Navigator>
+);
+
+const NotificationsStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Notifications" component={Notifications} />
+  </Stack.Navigator>
+);
+
+const ProfileStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Profile" component={Profile} />
+  </Stack.Navigator>
+);
+
+const MainTabs = () => (
+  <Tab.Navigator
+    tabBar={(props) => <PremiumTabBar {...props} />}
+    screenOptions={{ headerShown: false }}
+  >
+    <Tab.Screen name="DashboardTab" component={HomeStack} options={{ tabBarLabel: 'Home' }} />
+    <Tab.Screen name="CoursesTab" component={CoursesStack} options={{ tabBarLabel: 'Courses' }} />
+    <Tab.Screen name="PlannerTab" component={PlannerStack} options={{ tabBarLabel: 'Planner' }} />
+    <Tab.Screen name="NotificationsTab" component={NotificationsStack} options={{ tabBarLabel: 'Alerts' }} />
+    <Tab.Screen name="ProfileTab" component={ProfileStack} options={{ tabBarLabel: 'Profile' }} />
+  </Tab.Navigator>
 );
 
 const SessionGate = () => {
@@ -73,7 +109,7 @@ const SessionGate = () => {
       </View>
     );
   }
-  return onboarded ? <MainStack /> : <OnboardingStack />;
+  return onboarded ? <MainTabs /> : <OnboardingStack />;
 };
 
 export default function App() {

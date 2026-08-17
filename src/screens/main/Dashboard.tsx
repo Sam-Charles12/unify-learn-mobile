@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
             </View>
             <View className="flex-row items-center">
               <Pressable
-                onPress={() => navigation.navigate('Notifications')}
+                onPress={() => navigation.navigate('NotificationsTab')}
                 className="w-11 h-11 rounded-[14px] bg-white items-center justify-center mr-3 shadow-soft"
               >
                 <FontAwesome5 name="bell" size={17} color="#005B96" />
@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
                 )}
               </Pressable>
               <Pressable
-                onPress={() => navigation.navigate('Profile')}
+                onPress={() => navigation.navigate('ProfileTab')}
                 className="w-11 h-11 rounded-[14px] bg-white items-center justify-center shadow-soft"
               >
                 <Text className="font-headline text-[15px] text-primary-dark">
@@ -163,7 +163,7 @@ const Dashboard: React.FC = () => {
 
         {announcements.length > 0 && (
           <Pressable
-            onPress={() => navigation.navigate('Notifications')}
+            onPress={() => navigation.navigate('NotificationsTab')}
             className="mx-5 mt-4 rounded-[20px] p-4 flex-row items-center bg-[#FFF8E1] border border-[#E5D45A]"
           >
             {(() => {
@@ -209,7 +209,7 @@ const Dashboard: React.FC = () => {
 
         <View className="flex-row gap-3 mx-5 mt-5">
           <Pressable
-            onPress={() => navigation.navigate('GradePlanner')}
+            onPress={() => navigation.navigate('PlannerTab')}
             className="flex-1 bg-card rounded-[20px] border border-border p-4 shadow-soft items-center"
           >
             <View className="w-11 h-11 rounded-[16px] bg-accent-light items-center justify-center mb-2">
@@ -220,7 +220,7 @@ const Dashboard: React.FC = () => {
             </Text>
           </Pressable>
           <Pressable
-            onPress={() => navigation.navigate('Notifications')}
+            onPress={() => navigation.navigate('NotificationsTab')}
             className="flex-1 bg-card rounded-[20px] border border-border p-4 shadow-soft items-center"
           >
             <View className="w-11 h-11 rounded-[16px] bg-[#E5D45A]/50 items-center justify-center mb-2">
@@ -231,7 +231,7 @@ const Dashboard: React.FC = () => {
             </Text>
           </Pressable>
           <Pressable
-            onPress={() => navigation.navigate('Profile')}
+            onPress={() => navigation.navigate('ProfileTab')}
             className="flex-1 bg-card rounded-[20px] border border-border p-4 shadow-soft items-center"
           >
             <View className="w-11 h-11 rounded-[16px] bg-primary-light items-center justify-center mb-2">
@@ -250,7 +250,7 @@ const Dashboard: React.FC = () => {
           </Text>
 
           <Pressable
-            onPress={() => navigation.navigate('CourseList')}
+            onPress={() => navigation.navigate('CoursesTab')}
             className="bg-card rounded-[24px] border border-border p-5 shadow-soft mb-4"
           >
             <View className="flex-row items-center">
@@ -281,7 +281,7 @@ const Dashboard: React.FC = () => {
             end={{ x: 1, y: 1 }}
             className="rounded-[24px] p-5 shadow-soft"
           >
-            <Pressable onPress={() => navigation.navigate('CourseList')}>
+            <Pressable onPress={() => navigation.navigate('CoursesTab')}>
               <View className="flex-row items-center">
                 <View className="w-14 h-14 rounded-[18px] bg-white/15 items-center justify-center mr-4">
                   <FontAwesome5 name="layer-group" size={20} color="#ffffff" />

@@ -7,6 +7,11 @@ export type RootStackParamList = {
   GradePlanner: undefined;
   Profile: undefined;
   Lecturer: { lecturerId: string };
+  DashboardTab: undefined;
+  CoursesTab: undefined;
+  PlannerTab: undefined;
+  NotificationsTab: undefined;
+  ProfileTab: undefined;
 };
 
 export type AuthStackParamList = {
