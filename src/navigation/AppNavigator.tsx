@@ -14,6 +14,7 @@ import Notifications from '@/screens/main/Notifications';
 import GradePlanner from '@/screens/main/GradePlanner';
 import Profile from '@/screens/main/Profile';
 import LecturerProfile from '@/screens/main/LecturerProfile';
+import Timetable from '@/screens/main/Timetable';
 import Onboarding from '@/screens/onboarding/Onboarding';
 import PremiumTabBar from '@/components/PremiumTabBar';
 import LecturerTabs from '@/navigation/LecturerNavigator';
@@ -41,6 +42,7 @@ const OnboardingStack = () => (
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Dashboard" component={Dashboard} />
+    <Stack.Screen name="Timetable" component={Timetable} />
   </Stack.Navigator>
 );
 

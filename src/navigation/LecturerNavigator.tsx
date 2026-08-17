@@ -8,6 +8,7 @@ import LecturerDashboard from '@/screens/lecturer/LecturerDashboard';
 import LecturerCourses from '@/screens/lecturer/LecturerCourses';
 import LecturerCourseWorkspace from '@/screens/lecturer/LecturerCourseWorkspace';
 import LecturerProfileEdit from '@/screens/lecturer/LecturerProfileEdit';
+import LecturerTimetable from '@/screens/lecturer/LecturerTimetable';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -15,6 +16,7 @@ const Tab = createBottomTabNavigator();
 const ICONS: Record<string, string> = {
   LecturerDashboardTab: 'home',
   LecturerCoursesTab: 'book-open',
+  LecturerTimetableTab: 'calendar-alt',
   LecturerProfileTab: 'user',
 };
 
@@ -87,10 +89,17 @@ const ProfileStack = () => (
   </Stack.Navigator>
 );
 
+const TimetableStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="LecturerTimetable" component={LecturerTimetable} />
+  </Stack.Navigator>
+);
+
 const LecturerTabs = () => (
   <Tab.Navigator tabBar={(props) => <LecturerTabBar {...props} />} screenOptions={{ headerShown: false }}>
     <Tab.Screen name="LecturerDashboardTab" component={DashboardStack} options={{ tabBarLabel: 'Home' }} />
     <Tab.Screen name="LecturerCoursesTab" component={CoursesStack} options={{ tabBarLabel: 'Courses' }} />
+    <Tab.Screen name="LecturerTimetableTab" component={TimetableStack} options={{ tabBarLabel: 'Timetable' }} />
     <Tab.Screen name="LecturerProfileTab" component={ProfileStack} options={{ tabBarLabel: 'Profile' }} />
   </Tab.Navigator>
 );

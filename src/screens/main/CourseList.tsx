@@ -1,14 +1,13 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Pressable, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { RootStackParamList } from '@/navigation/types';
-import { cn } from '@/lib/utils';
 import LecturerAvatarStack from '@/components/week/LecturerAvatarStack';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -23,15 +22,6 @@ interface Course {
   departments?: string[];
   levels?: string[];
 }
-
-const CARD_THEMES = [
-  { bg: '#CFF5E6', icon: 'book-open', color: '#00895A' },
-  { bg: '#DCEEFF', icon: 'calculator', color: '#005B96' },
-  { bg: '#E5D45A', icon: 'atom', color: '#8B9658' },
-  { bg: '#E78B73', icon: 'flask', color: '#B45309' },
-  { bg: '#B7D8F5', icon: 'cogs', color: '#005B96' },
-  { bg: '#BFD9D2', icon: 'chart-pie', color: '#00895A' },
-];
 
 const CourseList: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -76,51 +66,53 @@ const CourseList: React.FC = () => {
     fetchCourses();
   };
 
-  const renderCourse = ({ item, index }: { item: Course; index: number }) => {
-    const theme = CARD_THEMES[index % CARD_THEMES.length];
+  const renderCourse = ({ item }: { item: Course }) => {
     const lecturerCount = item.lecturers?.length ?? 0;
 
     return (
       <Pressable
         onPress={() => navigation.navigate('Course', { courseId: item.id })}
-        className="mb-4"
-        >
-        <View className="bg-card rounded-lg border border-border p-5 shadow-soft">
-          <View className="flex-row items-center">
-            <View
-              style={{ backgroundColor: theme.bg }}
-              className="w-14 h-14 rounded-pill items-center justify-center mr-4"
-            >
-              <FontAwesome5 name={theme.icon} size={22} color={theme.color} />
-            </View>
-            <View className="flex-1">
-              <View className="flex-row items-center gap-2 mb-1">
-                <Text className="font-body-bold text-[15px] text-primary-dark">
+        className="mb-3"
+      >
+        <View className="bg-surface rounded-2xl border border-border p-5 shadow-card active:bg-soft">
+          <View className="flex-row items-start justify-between mb-3">
+            <View className="flex-row items-center gap-2">
+              <View className="bg-primary-light px-3 py-1 rounded-full border border-primary-border">
+                <Text className="font-body-bold text-[13px] text-primary-dark">
                   {item.code}
                 </Text>
-                {item.credits ? (
-                  <View className="bg-background rounded-pill px-2 py-0.5">
-                    <Text className="font-body-medium text-[11px] text-muted">
-                      {item.credits} credits
-                    </Text>
-                  </View>
-                ) : null}
               </View>
-              <Text className="font-body-medium text-[15px] text-text-primary" numberOfLines={1}>
-                {item.title}
-              </Text>
-            </View>
-            <View className="items-end">
-              {item.lecturers && item.lecturers.length > 0 ? (
-                <>
-                  <View className="mb-1">
-                    <LecturerAvatarStack lecturerIds={item.lecturers} />
-                  </View>
-                  <Text className="font-body-medium text-[11px] text-muted">
-                    {item.lecturers.length} Lecturer{item.lecturers.length > 1 ? 's' : ''}
+              {item.credits ? (
+                <View className="bg-soft px-2.5 py-1 rounded-full border border-border">
+                  <Text className="font-body-medium text-[11px] text-text-secondary">
+                    {item.credits} Units
                   </Text>
-                </>
+                </View>
               ) : null}
+            </View>
+
+            {item.lecturers && item.lecturers.length > 0 ? (
+              <View className="flex-row items-center gap-1.5">
+                <LecturerAvatarStack lecturerIds={item.lecturers} />
+              </View>
+            ) : null}
+          </View>
+
+          <Text className="font-headline text-[17px] text-text-primary leading-6 mb-2">
+            {item.title}
+          </Text>
+
+          <View className="flex-row items-center justify-between pt-2 border-t border-divider">
+            <Text className="font-body-medium text-[12px] text-muted">
+              {lecturerCount > 0
+                ? `${lecturerCount} Assigned Lecturer${lecturerCount > 1 ? 's' : ''}`
+                : 'Faculty Course'}
+            </Text>
+            <View className="flex-row items-center">
+              <Text className="font-body-bold text-[12px] text-primary-dark mr-1.5">
+                Start Week
+              </Text>
+              <FontAwesome5 name="arrow-right" size={10} color="#059669" />
             </View>
           </View>
         </View>
@@ -130,49 +122,56 @@ const CourseList: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <View className="bg-primary rounded-b-[28px] px-6 pt-4 pb-8 shadow-soft">
+      {/* Header */}
+      <View className="px-5 pt-3 pb-5 bg-surface border-b border-border">
         <View className="flex-row items-center justify-between mb-3">
-          <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-            <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
+          <Pressable
+            onPress={() => navigation.goBack()}
+            className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+          >
+            <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
           </Pressable>
-          <Text className="font-body-bold text-white text-[15px]">My Courses</Text>
-          <View className="w-9" />
+          <Text className="font-body-bold text-text-primary text-[16px]">Enrolled Courses</Text>
+          <View className="w-10" />
         </View>
-        <Text className="font-headline text-[24px] text-white leading-8">
-          {profile?.name?.split(' ')[0] ? `Hello, ${profile.name.split(' ')[0]}` : 'Hello'}
+
+        <Text className="font-headline text-[24px] text-text-primary leading-8">
+          Faculty Syllabus
         </Text>
-        <Text className="font-body text-[13px] text-white/75 mt-1">
-          Courses for your {profile?.level ? `L${profile.level}` : ''} {profile?.department ? profile.department.toUpperCase() : ''} programme
+        <Text className="font-body text-[13px] text-text-secondary mt-0.5">
+          {profile?.department
+            ? `${profile.department.toUpperCase()} • Level ${profile.level ?? ''}`
+            : 'Department Curriculum'}
         </Text>
       </View>
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#00A86B" />
+          <ActivityIndicator size="large" color="#059669" />
+          <Text className="font-body text-[13px] text-muted mt-2">Loading courses...</Text>
         </View>
       ) : indexError ? (
-        <View className="flex-1 items-center justify-center px-10">
-          <View className="w-20 h-20 rounded-pill bg-[#FDE8E8] items-center justify-center mb-4">
-            <FontAwesome5 name="database" size={26} color="#B91C1C" />
+        <View className="flex-1 items-center justify-center px-8">
+          <View className="w-16 h-16 rounded-2xl bg-rose-bg border border-rose-border items-center justify-center mb-4">
+            <FontAwesome5 name="database" size={24} color="#E11D48" />
           </View>
-          <Text className="font-headline text-[20px] text-text-primary mb-2 text-center">
-            Database index needed
+          <Text className="font-headline text-[18px] text-text-primary mb-2 text-center">
+            Database Index Required
           </Text>
-          <Text className="font-body text-[14px] text-muted text-center leading-5">
-            Firestore needs a composite index for this query. In the Firebase console, go to
-            Firestore Database → Indexes and create the suggested index, then pull to refresh.
+          <Text className="font-body text-[13px] text-text-secondary text-center leading-5">
+            Firestore composite index is building for this query. Pull down to refresh in a moment.
           </Text>
         </View>
       ) : courses.length === 0 ? (
-        <View className="flex-1 items-center justify-center px-10">
-          <View className="w-20 h-20 rounded-pill bg-primary-light items-center justify-center mb-4">
-            <FontAwesome5 name="book-open" size={28} color="#00895A" />
+        <View className="flex-1 items-center justify-center px-8">
+          <View className="w-16 h-16 rounded-2xl bg-primary-light border border-primary-border items-center justify-center mb-4">
+            <FontAwesome5 name="book-open" size={24} color="#059669" />
           </View>
-          <Text className="font-headline text-[20px] text-text-primary mb-2 text-center">
-            No courses yet
+          <Text className="font-headline text-[18px] text-text-primary mb-1 text-center">
+            No Published Courses
           </Text>
-          <Text className="font-body text-[14px] text-muted text-center leading-5">
-            Courses for your department and level will appear here once they're published.
+          <Text className="font-body text-[13px] text-text-secondary text-center leading-5">
+            Weekly modules for your department will appear here as lecturers publish them.
           </Text>
         </View>
       ) : (
@@ -180,10 +179,10 @@ const CourseList: React.FC = () => {
           data={courses}
           keyExtractor={(item) => item.id}
           renderItem={renderCourse}
-          contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+          contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#00A86B" />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#059669" />
           }
         />
       )}

@@ -18,11 +18,15 @@ import { db } from '@/config/firebaseConfig';
 import { useAuth } from '@/context/AuthContext';
 import { DEPARTMENTS, LEVELS } from '@/types';
 import { Picker } from '@react-native-picker/picker';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface Slide {
   icon: string;
   iconColor: string;
+  badgeBg: string;
+  badgeBorder: string;
+  tag: string;
   title: string;
   subtitle: string;
 }
@@ -30,24 +34,33 @@ interface Slide {
 const SLIDES: Slide[] = [
   {
     icon: 'graduation-cap',
-    iconColor: '#00A86B',
-    title: 'Welcome to Unify Learn',
+    iconColor: '#059669',
+    badgeBg: '#ECFDF5',
+    badgeBorder: '#A7F3D0',
+    tag: 'Curriculum-Aligned',
+    title: 'Your Faculty Syllabus,\nWeek by Week',
     subtitle:
-      'Curriculum-aligned weekly content built for LASU Engineering students. No more scattered notes.',
+      'Engineered specifically for LASU Engineering students. No more scattered WhatsApp notes or outdated PDFs.',
   },
   {
-    icon: 'check-circle',
-    iconColor: '#005B96',
-    title: 'Learn by doing',
+    icon: 'brain',
+    iconColor: '#4F46E5',
+    badgeBg: '#EEF2FF',
+    badgeBorder: '#C7D2FE',
+    tag: 'Active Recall',
+    title: 'Learn Faster with\nInteractive Checks',
     subtitle:
-      'Read, interact and test yourself with mini checks, pulse checks and end-of-week quizzes.',
+      'Test your comprehension right inside reading sessions with Mini Checks, Pulse Checks, and End-of-Week Quizzes.',
   },
   {
     icon: 'chart-line',
-    iconColor: '#E5D45A',
-    title: 'Stay on track',
+    iconColor: '#D97706',
+    badgeBg: '#FFFBEB',
+    badgeBorder: '#FDE68A',
+    tag: 'Academic Transparency',
+    title: 'Track Milestones &\nGrade Projections',
     subtitle:
-      'Pass each week to unlock the next. Your progress is tracked every step of the way.',
+      'Pass each week to unlock the next. Use the built-in Grade Planner to calculate continuous assessment scores.',
   },
 ];
 
@@ -82,7 +95,7 @@ const Onboarding: React.FC = () => {
     if (!user) return;
 
     if (!matric.trim() || !department || !level) {
-      Alert.alert('Missing Fields', 'Please fill in all fields to finish setup');
+      Alert.alert('Incomplete Profile', 'Please enter your Matric number, Department, and Level to view your courses.');
       return;
     }
 
@@ -101,7 +114,7 @@ const Onboarding: React.FC = () => {
         ),
         new Promise((_, reject) =>
           setTimeout(
-            () => reject(new Error('Timed out. Check your internet connection and try again.')),
+            () => reject(new Error('Connection timeout. Please check your internet connection.')),
             15000
           )
         ),
@@ -121,7 +134,7 @@ const Onboarding: React.FC = () => {
         setDoc(doc(db, 'users', user.uid), { onboarded: true }, { merge: true }),
         new Promise((_, reject) =>
           setTimeout(
-            () => reject(new Error('Timed out. Check your internet connection and try again.')),
+            () => reject(new Error('Connection timeout. Please check your internet connection.')),
             15000
           )
         ),
@@ -135,39 +148,51 @@ const Onboarding: React.FC = () => {
 
   const renderSlide = ({ item }: { item: Slide }) => (
     <View style={{ width }} className="flex-1 px-8 justify-center items-center">
-      <View className="w-28 h-28 rounded-pill bg-primary-light items-center justify-center mb-10">
-        <FontAwesome5 name={item.icon} size={44} color={item.iconColor} />
+      {/* Bento Card Tile */}
+      <View
+        style={{ backgroundColor: item.badgeBg, borderColor: item.badgeBorder }}
+        className="w-24 h-24 rounded-3xl items-center justify-center mb-6 border shadow-card"
+      >
+        <FontAwesome5 name={item.icon} size={38} color={item.iconColor} />
       </View>
-      <Text className="font-headline text-[26px] leading-9 text-text-primary text-center mb-3">
+      <View
+        style={{ backgroundColor: item.badgeBg, borderColor: item.badgeBorder }}
+        className="px-3.5 py-1 rounded-full border mb-4"
+      >
+        <Text style={{ color: item.iconColor }} className="font-body-bold text-[12px] uppercase tracking-wider">
+          {item.tag}
+        </Text>
+      </View>
+      <Text className="font-headline text-[26px] leading-[34px] text-text-primary text-center mb-3">
         {item.title}
       </Text>
-      <Text className="font-body text-[16px] leading-6 text-text-secondary text-center">
+      <Text className="font-body text-[15px] leading-6 text-text-secondary text-center max-w-[320px]">
         {item.subtitle}
       </Text>
     </View>
   );
 
   const renderProfileStep = () => (
-    <View style={{ width }} className="flex-1 px-7 pt-8">
-      <View className="w-16 h-16 rounded-pill bg-primary-light items-center justify-center mb-6">
-        <FontAwesome5 name="user-plus" size={24} color="#00A86B" />
+    <View style={{ width }} className="flex-1 px-6 pt-4">
+      <View className="w-14 h-14 rounded-2xl bg-primary-light border border-primary-border items-center justify-center mb-4">
+        <FontAwesome5 name="user-graduate" size={22} color="#059669" />
       </View>
-      <Text className="font-headline text-[24px] leading-8 text-text-primary mb-2">
-        Tell us about you
+      <Text className="font-headline text-[24px] leading-8 text-text-primary mb-1">
+        Setup Your Academic Profile
       </Text>
-      <Text className="font-body text-[15px] leading-5 text-text-secondary mb-8">
-        We use this to show you the right courses for your department and level.
+      <Text className="font-body text-[14px] leading-5 text-text-secondary mb-6">
+        This configures your timetable, lecturers, and department courses.
       </Text>
 
-      <View className="mb-5">
-        <Text className="font-body-medium text-[13px] text-text-secondary mb-2">
+      <View className="mb-4">
+        <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Matric Number
         </Text>
-        <View className="bg-soft rounded-pill px-5">
+        <View className="bg-surface rounded-xl px-4 border border-border">
           <TextInput
-            className="py-4 font-body text-[16px] text-text-primary"
+            className="py-3.5 font-body text-[15px] text-text-primary"
             placeholder="e.g. 21/52CB001"
-            placeholderTextColor="#8A817C"
+            placeholderTextColor="#94A3B8"
             value={matric}
             onChangeText={setMatric}
             autoCapitalize="characters"
@@ -175,18 +200,18 @@ const Onboarding: React.FC = () => {
         </View>
       </View>
 
-      <View className="mb-5">
-        <Text className="font-body-medium text-[13px] text-text-secondary mb-2">
+      <View className="mb-4">
+        <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Department
         </Text>
-        <View className="bg-soft rounded-pill overflow-hidden">
+        <View className="bg-surface rounded-xl overflow-hidden border border-border">
           <Picker
             selectedValue={department}
             onValueChange={setDepartment}
-            style={{ backgroundColor: '#F2F2F2' }}
-            dropdownIconColor="#8A817C"
+            style={{ backgroundColor: '#FFFFFF', color: '#0F172A' }}
+            dropdownIconColor="#64748B"
           >
-            <Picker.Item label="Select department" value="" />
+            <Picker.Item label="Select your department" value="" color="#94A3B8" />
             {DEPARTMENTS.map((dept) => (
               <Picker.Item key={dept.id} label={dept.name} value={dept.id} />
             ))}
@@ -194,18 +219,18 @@ const Onboarding: React.FC = () => {
         </View>
       </View>
 
-      <View className="mb-8">
-        <Text className="font-body-medium text-[13px] text-text-secondary mb-2">
+      <View className="mb-6">
+        <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Level
         </Text>
-        <View className="bg-soft rounded-pill overflow-hidden">
+        <View className="bg-surface rounded-xl overflow-hidden border border-border">
           <Picker
             selectedValue={level}
             onValueChange={setLevel}
-            style={{ backgroundColor: '#F2F2F2' }}
-            dropdownIconColor="#8A817C"
+            style={{ backgroundColor: '#FFFFFF', color: '#0F172A' }}
+            dropdownIconColor="#64748B"
           >
-            <Picker.Item label="Select level" value="" />
+            <Picker.Item label="Select current level" value="" color="#94A3B8" />
             {LEVELS.map((l) => (
               <Picker.Item key={l.value} label={l.label} value={l.value} />
             ))}
@@ -213,19 +238,18 @@ const Onboarding: React.FC = () => {
         </View>
       </View>
 
-      <Pressable
-        className="bg-primary rounded-pill py-4 items-center mb-4"
+      <Button
+        variant="default"
+        size="lg"
+        className="mb-3"
+        loading={saving}
         onPress={handleFinish}
-        disabled={saving}
       >
-        {saving ? (
-          <ActivityIndicator color="#ffffff" />
-        ) : (
-          <Text className="font-body-bold text-[16px] text-white">Finish Setup</Text>
-        )}
-      </Pressable>
+        Enter Dashboard
+      </Button>
+
       <Pressable className="items-center py-2" onPress={handleSkip} disabled={saving}>
-        <Text className="font-body-medium text-[14px] text-muted">Skip for now</Text>
+        <Text className="font-body-medium text-[13px] text-muted">Skip for now</Text>
       </Pressable>
     </View>
   );
@@ -237,26 +261,27 @@ const Onboarding: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row justify-between items-center px-7 pt-3 pb-2">
+      {/* Top Bar */}
+      <View className="flex-row justify-between items-center px-6 pt-3 pb-2">
         <Pressable
           onPress={handleSkip}
           disabled={saving}
           className="py-2 pr-4"
         >
-          <Text className="font-body-medium text-[14px] text-muted">Skip</Text>
+          <Text className="font-body-bold text-[13px] text-muted">Skip</Text>
         </Pressable>
-        <View className="flex-row gap-2">
+        <View className="flex-row items-center gap-1.5">
           {[...Array(SLIDES.length + 1)].map((_, i) => (
             <View
               key={i}
               className={cn(
-                'h-2 rounded-pill',
-                i === index ? 'w-6 bg-primary' : 'w-2 bg-border'
+                'h-2 rounded-full',
+                i === index ? 'w-6 bg-primary' : 'w-2 bg-border-strong'
               )}
             />
           ))}
         </View>
-        <View className="w-16" />
+        <View className="w-12" />
       </View>
 
       <FlatList
@@ -273,13 +298,14 @@ const Onboarding: React.FC = () => {
       />
 
       {!isLastSlide && (
-        <View className="px-7 pb-8">
-          <Pressable
-            className="bg-primary rounded-pill py-4 items-center"
+        <View className="px-6 pb-8">
+          <Button
+            variant="default"
+            size="lg"
             onPress={handleNext}
           >
-            <Text className="font-body-bold text-[16px] text-white">Next</Text>
-          </Pressable>
+            Continue
+          </Button>
         </View>
       )}
     </SafeAreaView>

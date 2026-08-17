@@ -228,6 +228,91 @@ async function seed() {
     console.log('Week upserted:', week.id, '—', weekData.contentBlocks.length, 'blocks');
   }
 
+  const timetableEntries = [
+    {
+      id: 'ece301-mon',
+      courseId: 'ece301',
+      courseCode: 'ECE 301',
+      courseTitle: 'Electrical Engineering Materials',
+      day: 'Monday',
+      startTime: '09:00',
+      endTime: '11:00',
+      classroom: 'Engineering Block B, Room 204',
+      lecturerId: lecturerUid,
+      lecturerName: 'Dr. A. Adeyemi',
+      department: 'ece',
+      level: 300,
+      faculty: 'engineering',
+      semester: 'first',
+      audience: 'ece-300',
+      status: 'scheduled',
+      expectedCount: 45,
+    },
+    {
+      id: 'ece301-tue',
+      courseId: 'ece301',
+      courseCode: 'ECE 301',
+      courseTitle: 'Electrical Engineering Materials',
+      day: 'Tuesday',
+      startTime: '11:00',
+      endTime: '13:00',
+      classroom: 'Engineering Block A, Lab 3',
+      lecturerId: lecturerUid,
+      lecturerName: 'Dr. A. Adeyemi',
+      department: 'ece',
+      level: 300,
+      faculty: 'engineering',
+      semester: 'first',
+      audience: 'ece-300',
+      status: 'scheduled',
+      expectedCount: 45,
+    },
+    {
+      id: 'ece301-wed',
+      courseId: 'ece301',
+      courseCode: 'ECE 301',
+      courseTitle: 'Electrical Engineering Materials',
+      day: 'Wednesday',
+      startTime: '14:00',
+      endTime: '16:00',
+      classroom: 'Engineering Block B, Room 204',
+      lecturerId: lecturerUid,
+      lecturerName: 'Dr. A. Adeyemi',
+      department: 'ece',
+      level: 300,
+      faculty: 'engineering',
+      semester: 'first',
+      audience: 'ece-300',
+      status: 'scheduled',
+      expectedCount: 45,
+    },
+    {
+      id: 'ece301-thu',
+      courseId: 'ece301',
+      courseCode: 'ECE 301',
+      courseTitle: 'Electrical Engineering Materials',
+      day: 'Thursday',
+      startTime: '10:00',
+      endTime: '12:00',
+      classroom: 'Engineering Block A, Room 108',
+      lecturerId: lecturerUid,
+      lecturerName: 'Dr. A. Adeyemi',
+      department: 'ece',
+      level: 300,
+      faculty: 'engineering',
+      semester: 'first',
+      audience: 'ece-300',
+      status: 'scheduled',
+      expectedCount: 45,
+    },
+  ];
+
+  for (const entry of timetableEntries) {
+    const { id, ...entryData } = entry;
+    await db.collection('timetable').doc(id).set(entryData);
+    console.log('Timetable entry upserted:', id);
+  }
+
   console.log('\nSeed complete.');
   process.exit(0);
 }

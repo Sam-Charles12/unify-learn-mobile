@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { RootStackParamList } from '@/navigation/types';
 import ContentBlockRenderer, { Block } from '@/components/week/ContentBlockRenderer';
+import { Button } from '@/components/ui/button';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type WeekRouteProp = RouteProp<RootStackParamList, 'Week'>;
@@ -65,18 +66,19 @@ const WeekPage: React.FC = () => {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 bg-background items-center justify-center" edges={['top']}>
-        <ActivityIndicator size="large" color="#00A86B" />
+        <ActivityIndicator size="large" color="#059669" />
+        <Text className="font-body text-[13px] text-muted mt-2">Loading lesson notes...</Text>
       </SafeAreaView>
     );
   }
 
   if (!week) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center px-10" edges={['top']}>
-        <Text className="font-headline text-[18px] text-text-primary">Week not found</Text>
-        <Pressable onPress={() => navigation.goBack()} className="mt-4 bg-primary rounded-pill px-6 py-3">
-          <Text className="font-body-semibold text-[14px] text-white">Go back</Text>
-        </Pressable>
+      <SafeAreaView className="flex-1 bg-background items-center justify-center px-8" edges={['top']}>
+        <Text className="font-headline text-[18px] text-text-primary mb-2">Week Not Found</Text>
+        <Button variant="default" size="sm" onPress={() => navigation.goBack()}>
+          Return to Course
+        </Button>
       </SafeAreaView>
     );
   }
@@ -86,35 +88,43 @@ const WeekPage: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <View className="bg-primary rounded-b-[28px] px-6 pt-4 pb-8 shadow-soft">
+      {/* Top Header */}
+      <View className="px-5 pt-3 pb-4 bg-surface border-b border-border">
         <View className="flex-row items-center justify-between mb-3">
-          <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-            <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
+          <Pressable
+            onPress={() => navigation.goBack()}
+            className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+          >
+            <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
           </Pressable>
-          <View className="flex-row items-center">
-            <Text className="font-body-bold text-white text-[15px]">Week {week.weekNumber}</Text>
+          <View className="bg-primary-light px-3 py-1 rounded-full border border-primary-border">
+            <Text className="font-body-bold text-[12px] text-primary-dark">
+              Week {week.weekNumber}
+            </Text>
           </View>
-          <View className="w-9" />
+          <View className="w-10" />
         </View>
-        <Text className="font-headline text-[22px] text-white leading-7" numberOfLines={2}>
+
+        <Text className="font-headline text-[22px] text-text-primary leading-7" numberOfLines={2}>
           {week.title}
         </Text>
-        <Text className="font-body-medium text-[12px] text-white/75 mt-1.5">
-          {blockCount} section{blockCount === 1 ? '' : 's'}
+        <Text className="font-body text-[12px] text-muted mt-1">
+          {blockCount} interactive section{blockCount === 1 ? '' : 's'} in this module
         </Text>
       </View>
 
+      {/* Completion Pass Banner */}
       {passBanner && (
-        <View className="mx-5 mt-4 bg-primary-light border border-primary rounded-[16px] p-4 flex-row items-center">
-          <View className="w-10 h-10 rounded-full bg-primary items-center justify-center mr-3">
-            <FontAwesome5 name="unlock" size={15} color="#ffffff" />
+        <View className="mx-4 mt-4 bg-primary-light border border-primary-border rounded-2xl p-4 flex-row items-center shadow-card">
+          <View className="w-10 h-10 rounded-xl bg-primary items-center justify-center mr-3.5">
+            <FontAwesome5 name="award" size={16} color="#ffffff" />
           </View>
           <View className="flex-1">
             <Text className="font-headline text-[15px] text-primary-dark">
-              Week {week.weekNumber} Complete!
+              Week {week.weekNumber} Completed! (+10 pts)
             </Text>
-            <Text className="font-body-medium text-[13px] text-primary-dark mt-0.5">
-              Week {week.weekNumber + 1} has been unlocked.
+            <Text className="font-body text-[13px] text-primary-dark mt-0.5">
+              Week {week.weekNumber + 1} syllabus has now been unlocked.
             </Text>
           </View>
         </View>
@@ -126,31 +136,31 @@ const WeekPage: React.FC = () => {
         renderItem={({ item }) => (
           <ContentBlockRenderer block={item} onPass={handlePass} weekNumber={week.weekNumber} />
         )}
-        contentContainerStyle={{ padding: 20, paddingBottom: 60 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
           passed ? (
-            <View className="mt-6 bg-primary rounded-[20px] p-5 items-center">
-              <View className="w-12 h-12 rounded-full bg-white/15 items-center justify-center mb-2.5">
-                <FontAwesome5 name="check-double" size={18} color="#ffffff" />
+            <View className="mt-6 bg-surface rounded-2xl border border-primary-border p-5 items-center shadow-card">
+              <View className="w-12 h-12 rounded-xl bg-primary-light items-center justify-center mb-3">
+                <FontAwesome5 name="check-double" size={18} color="#059669" />
               </View>
-              <Text className="font-headline text-[17px] text-white">Week complete</Text>
-              <Text className="font-body text-[13px] text-white/80 mt-1 text-center leading-5">
-                Your progress has been saved. Week {week.weekNumber + 1} is unlocked.
+              <Text className="font-headline text-[17px] text-text-primary">Week Completed</Text>
+              <Text className="font-body text-[13px] text-text-secondary mt-1 text-center leading-5">
+                Your progress has been recorded. You can proceed to Week {week.weekNumber + 1}.
               </Text>
-              <Pressable
+              <Button
+                variant="default"
+                size="default"
+                className="mt-4 w-full"
                 onPress={() => navigation.goBack()}
-                className="mt-4 bg-white rounded-pill px-7 py-3"
               >
-                <Text className="font-body-semibold text-[14px] text-primary-dark">
-                  Back to course
-                </Text>
-              </Pressable>
+                Back to Course Syllabus
+              </Button>
             </View>
           ) : (
-            <View className="mt-8 items-center">
-              <Text className="font-body-medium text-[12px] text-muted text-center leading-5">
-                Finish the End of Week Quiz to unlock the next week.
+            <View className="mt-8 items-center px-4">
+              <Text className="font-body text-[12px] text-muted text-center leading-5">
+                Complete the End of Week Quiz at the bottom to verify comprehension and unlock Week {week.weekNumber + 1}.
               </Text>
             </View>
           )

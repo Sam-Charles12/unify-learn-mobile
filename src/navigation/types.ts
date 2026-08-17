@@ -1,5 +1,6 @@
 export type RootStackParamList = {
   Dashboard: undefined;
+  Timetable: undefined;
   CourseList: undefined;
   Course: { courseId: string };
   Week: { courseId: string; weekId: string };
@@ -17,10 +18,12 @@ export type RootStackParamList = {
 export type LecturerNavigatorParamList = {
   LecturerDashboardTab: undefined;
   LecturerCoursesTab: undefined;
+  LecturerTimetableTab: undefined;
   LecturerProfileTab: undefined;
   LecturerDashboard: undefined;
   LecturerCourses: undefined;
   LecturerCourseWorkspace: { courseId: string };
+  LecturerTimetable: undefined;
   LecturerProfileEdit: undefined;
 };
 

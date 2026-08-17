@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/ui/button';
 import { AuthStackParamList } from '@/navigation/types';
 
 type NavigationProp = NativeStackNavigationProp<AuthStackParamList>;
@@ -41,56 +42,58 @@ const ForgotPassword: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1"
       >
-        <View className="bg-primary rounded-b-[28px] px-6 pt-4 pb-10 shadow-soft">
+        <View className="px-6 pt-3 pb-6 border-b border-border bg-surface">
           <View className="flex-row items-center justify-between mb-4">
-            <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-              <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
+            <Pressable
+              onPress={() => navigation.goBack()}
+              className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+            >
+              <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
             </Pressable>
-            <Text className="font-body-bold text-white text-[15px]">Reset Password</Text>
-            <View className="w-9" />
+            <Text className="font-body-bold text-text-primary text-[15px]">Reset Password</Text>
+            <View className="w-10" />
           </View>
-          <View className="w-16 h-16 rounded-pill bg-white/15 items-center justify-center mb-4">
-            <FontAwesome5 name="key" size={22} color="#ffffff" />
+          
+          <View className="w-14 h-14 rounded-2xl bg-primary-light border border-primary-border items-center justify-center mb-3">
+            <FontAwesome5 name="key" size={20} color="#059669" />
           </View>
-          <Text className="font-headline text-[24px] text-white leading-8">
+          <Text className="font-headline text-[24px] text-text-primary leading-8">
             Forgot your password?
           </Text>
-          <Text className="font-body text-[13px] text-white/80 mt-2 leading-5">
-            Enter the email you signed up with and we'll send you a reset link.
+          <Text className="font-body text-[14px] text-text-secondary mt-1 leading-5">
+            Enter your student email address and we'll send you an instant reset link.
           </Text>
         </View>
 
-        <View className="px-6 mt-8">
-          <Text className="font-body-medium text-[13px] text-text-secondary mb-2">Email address</Text>
-          <View className="flex-row items-center bg-soft rounded-pill px-5">
-            <FontAwesome5 name="envelope" size={14} color="#8A817C" />
+        <View className="px-6 mt-6">
+          <Text className="font-body-semibold text-[13px] text-text-primary mb-2">Student Email</Text>
+          <View className="flex-row items-center bg-surface rounded-xl px-4 border border-border">
+            <FontAwesome5 name="envelope" size={14} color="#94A3B8" />
             <TextInput
               value={email}
               onChangeText={setEmail}
-              placeholder="you@example.com"
-              placeholderTextColor="#8A817C"
+              placeholder="e.g. student@lasu.edu.ng"
+              placeholderTextColor="#94A3B8"
               autoCapitalize="none"
               keyboardType="email-address"
-              className="flex-1 py-4 px-3 font-body-medium text-[15px] text-text-primary"
+              className="flex-1 py-3.5 px-3 font-body text-[15px] text-text-primary"
             />
           </View>
 
-          <Pressable
+          <Button
+            variant="default"
+            size="lg"
+            className="mt-6"
+            loading={loading}
             onPress={handleReset}
-            disabled={loading}
-            className="mt-6 bg-primary rounded-pill py-4 items-center shadow-soft"
           >
-            {loading ? (
-              <ActivityIndicator color="#ffffff" />
-            ) : (
-              <Text className="font-body-semibold text-[15px] text-white">Send reset link</Text>
-            )}
-          </Pressable>
+            Send Reset Link
+          </Button>
 
           <View className="flex-row items-center justify-center mt-6">
             <Text className="font-body text-[13px] text-muted">Remembered it? </Text>
             <Pressable onPress={() => navigation.navigate('Login')}>
-              <Text className="font-body-semibold text-[13px] text-primary-dark">Back to login</Text>
+              <Text className="font-body-bold text-[13px] text-primary-dark">Back to login</Text>
             </Pressable>
           </View>
         </View>

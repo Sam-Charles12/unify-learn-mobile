@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useAnnouncements } from '@/hooks/useAnnouncements';
 import { useAuth } from '@/context/AuthContext';
@@ -51,7 +50,7 @@ const PremiumTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, naviga
   const { unreadCount } = useAnnouncements({ courseIds });
 
   return (
-    <View className="bg-surface border-t border-border px-3 pt-2 pb-6 flex-row justify-around items-center">
+    <View className="bg-surface border-t border-border px-3 pt-2 pb-6 flex-row justify-around items-center shadow-soft">
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
         const icon = ICONS[route.name] ?? 'circle';
@@ -73,18 +72,18 @@ const PremiumTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, naviga
             <View
               className={
                 isFocused
-                  ? 'w-12 h-8 rounded-pill bg-primary-light items-center justify-center'
+                  ? 'w-12 h-8 rounded-full bg-primary-light items-center justify-center'
                   : 'w-12 h-8 items-center justify-center'
               }
             >
               <FontAwesome5
                 name={icon}
-                size={18}
-                color={isFocused ? '#00895A' : '#8A817C'}
+                size={17}
+                color={isFocused ? '#059669' : '#64748B'}
                 solid={isFocused}
               />
               {isNotifications && unreadCount > 0 && (
-                <View className="absolute -top-1 -right-1 min-w-5 h-5 rounded-pill bg-error items-center justify-center px-1">
+                <View className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-error items-center justify-center px-1 border-2 border-surface">
                   <Text className="font-body-bold text-[9px] text-white">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </Text>
@@ -94,7 +93,7 @@ const PremiumTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, naviga
             <Text
               className={
                 isFocused
-                  ? 'font-body-semibold text-[11px] text-primary-dark mt-1'
+                  ? 'font-body-bold text-[11px] text-primary-dark mt-1'
                   : 'font-body-medium text-[11px] text-muted mt-1'
               }
             >

@@ -23,7 +23,7 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Email and password are required');
+      Alert.alert('Missing Fields', 'Email and password are required.');
       return;
     }
 
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
     try {
       await signIn(email, password);
     } catch (error: any) {
-      Alert.alert('Login Failed', error.message);
+      Alert.alert('Login Failed', error.message || 'Check your credentials and try again.');
     } finally {
       setLoading(false);
     }
@@ -39,16 +39,16 @@ const Login: React.FC = () => {
 
   return (
     <AuthLayout
-      title="Welcome back to Unify Learn"
-      subtitle="Log in to continue your weekly lessons and track your progress."
+      title="Welcome Back"
+      subtitle="Continue your curriculum-aligned learning and track your course progress."
       activeTab="login"
     >
-      <View className="mb-5">
-        <Text className="font-body-medium text-[13px] text-text-secondary mb-2">
-          Email
+      <View className="mb-4">
+        <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
+          Email Address
         </Text>
         <Input
-          placeholder="Enter your email"
+          placeholder="e.g. student@lasu.edu.ng"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
@@ -56,24 +56,24 @@ const Login: React.FC = () => {
         />
       </View>
 
-      <View className="mb-5">
-        <Text className="font-body-medium text-[13px] text-text-secondary mb-2">
+      <View className="mb-4">
+        <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Password
         </Text>
-        <View className="flex-row items-center bg-soft rounded-pill">
+        <View className="flex-row items-center bg-surface rounded-xl border border-border">
           <TextInput
-            className="flex-1 pl-5 pr-2 py-4 font-body text-[16px] text-text-primary"
+            className="flex-1 pl-4 pr-2 py-3.5 font-body text-[15px] text-text-primary"
             placeholder="Enter your password"
-            placeholderTextColor="#8A817C"
+            placeholderTextColor="#94A3B8"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
           />
-          <Pressable className="px-5 py-4" onPress={() => setShowPassword(!showPassword)}>
+          <Pressable className="px-4 py-3.5" onPress={() => setShowPassword(!showPassword)}>
             <FontAwesome5
               name={showPassword ? 'eye-slash' : 'eye'}
-              size={16}
-              color="#8A817C"
+              size={15}
+              color="#64748B"
             />
           </Pressable>
         </View>
@@ -86,53 +86,57 @@ const Login: React.FC = () => {
         >
           <View
             className={cn(
-              'w-5 h-5 rounded-md border-[1.5px] border-primary bg-surface items-center justify-center mr-2',
-              rememberMe && 'bg-primary border-primary'
+              'w-5 h-5 rounded-md border items-center justify-center mr-2',
+              rememberMe
+                ? 'bg-primary border-primary'
+                : 'border-border-strong bg-surface'
             )}
           >
             {rememberMe && (
               <FontAwesome5 name="check" size={10} color="#ffffff" />
             )}
           </View>
-          <Text className="font-body text-[14px] text-text-secondary">
+          <Text className="font-body text-[13px] text-text-secondary">
             Remember Me
           </Text>
         </Pressable>
 
         <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text className="font-body-bold text-[14px] text-text-primary">
+          <Text className="font-body-bold text-[13px] text-primary-dark">
             Forgot Password?
           </Text>
         </Pressable>
       </View>
 
       <Button
+        variant="default"
         size="lg"
-        className="mt-2 mb-8"
+        className="mb-6"
         loading={loading}
         onPress={handleLogin}
       >
-        Login
+        Sign In
       </Button>
 
+      {/* Clean Divider */}
       <View className="flex-row items-center mb-6">
-        <View className="flex-1 h-px bg-divider" />
-        <Text className="font-body text-[13px] text-muted mx-3">
-          Or login with
+        <View className="flex-1 h-[1px] bg-border" />
+        <Text className="font-body text-[12px] text-muted mx-3 uppercase tracking-wider">
+          Or continue with
         </Text>
-        <View className="flex-1 h-px bg-divider" />
+        <View className="flex-1 h-[1px] bg-border" />
       </View>
 
       <View className="flex-row gap-3">
-        <Pressable className="flex-1 flex-row items-center justify-center bg-soft rounded-pill py-4 gap-2">
-          <FontAwesome5 name="google" size={16} color="#4285F4" />
-          <Text className="font-body-semibold text-[14px] text-text-primary">
+        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-xl py-3.5 gap-2 border border-border shadow-soft active:bg-soft">
+          <FontAwesome5 name="google" size={15} color="#EA4335" />
+          <Text className="font-body-bold text-[14px] text-text-primary">
             Google
           </Text>
         </Pressable>
-        <Pressable className="flex-1 flex-row items-center justify-center bg-soft rounded-pill py-4 gap-2">
-          <FontAwesome5 name="facebook-f" size={16} color="#1877F2" />
-          <Text className="font-body-semibold text-[14px] text-text-primary">
+        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-xl py-3.5 gap-2 border border-border shadow-soft active:bg-soft">
+          <FontAwesome5 name="facebook-f" size={15} color="#1877F2" />
+          <Text className="font-body-bold text-[14px] text-text-primary">
             Facebook
           </Text>
         </Pressable>
