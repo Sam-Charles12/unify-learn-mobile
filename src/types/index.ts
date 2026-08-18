@@ -65,14 +65,15 @@ export interface Level {
 }
 
 export const DEPARTMENTS: Department[] = [
-  { id: 'ece', name: 'Electrical and Computer Engineering', faculty: 'Engineering' },
-  { id: 'civil', name: 'Civil Engineering', faculty: 'Engineering' },
   { id: 'mech', name: 'Mechanical Engineering', faculty: 'Engineering' },
+  { id: 'civil', name: 'Civil Engineering', faculty: 'Engineering' },
   { id: 'chem', name: 'Chemical Engineering', faculty: 'Engineering' },
-  { id: 'computer', name: 'Computer Engineering', faculty: 'Engineering' },
+  { id: 'aerospace', name: 'Aerospace Engineering', faculty: 'Engineering' },
+  { id: 'industrial', name: 'Industrial Engineering', faculty: 'Engineering' },
 ];
 
 export const LEVELS: Level[] = [
+  { value: '100', label: '100 Level' },
   { value: '200', label: '200 Level' },
   { value: '300', label: '300 Level' },
   { value: '400', label: '400 Level' },
