@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Pressable, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, Text, FlatList, Pressable, ActivityIndicator, RefreshControl, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { RootStackParamList } from '@/navigation/types';
 import LecturerAvatarStack from '@/components/week/LecturerAvatarStack';
+import { seedSampleCourses } from '@/lib/seedCourses';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -33,30 +34,49 @@ const COURSE_COLOR_SCHEMES = [
 
 const CourseList: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { profile } = useUserProfile();
+  const { profile, loading: profileLoading } = useUserProfile();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [indexError, setIndexError] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
   const fetchCourses = async () => {
-    if (!profile?.department || !profile?.level) return;
     try {
-      const q = query(
-        collection(db, 'courses'),
-        where('departments', 'array-contains', profile.department)
-      );
-      const snap = await getDocs(q);
-      const filtered = snap.docs
-        .map((d) => ({ id: d.id, ...d.data() } as Course))
-        .filter((c) => !Array.isArray(c.levels) || c.levels.includes(profile.level ?? ''));
-      setCourses(filtered);
-    } catch (e: any) {
-      if (e?.code === 'failed-precondition' && String(e?.message ?? '').includes('index')) {
-        setIndexError(true);
-      } else {
-        console.warn('Failed to load courses:', e);
+      const snap = await getDocs(collection(db, 'courses'));
+      const allCourses = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Course));
+
+      let matchedCourses = allCourses;
+
+      if (profile?.department) {
+        const userDept = profile.department.toLowerCase().trim();
+        const deptMatches = allCourses.filter((c) => {
+          if (!c.departments || !Array.isArray(c.departments) || c.departments.length === 0) {
+            return true;
+          }
+          return c.departments.some(
+            (d) => String(d).toLowerCase().trim() === userDept || String(d).toLowerCase().includes(userDept)
+          );
+        });
+
+        if (deptMatches.length > 0) {
+          matchedCourses = deptMatches;
+        }
+
+        if (profile?.level) {
+          const userLevel = String(profile.level).trim();
+          const levelMatches = matchedCourses.filter((c) => {
+            if (!c.levels || !Array.isArray(c.levels) || c.levels.length === 0) return true;
+            return c.levels.map((l) => String(l).trim()).includes(userLevel);
+          });
+          if (levelMatches.length > 0) {
+            matchedCourses = levelMatches;
+          }
+        }
       }
+
+      setCourses(matchedCourses);
+    } catch (e: any) {
+      console.warn('Failed to load courses:', e);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -64,14 +84,26 @@ const CourseList: React.FC = () => {
   };
 
   useEffect(() => {
-    if (profile?.department && profile?.level) {
+    if (!profileLoading) {
       fetchCourses();
     }
-  }, [profile?.department, profile?.level]);
+  }, [profile?.department, profile?.level, profileLoading]);
 
   const onRefresh = () => {
     setRefreshing(true);
     fetchCourses();
+  };
+
+  const handleSeed = async () => {
+    setSeeding(true);
+    const ok = await seedSampleCourses();
+    setSeeding(false);
+    if (ok) {
+      Alert.alert('Sample Syllabus Added', 'Sample LASU Engineering courses and weekly modules have been loaded.');
+      fetchCourses();
+    } else {
+      Alert.alert('Notice', 'Could not add sample courses. Please check your internet connection or Firestore permissions.');
+    }
   };
 
   const renderCourse = ({ item, index }: { item: Course; index: number }) => {
@@ -161,23 +193,38 @@ const CourseList: React.FC = () => {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="small" color="#059669" />
         </View>
-      ) : indexError ? (
-        <View className="flex-1 items-center justify-center px-8">
-          <Text className="font-headline text-[18px] text-text-primary mb-2 text-center">
-            Database Index Building
-          </Text>
-          <Text className="font-body text-[13px] text-text-secondary text-center leading-5">
-            Pull down to refresh in a moment.
-          </Text>
-        </View>
       ) : courses.length === 0 ? (
         <View className="flex-1 items-center justify-center px-8">
+          <View className="w-16 h-16 rounded-2xl bg-soft border border-border items-center justify-center mb-4">
+            <FontAwesome5 name="book-open" size={24} color="#71717A" />
+          </View>
           <Text className="font-headline text-[18px] text-text-primary mb-1 text-center">
-            No Published Courses
+            No Courses Found
           </Text>
-          <Text className="font-body text-[13px] text-muted text-center">
-            Weekly modules will appear here as lecturers publish them.
+          <Text className="font-body text-[13px] text-muted text-center leading-5 mb-5">
+            Your Firestore database does not have courses matching your department ({profile?.department?.toUpperCase() || 'General'}) yet.
           </Text>
+          
+          <Pressable
+            onPress={handleSeed}
+            disabled={seeding}
+            className="bg-primary px-6 py-3.5 rounded-xl active:bg-primary-dark shadow-soft mb-3"
+          >
+            {seeding ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text className="font-body-bold text-[14px] text-white">
+                Load Sample Engineering Courses
+              </Text>
+            )}
+          </Pressable>
+
+          <Pressable
+            onPress={onRefresh}
+            className="py-2"
+          >
+            <Text className="font-body-semibold text-[13px] text-text-secondary">Pull to Refresh</Text>
+          </Pressable>
         </View>
       ) : (
         <FlatList

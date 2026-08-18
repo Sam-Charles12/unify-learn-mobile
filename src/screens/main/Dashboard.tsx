@@ -3,7 +3,7 @@ import { View, Text, Pressable, ActivityIndicator, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
@@ -23,7 +23,7 @@ const COURSE_COLOR_SCHEMES = [
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const { profile } = useUserProfile();
+  const { profile, loading: profileLoading } = useUserProfile();
   const navigation = useNavigation<NavigationProp>();
 
   const [courses, setCourses] = useState<any[]>([]);
@@ -36,16 +36,36 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const load = async () => {
-      if (!user || !profile?.department || !profile?.level) return;
+      if (!user) return;
       try {
-        const q = query(
-          collection(db, 'courses'),
-          where('departments', 'array-contains', profile.department)
-        );
-        const snap = await getDocs(q);
-        const courseList = snap.docs
-          .map((d) => ({ id: d.id, ...d.data() } as any))
-          .filter((c) => !Array.isArray(c.levels) || c.levels.includes(profile.level ?? ''));
+        const snap = await getDocs(collection(db, 'courses'));
+        const allCourses = snap.docs.map((d) => ({ id: d.id, ...d.data() } as any));
+
+        let courseList = allCourses;
+
+        if (profile?.department) {
+          const userDept = profile.department.toLowerCase().trim();
+          const deptMatches = allCourses.filter((c) => {
+            if (!c.departments || !Array.isArray(c.departments) || c.departments.length === 0) return true;
+            return c.departments.some(
+              (d: string) => String(d).toLowerCase().trim() === userDept || String(d).toLowerCase().includes(userDept)
+            );
+          });
+          if (deptMatches.length > 0) {
+            courseList = deptMatches;
+          }
+
+          if (profile?.level) {
+            const userLevel = String(profile.level).trim();
+            const levelMatches = courseList.filter((c) => {
+              if (!c.levels || !Array.isArray(c.levels) || c.levels.length === 0) return true;
+              return c.levels.map((l: any) => String(l).trim()).includes(userLevel);
+            });
+            if (levelMatches.length > 0) {
+              courseList = levelMatches;
+            }
+          }
+        }
 
         const progressSnap = await getDocs(collection(db, 'users', user.uid, 'progress'));
         let done = 0;
@@ -70,8 +90,11 @@ const Dashboard: React.FC = () => {
         setDataLoading(false);
       }
     };
-    load();
-  }, [user, profile?.department, profile?.level]);
+
+    if (!profileLoading) {
+      load();
+    }
+  }, [user, profile?.department, profile?.level, profileLoading]);
 
   const firstName =
     profile?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'Student';
@@ -98,7 +121,7 @@ const Dashboard: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Top Header with subtle Emerald Institutional Pill */}
+        {/* Top Header */}
         <View className="px-6 pt-4 pb-2 flex-row items-center justify-between">
           <View className="flex-row items-center bg-primary-light px-3 py-1.5 rounded-full border border-primary-border">
             <View className="w-2 h-2 rounded-full bg-primary mr-2" />
@@ -135,7 +158,7 @@ const Dashboard: React.FC = () => {
           </View>
         </View>
 
-        {/* Hero Greeting Section */}
+        {/* Hero Greeting */}
         <View className="px-6 pt-6 pb-2">
           <Text className="font-headline text-[28px] text-text-primary leading-9 tracking-tight">
             {getGreeting()}, {firstName} 👋
@@ -145,7 +168,7 @@ const Dashboard: React.FC = () => {
           </Text>
         </View>
 
-        {/* Hero Spotlight: Semester Progress (with Emerald Accents) */}
+        {/* Hero Spotlight: Semester Progress */}
         <View className="px-6 mt-6">
           {dataLoading ? (
             <View className="bg-surface rounded-2xl border border-border/80 p-8 items-center justify-center shadow-soft">
@@ -190,9 +213,8 @@ const Dashboard: React.FC = () => {
           )}
         </View>
 
-        {/* 2 Clean Stat Cards with Tasteful Color Touches */}
+        {/* 2 Clean Stat Cards */}
         <View className="px-6 mt-4 flex-row gap-4">
-          {/* Weeks Cleared with Cobalt Touch */}
           <View className="flex-1 bg-surface rounded-2xl border border-border/80 p-5 shadow-soft">
             <View className="w-9 h-9 rounded-xl bg-cobalt-light border border-cobalt-border items-center justify-center mb-3">
               <FontAwesome5 name="check-circle" size={14} color="#2563EB" />
@@ -208,7 +230,6 @@ const Dashboard: React.FC = () => {
             </Text>
           </View>
 
-          {/* Study Points with Sunlit Amber Touch */}
           <View className="flex-1 bg-surface rounded-2xl border border-border/80 p-5 shadow-soft">
             <View className="w-9 h-9 rounded-xl bg-amber-light border border-amber-border items-center justify-center mb-3">
               <FontAwesome5 name="award" size={14} color="#D97706" />
@@ -225,7 +246,7 @@ const Dashboard: React.FC = () => {
           </View>
         </View>
 
-        {/* Academic Notice Banner with Rose/Amber Accent */}
+        {/* Academic Notice Banner */}
         {announcements.length > 0 && (
           <View className="px-6 mt-6">
             <Pressable
@@ -250,7 +271,7 @@ const Dashboard: React.FC = () => {
           </View>
         )}
 
-        {/* Grade Planner Card with Violet Accent */}
+        {/* Grade Planner Card */}
         <View className="px-6 mt-6">
           <Pressable
             onPress={() => navigation.navigate('PlannerTab')}
@@ -275,7 +296,7 @@ const Dashboard: React.FC = () => {
           </Pressable>
         </View>
 
-        {/* Enrolled Courses with Distinct Course Pill Colors */}
+        {/* Enrolled Courses */}
         <View className="px-6 mt-8">
           <View className="flex-row justify-between items-center mb-4">
             <Text className="font-headline text-[18px] text-text-primary tracking-tight">
@@ -288,41 +309,52 @@ const Dashboard: React.FC = () => {
             </Pressable>
           </View>
 
-          <View className="gap-3">
-            {courses.slice(0, 3).map((course, idx) => {
-              const scheme = COURSE_COLOR_SCHEMES[idx % COURSE_COLOR_SCHEMES.length];
-              return (
-                <Pressable
-                  key={course.id}
-                  onPress={() => navigation.navigate('Course', { courseId: course.id })}
-                  className="bg-surface rounded-2xl border border-border/80 p-4 flex-row items-center justify-between shadow-soft active:bg-soft"
-                >
-                  <View className="flex-1 pr-3">
-                    <View className="flex-row items-center gap-2 mb-1">
-                      <View
-                        style={{ backgroundColor: scheme.bg, borderColor: scheme.border }}
-                        className="px-2.5 py-0.5 rounded-full border"
-                      >
-                        <Text style={{ color: scheme.text }} className="font-body-bold text-[11px]">
-                          {course.code}
-                        </Text>
+          {courses.length === 0 ? (
+            <View className="bg-surface rounded-2xl border border-border/80 p-6 items-center shadow-soft">
+              <Text className="font-body-semibold text-[14px] text-text-primary mb-1">
+                No Enrolled Courses Found
+              </Text>
+              <Text className="font-body text-[12px] text-muted text-center">
+                Courses will appear once added to the database or when department matching completes.
+              </Text>
+            </View>
+          ) : (
+            <View className="gap-3">
+              {courses.slice(0, 3).map((course, idx) => {
+                const scheme = COURSE_COLOR_SCHEMES[idx % COURSE_COLOR_SCHEMES.length];
+                return (
+                  <Pressable
+                    key={course.id}
+                    onPress={() => navigation.navigate('Course', { courseId: course.id })}
+                    className="bg-surface rounded-2xl border border-border/80 p-4 flex-row items-center justify-between shadow-soft active:bg-soft"
+                  >
+                    <View className="flex-1 pr-3">
+                      <View className="flex-row items-center gap-2 mb-1">
+                        <View
+                          style={{ backgroundColor: scheme.bg, borderColor: scheme.border }}
+                          className="px-2.5 py-0.5 rounded-full border"
+                        >
+                          <Text style={{ color: scheme.text }} className="font-body-bold text-[11px]">
+                            {course.code}
+                          </Text>
+                        </View>
+                        {course.credits ? (
+                          <Text className="font-body text-[11px] text-muted">
+                            {course.credits} Units
+                          </Text>
+                        ) : null}
                       </View>
-                      {course.credits ? (
-                        <Text className="font-body text-[11px] text-muted">
-                          {course.credits} Units
-                        </Text>
-                      ) : null}
-                    </View>
 
-                    <Text className="font-headline text-[15px] text-text-primary mt-0.5" numberOfLines={1}>
-                      {course.title}
-                    </Text>
-                  </View>
-                  <FontAwesome5 name="chevron-right" size={11} color="#A1A1AA" />
-                </Pressable>
-              );
-            })}
-          </View>
+                      <Text className="font-headline text-[15px] text-text-primary mt-0.5" numberOfLines={1}>
+                        {course.title}
+                      </Text>
+                    </View>
+                    <FontAwesome5 name="chevron-right" size={11} color="#A1A1AA" />
+                  </Pressable>
+                );
+              })}
+            </View>
+          )}
         </View>
 
       </ScrollView>
