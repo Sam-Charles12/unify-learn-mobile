@@ -54,23 +54,31 @@ const GradePlanner: React.FC = () => {
 
   React.useEffect(() => {
     (async () => {
-      if (!profile?.department || !profile?.level) return;
       try {
-        const q = query(
-          collection(db, 'courses'),
-          where('departments', 'array-contains', profile.department)
-        );
-        const snap = await getDocs(q);
-        const list = snap.docs
-          .map((d) => ({ id: d.id, ...d.data() } as any))
-          .filter((c) => !Array.isArray(c.levels) || c.levels.includes(profile.level ?? ''));
+        const snap = await getDocs(collection(db, 'courses'));
+        const all = snap.docs.map((d) => ({ id: d.id, ...d.data() } as any));
+        
+        let list = all;
+        if (profile?.enrolledCourses && Array.isArray(profile.enrolledCourses) && profile.enrolledCourses.length > 0) {
+          list = all.filter((c) =>
+            profile.enrolledCourses!.includes(c.id) || profile.enrolledCourses!.includes(c.code)
+          );
+        } else if (profile?.department) {
+          const userDept = profile.department.toLowerCase().trim();
+          list = all.filter((c) => {
+            const deptMatch = !c.departments?.length || c.departments.some((d: string) => String(d).toLowerCase().trim() === userDept);
+            const lvlMatch = !profile?.level || !c.levels?.length || c.levels.map(String).includes(String(profile.level).trim());
+            return deptMatch && lvlMatch;
+          });
+        }
+        
         setCourses(list);
         if (list.length > 0) setCourseId(list[0].id);
       } catch (e) {
         console.warn('Failed to load courses for planner:', e);
       }
     })();
-  }, [profile?.department, profile?.level]);
+  }, [profile?.department, profile?.level, profile?.enrolledCourses]);
 
   const course = courses.find((c) => c.id === courseId);
   const w = { ca: 0.2, test: 0.2, exam: 0.6, ...(course?.weights ?? {}) };

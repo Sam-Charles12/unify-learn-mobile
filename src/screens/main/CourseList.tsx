@@ -47,7 +47,14 @@ const CourseList: React.FC = () => {
 
       let matchedCourses = allCourses;
 
-      if (profile?.department) {
+      if (profile?.enrolledCourses && Array.isArray(profile.enrolledCourses) && profile.enrolledCourses.length > 0) {
+        const enrolled = allCourses.filter((c) =>
+          profile.enrolledCourses!.includes(c.id) || profile.enrolledCourses!.includes(c.code)
+        );
+        if (enrolled.length > 0) {
+          matchedCourses = enrolled;
+        }
+      } else if (profile?.department) {
         const userDept = profile.department.toLowerCase().trim();
         const deptMatches = allCourses.filter((c) => {
           if (!c.departments || !Array.isArray(c.departments) || c.departments.length === 0) {

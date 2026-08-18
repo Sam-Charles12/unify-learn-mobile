@@ -12,6 +12,7 @@ export interface UserProfile {
   level?: string;
   role?: string;
   onboarded?: boolean;
+  enrolledCourses?: string[];
   createdAt?: Date;
 }
 

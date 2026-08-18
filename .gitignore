@@ -44,6 +44,8 @@ scripts/firebase-admin-key.json
 # Uploaded course materials (local only)
 contents/
 *.pdf
+# Generated PDF parse dumps (local only)
+scripts/ccmas-text.txt
 
 # typescript
 *.tsbuildinfo

@@ -7,6 +7,7 @@ export interface User {
   email: string;
   department: string;
   level: string;
+  enrolledCourses?: string[];
   role: UserRole;
   createdAt: Date;
 }
