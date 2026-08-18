@@ -75,34 +75,48 @@ const Profile: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 60 }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         
         {/* Header */}
         <View className="px-6 pt-4 pb-4">
           <View className="flex-row items-center justify-between mb-6">
             <Pressable
               onPress={() => navigation.goBack()}
-              className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
+              className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                borderWidth: 1,
+                borderColor: '#E7DDD5',
+              }}
             >
-              <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
+              <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
             </Pressable>
             <Text className="font-body-bold text-text-primary text-[15px]">Student Profile</Text>
-            <View className="w-10" />
+            <View className="w-11" />
           </View>
 
-          {/* Profile Identity Card */}
+          {/* Profile Identity */}
           <View className="flex-row items-center">
-            <View className="w-16 h-16 rounded-full bg-ink items-center justify-center mr-4 shadow-soft">
+            <View
+              className="w-16 h-16 rounded-full bg-ink items-center justify-center mr-4"
+              style={{
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.15,
+                shadowRadius: 10,
+                elevation: 6,
+              }}
+            >
               <Text className="font-headline text-[22px] text-white">
                 {loading ? '…' : initials}
               </Text>
             </View>
             <View className="flex-1">
-              <Text className="font-headline text-[22px] text-text-primary leading-7 tracking-tight">
+              <Text className="font-headline text-[24px] text-text-primary leading-[30px] tracking-tight">
                 {profile?.name || 'LASU Student'}
               </Text>
-              <View className="flex-row items-center mt-1">
-                <View className="bg-primary-light px-2.5 py-0.5 rounded-full border border-primary-border">
+              <View className="flex-row items-center mt-1.5">
+                <View className="bg-pastel-sage px-2.5 py-1 rounded-full">
                   <Text className="font-body-bold text-[11px] text-primary-dark uppercase">
                     {profile?.role || 'Student'}
                   </Text>
@@ -115,24 +129,33 @@ const Profile: React.FC = () => {
           </View>
         </View>
 
-        {/* Academic Stats with Tasteful Color Touches */}
+        {/* Pastel Stat Cards */}
         <View className="px-6 mt-4 flex-row gap-3">
-          <View className="flex-1 bg-cobalt-light border border-cobalt-border rounded-2xl p-4 items-center shadow-soft">
-            <Text className="font-headline text-[22px] text-cobalt">
+          <View
+            className="flex-1 rounded-2xl p-4 items-center"
+            style={{ backgroundColor: '#E4EDF6' }}
+          >
+            <Text className="font-headline text-[24px] text-cobalt">
               {courseCount ?? 0}
             </Text>
             <Text className="font-body-bold text-[11px] text-cobalt mt-0.5">Enrolled</Text>
           </View>
 
-          <View className="flex-1 bg-primary-light border border-primary-border rounded-2xl p-4 items-center shadow-soft">
-            <Text className="font-headline text-[22px] text-primary">
+          <View
+            className="flex-1 rounded-2xl p-4 items-center"
+            style={{ backgroundColor: '#E8F0EC' }}
+          >
+            <Text className="font-headline text-[24px] text-primary">
               {weeksDone ?? 0}
             </Text>
             <Text className="font-body-bold text-[11px] text-primary mt-0.5">Weeks Done</Text>
           </View>
 
-          <View className="flex-1 bg-amber-light border border-amber-border rounded-2xl p-4 items-center shadow-soft">
-            <Text className="font-headline text-[22px] text-amber">
+          <View
+            className="flex-1 rounded-2xl p-4 items-center"
+            style={{ backgroundColor: '#F4E9DE' }}
+          >
+            <Text className="font-headline text-[24px] text-amber">
               {(weeksDone ?? 0) * 10}
             </Text>
             <Text className="font-body-bold text-[11px] text-amber mt-0.5">Study Pts</Text>
@@ -141,14 +164,27 @@ const Profile: React.FC = () => {
 
         {/* Details Card */}
         <View className="px-6 mt-6">
-          <View className="bg-surface rounded-2xl border border-border/80 p-6 shadow-soft">
+          <View
+            className="rounded-2xl p-6"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.82)',
+              borderWidth: 1,
+              borderColor: 'rgba(231,221,213,0.5)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
+          >
             <Text className="font-body-bold text-[12px] text-muted uppercase tracking-wider mb-3">
               Academic Registration
             </Text>
             {fields.map((f, idx) => (
               <View
                 key={f.label}
-                className={`py-3.5 ${idx < fields.length - 1 ? 'border-b border-divider' : ''}`}
+                className={`py-3.5 ${idx < fields.length - 1 ? 'border-b' : ''}`}
+                style={{ borderBottomColor: '#F0EAE3' }}
               >
                 <Text className="font-body text-[12px] text-muted">{f.label}</Text>
                 <Text className="font-body-semibold text-[14px] text-text-primary mt-0.5">{f.value}</Text>
@@ -162,7 +198,15 @@ const Profile: React.FC = () => {
           <Pressable
             onPress={handleLogout}
             disabled={signingOut}
-            className="bg-surface border border-border rounded-2xl py-4 items-center flex-row justify-center active:bg-soft shadow-soft"
+            className="rounded-2xl py-4 items-center flex-row justify-center active:opacity-80"
+            style={{
+              backgroundColor: '#F5EAEA',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.03,
+              shadowRadius: 4,
+              elevation: 1,
+            }}
           >
             {signingOut ? (
               <ActivityIndicator size="small" color="#BE123C" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Platform } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useAnnouncements } from '@/hooks/useAnnouncements';
@@ -50,7 +50,29 @@ const PremiumTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, naviga
   const { unreadCount } = useAnnouncements({ courseIds });
 
   return (
-    <View className="bg-surface border-t border-border/70 px-4 pt-3 pb-7 flex-row justify-around items-center">
+    <View
+      style={{
+        position: 'absolute',
+        bottom: Platform.OS === 'ios' ? 28 : 16,
+        left: 20,
+        right: 20,
+        backgroundColor: 'rgba(255,255,255,0.92)',
+        borderRadius: 28,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        paddingVertical: 10,
+        paddingHorizontal: 8,
+        // Simulated glassmorphism — soft diffused shadow
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.08,
+        shadowRadius: 24,
+        elevation: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(231,221,213,0.5)',
+      }}
+    >
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
         const icon = ICONS[route.name] ?? 'circle';
@@ -71,30 +93,81 @@ const PremiumTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, naviga
           <Pressable
             key={route.key}
             onPress={onPress}
-            className="items-center justify-center flex-1 py-1"
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              flex: 1,
+            }}
           >
-            <View className="items-center justify-center relative w-10 h-7">
-              <FontAwesome5
-                name={icon}
-                size={18}
-                color={isFocused ? '#0F5132' : '#A1A1AA'}
-                solid={isFocused}
-              />
-              {isNotifications && unreadCount > 0 && (
-                <View className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-error items-center justify-center px-1 border border-surface">
-                  <Text className="font-body-bold text-[8px] text-white">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </Text>
-                </View>
-              )}
-            </View>
-            <Text
-              className={`font-body-medium text-[11px] mt-1 tracking-tight ${
-                isFocused ? 'font-body-bold text-primary' : 'text-muted'
-              }`}
-            >
-              {descriptors[route.key].options.tabBarLabel as string}
-            </Text>
+            {isFocused ? (
+              // Active: dark circle with white icon (Dribbble style)
+              <View
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  backgroundColor: '#1A1A1A',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 8,
+                  elevation: 6,
+                }}
+              >
+                <FontAwesome5 name={icon} size={18} color="#FFFFFF" solid />
+                {isNotifications && unreadCount > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: -2,
+                      right: -2,
+                      minWidth: 18,
+                      height: 18,
+                      borderRadius: 9,
+                      backgroundColor: '#E11D48',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      paddingHorizontal: 4,
+                      borderWidth: 2,
+                      borderColor: '#1A1A1A',
+                    }}
+                  >
+                    <Text style={{ fontFamily: 'Manrope_700Bold', fontSize: 9, color: '#fff' }}>
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            ) : (
+              // Inactive: just icon, no label
+              <View style={{ alignItems: 'center', justifyContent: 'center', width: 50, height: 50, position: 'relative' }}>
+                <FontAwesome5 name={icon} size={18} color="#8A817C" />
+                {isNotifications && unreadCount > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 6,
+                      right: 6,
+                      minWidth: 16,
+                      height: 16,
+                      borderRadius: 8,
+                      backgroundColor: '#E11D48',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      paddingHorizontal: 3,
+                      borderWidth: 2,
+                      borderColor: '#FFFFFF',
+                    }}
+                  >
+                    <Text style={{ fontFamily: 'Manrope_700Bold', fontSize: 8, color: '#fff' }}>
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
           </Pressable>
         );
       })}

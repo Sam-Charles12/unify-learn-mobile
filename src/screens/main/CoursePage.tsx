@@ -112,28 +112,44 @@ const CoursePage: React.FC = () => {
         className="mb-3"
       >
         <View
-          className={`rounded-2xl border p-5 flex-row items-center justify-between shadow-soft ${
-            locked
-              ? 'bg-soft/70 border-border/60 opacity-60'
+          className="rounded-2xl p-5 flex-row items-center justify-between"
+          style={{
+            backgroundColor: locked
+              ? '#F2EDE8'
               : done
-              ? 'bg-surface border-border/80'
-              : 'bg-surface border-ink shadow-card'
-          }`}
+              ? '#E8F0EC'
+              : 'rgba(255,255,255,0.82)',
+            borderWidth: locked ? 0 : 1,
+            borderColor: locked
+              ? 'transparent'
+              : done
+              ? '#C8DDCF'
+              : '#1A1A1A',
+            opacity: locked ? 0.55 : 1,
+            shadowColor: locked ? 'transparent' : '#000',
+            shadowOffset: { width: 0, height: locked ? 0 : 3 },
+            shadowOpacity: locked ? 0 : 0.05,
+            shadowRadius: locked ? 0 : 10,
+            elevation: locked ? 0 : 3,
+          }}
         >
           <View className="flex-row items-center flex-1 pr-4">
             <View
-              className={`w-10 h-10 rounded-xl items-center justify-center mr-4 ${
-                done
-                  ? 'bg-primary-light border border-primary-border'
+              className="w-11 h-11 rounded-xl items-center justify-center mr-4"
+              style={{
+                backgroundColor: done
+                  ? '#ECFDF5'
                   : locked
-                  ? 'bg-surface border border-border'
-                  : 'bg-ink'
-              }`}
+                  ? 'rgba(255,255,255,0.5)'
+                  : '#1A1A1A',
+                borderWidth: done ? 1 : 0,
+                borderColor: done ? '#A7F3D0' : 'transparent',
+              }}
             >
               {done ? (
-                <FontAwesome5 name="check" size={13} color="#0F5132" />
+                <FontAwesome5 name="check" size={14} color="#059669" />
               ) : locked ? (
-                <FontAwesome5 name="lock" size={12} color="#A1A1AA" />
+                <FontAwesome5 name="lock" size={12} color="#8A817C" />
               ) : (
                 <Text className="font-headline text-[15px] text-white">
                   {item.weekNumber}
@@ -162,7 +178,7 @@ const CoursePage: React.FC = () => {
             ) : done ? (
               <Text className="font-body-bold text-[12px] text-primary">Completed</Text>
             ) : (
-              <View className="bg-ink rounded-xl px-4 py-2 flex-row items-center">
+              <View className="bg-ink rounded-xl px-4 py-2.5 flex-row items-center">
                 <Text className="font-body-semibold text-[12px] text-white mr-1.5">Study</Text>
                 <FontAwesome5 name="arrow-right" size={9} color="#FFFFFF" />
               </View>
@@ -176,7 +192,7 @@ const CoursePage: React.FC = () => {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 bg-background items-center justify-center" edges={['top']}>
-        <ActivityIndicator size="large" color="#0F5132" />
+        <ActivityIndicator size="large" color="#059669" />
       </SafeAreaView>
     );
   }
@@ -196,31 +212,34 @@ const CoursePage: React.FC = () => {
         <View className="flex-row items-center justify-between mb-4">
           <Pressable
             onPress={() => navigation.goBack()}
-            className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
+            className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              borderWidth: 1,
+              borderColor: '#E7DDD5',
+            }}
           >
-            <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
+            <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
           </Pressable>
-          <Text className="font-body-bold text-[13px] text-primary">
-            {course?.code ?? 'Course'}
-          </Text>
-          <View className="w-10" />
+          <View className="bg-pastel-sage px-3 py-1 rounded-full">
+            <Text className="font-body-bold text-[13px] text-primary">
+              {course?.code ?? 'Course'}
+            </Text>
+          </View>
+          <View className="w-11" />
         </View>
 
-        <Text className="font-headline text-[24px] text-text-primary leading-8 tracking-tight" numberOfLines={2}>
+        {/* Bold Display Title — Dribbble "Spatial Aptitude" style */}
+        <Text className="font-headline text-[28px] text-text-primary leading-[34px] tracking-tight" numberOfLines={2}>
           {course?.title}
         </Text>
 
         {/* Progress Bar */}
-        <View className="mt-4 pt-4 border-t border-divider">
-          <View className="flex-row justify-between items-center mb-2">
-            <Text className="font-body-medium text-[13px] text-text-secondary">
-              Course Syllabus Progress
-            </Text>
-            <Text className="font-headline text-[13px] text-primary">{progress}%</Text>
-          </View>
-          <View className="h-2 rounded-full bg-soft overflow-hidden">
+        <View className="mt-5 flex-row items-center gap-4">
+          <View className="flex-1 h-3 rounded-full overflow-hidden" style={{ backgroundColor: '#E8F0EC' }}>
             <View className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
           </View>
+          <Text className="font-headline text-[16px] text-primary">{progress}%</Text>
         </View>
       </View>
 
@@ -228,12 +247,24 @@ const CoursePage: React.FC = () => {
         data={weeks}
         keyExtractor={(item) => item.id}
         renderItem={renderWeek}
-        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 12, paddingBottom: 60 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 12, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <>
             {lecturers.length > 0 && (
-              <View className="bg-surface rounded-2xl border border-border/80 p-5 shadow-soft mb-6">
+              <View
+                className="rounded-2xl p-5 mb-6"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.78)',
+                  borderWidth: 1,
+                  borderColor: 'rgba(231,221,213,0.5)',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.04,
+                  shadowRadius: 8,
+                  elevation: 3,
+                }}
+              >
                 <Text className="font-body-bold text-[12px] text-muted uppercase tracking-wider mb-3">
                   Teaching Faculty
                 </Text>
@@ -245,7 +276,10 @@ const CoursePage: React.FC = () => {
                       onPress={() => navigation.navigate('Lecturer', { lecturerId: l.id })}
                       className={`flex-row items-center py-3 ${i < lecturers.length - 1 ? 'border-b border-divider' : ''}`}
                     >
-                      <View className="w-10 h-10 rounded-full bg-soft items-center justify-center mr-3.5">
+                      <View
+                        className="w-11 h-11 rounded-full items-center justify-center mr-3.5"
+                        style={{ backgroundColor: '#ECEAF4' }}
+                      >
                         <Text className="font-headline text-[14px] text-text-primary">
                           {l.name?.split(' ').slice(0, 2).map((s) => s[0]).join('') ?? '?'}
                         </Text>
@@ -256,14 +290,14 @@ const CoursePage: React.FC = () => {
                           {[l.title, range].filter(Boolean).join(' • ')}
                         </Text>
                       </View>
-                      <FontAwesome5 name="chevron-right" size={10} color="#A1A1AA" />
+                      <FontAwesome5 name="chevron-right" size={10} color="#8A817C" />
                     </Pressable>
                   );
                 })}
               </View>
             )}
 
-            <Text className="font-headline text-[18px] text-text-primary tracking-tight mb-4">
+            <Text className="font-headline text-[20px] text-text-primary tracking-tight mb-4">
               Weekly Syllabus
             </Text>
           </>

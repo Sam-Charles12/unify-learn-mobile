@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Pressable, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -32,12 +32,28 @@ export interface TimetableEntry {
 }
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+const SHORT_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+const PASTEL_EVENT_COLORS = [
+  { bg: '#E8F0EC', border: '#C8DDCF', accent: '#059669' }, // Sage
+  { bg: '#ECEAF4', border: '#D5D2E8', accent: '#7C3AED' }, // Lavender
+  { bg: '#F5EAEA', border: '#E5D0D0', accent: '#E11D48' }, // Blush
+  { bg: '#F4E9DE', border: '#E2D4C4', accent: '#D97706' }, // Cream
+  { bg: '#E4EDF6', border: '#C8D9EA', accent: '#2563EB' }, // Sky
+];
 
 const formatTime = (t: string) => {
   const [h, m] = t.split(':').map(Number);
-  const suffix = h >= 12 ? 'pm' : 'am';
+  const suffix = h >= 12 ? 'PM' : 'AM';
   const hour = h % 12 === 0 ? 12 : h % 12;
-  return `${hour}:${m.toString().padStart(2, '0')}${suffix}`;
+  return `${hour}:${m.toString().padStart(2, '0')} ${suffix}`;
+};
+
+const formatTimeShort = (t: string) => {
+  const [h] = t.split(':').map(Number);
+  const suffix = h >= 12 ? 'PM' : 'AM';
+  const hour = h % 12 === 0 ? 12 : h % 12;
+  return `${hour} ${suffix}`;
 };
 
 const Timetable: React.FC = () => {
@@ -46,6 +62,10 @@ const Timetable: React.FC = () => {
 
   const [entries, setEntries] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedDay, setSelectedDay] = useState(() => {
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    return DAYS.includes(today) ? today : 'Monday';
+  });
 
   useEffect(() => {
     const dept = profile?.department;
@@ -75,40 +95,96 @@ const Timetable: React.FC = () => {
   }, [profile?.department, profile?.level]);
 
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-  const todayEntries = entries.filter((e) => e.day === today);
-  const hasCancelledToday = todayEntries.some((e) => e.status === 'cancelled');
+  const dayEntries = entries.filter((e) => e.day === selectedDay);
 
-  const grouped = DAYS.map((day) => ({
-    day,
-    items: entries.filter((e) => e.day === day),
-  }));
+  // Get current month and simulated dates for the day strip
+  const now = new Date();
+  const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <View className="bg-accent rounded-b-[28px] px-6 pt-4 pb-8 shadow-soft">
-        <View className="flex-row items-center justify-between mb-3">
-          <Pressable onPress={() => navigation.goBack()} className="w-9 h-9 rounded-full bg-white/15 items-center justify-center">
-            <FontAwesome5 name="chevron-left" size={14} color="#ffffff" />
+      {/* Header */}
+      <View className="px-6 pt-4 pb-2">
+        <View className="flex-row items-center justify-between mb-4">
+          <Pressable
+            onPress={() => navigation.goBack()}
+            className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              borderWidth: 1,
+              borderColor: '#E7DDD5',
+            }}
+          >
+            <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
           </Pressable>
-          <Text className="font-body-bold text-white text-[15px]">Timetable</Text>
-          <View className="w-9" />
+          <Text className="font-headline text-[17px] text-text-primary">{monthName}</Text>
+          <View className="w-11 h-11 rounded-full bg-pastel-sage items-center justify-center">
+            <FontAwesome5 name="calendar-alt" size={15} color="#059669" />
+          </View>
         </View>
-        <Text className="font-headline text-[22px] text-white leading-7">
-          {profile?.department ? `${profile.department.toUpperCase()} — L${profile.level ?? ''}` : 'Weekly Schedule'}
-        </Text>
-        <Text className="font-body text-[13px] text-white/75 mt-1">
-          First semester, Monday to Friday
-        </Text>
+
+        {/* Day Strip — Dribbble style */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 8, paddingVertical: 4 }}
+        >
+          {DAYS.map((day, i) => {
+            const isSelected = selectedDay === day;
+            const isToday = day === today;
+            // Simulated date number based on current week
+            const dayOffset = i - DAYS.indexOf(today);
+            const dateNum = now.getDate() + dayOffset;
+
+            return (
+              <Pressable
+                key={day}
+                onPress={() => setSelectedDay(day)}
+                className="items-center px-1"
+                style={{ width: 58 }}
+              >
+                <Text
+                  className={`font-body-medium text-[12px] mb-1.5 ${
+                    isSelected ? 'text-white' : 'text-muted'
+                  }`}
+                  style={isSelected ? { color: '#1A1A1A' } : {}}
+                >
+                  {SHORT_DAYS[i]}
+                </Text>
+                <View
+                  className="w-10 h-10 rounded-full items-center justify-center"
+                  style={{
+                    backgroundColor: isSelected ? '#1A1A1A' : isToday ? '#E8F0EC' : 'transparent',
+                  }}
+                >
+                  <Text
+                    className={`font-headline text-[15px] ${
+                      isSelected ? 'text-white' : isToday ? 'text-primary' : 'text-text-primary'
+                    }`}
+                  >
+                    {dateNum > 0 ? dateNum : ''}
+                  </Text>
+                </View>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
       </View>
+
+      {/* Divider */}
+      <View className="h-[1px] bg-border mx-6 mb-2" />
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#005B96" />
+          <ActivityIndicator size="large" color="#059669" />
         </View>
       ) : entries.length === 0 ? (
         <View className="flex-1 items-center justify-center px-10">
-          <View className="w-20 h-20 rounded-pill bg-accent-light items-center justify-center mb-4">
-            <FontAwesome5 name="calendar-alt" size={26} color="#005B96" />
+          <View
+            className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
+            style={{ backgroundColor: '#ECEAF4' }}
+          >
+            <FontAwesome5 name="calendar-alt" size={28} color="#7C3AED" />
           </View>
           <Text className="font-headline text-[20px] text-text-primary mb-2 text-center">
             No classes scheduled
@@ -118,154 +194,150 @@ const Timetable: React.FC = () => {
           </Text>
         </View>
       ) : (
-        <FlatList
-          data={grouped}
-          keyExtractor={(g) => g.day}
-          contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+        <ScrollView
+          contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 12, paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            todayEntries.length > 0 ? (
-              <View
-                className={`rounded-[20px] p-4 mb-6 border ${
-                  hasCancelledToday
-                    ? 'bg-[#FDE8E8] border-[#DC2626]/30'
-                    : 'bg-primary-light border-primary/20'
-                }`}
-              >
-                <View className="flex-row items-center mb-1">
-                  <FontAwesome5
-                    name={hasCancelledToday ? 'exclamation-triangle' : 'calendar-check'}
-                    size={14}
-                    color={hasCancelledToday ? '#B91C1C' : '#00895A'}
-                  />
-                  <Text
-                    className={`ml-2 font-body-bold text-[14px] ${
-                      hasCancelledToday ? 'text-[#B91C1C]' : 'text-primary-dark'
-                    }`}
-                  >
-                    Today — {today}
-                  </Text>
-                </View>
-                {todayEntries.map((e) => (
-                  <View key={e.id} className="mt-1.5">
-                    <Text className={`font-body-medium text-[13px] text-text-primary ${e.status === 'cancelled' ? 'line-through' : ''}`}>
-                      {e.courseCode} · {formatTime(e.startTime)} – {formatTime(e.endTime)}
-                      {e.status === 'cancelled' ? ' (cancelled)' : ''}
+        >
+          {/* Day label */}
+          <View className="flex-row items-center mb-4">
+            <Text className="font-headline text-[22px] text-text-primary tracking-tight">
+              {selectedDay}
+            </Text>
+            {selectedDay === today && (
+              <View className="ml-2.5 px-2.5 py-1 rounded-full bg-pastel-sage">
+                <Text className="font-body-bold text-[10px] text-primary uppercase">Today</Text>
+              </View>
+            )}
+          </View>
+
+          {dayEntries.length === 0 ? (
+            <View
+              className="rounded-2xl p-6 items-center"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.78)',
+                borderWidth: 1,
+                borderColor: 'rgba(231,221,213,0.5)',
+              }}
+            >
+              <Text className="font-body-semibold text-[15px] text-text-primary mb-1">
+                No classes on {selectedDay}
+              </Text>
+              <Text className="font-body text-[13px] text-muted text-center">
+                {selectedDay === today ? 'You have the day free! 🎉' : 'No lectures scheduled.'}
+              </Text>
+            </View>
+          ) : (
+            /* Timeline */
+            dayEntries.map((entry, idx) => {
+              const cancelled = entry.status === 'cancelled';
+              const scheme = PASTEL_EVENT_COLORS[idx % PASTEL_EVENT_COLORS.length];
+
+              return (
+                <View key={entry.id} className="flex-row mb-4">
+                  {/* Time Gutter */}
+                  <View className="w-14 items-end pr-3 pt-1">
+                    <Text className="font-body-bold text-[12px] text-muted">
+                      {formatTimeShort(entry.startTime)}
                     </Text>
                   </View>
-                ))}
-              </View>
-            ) : null
-          }
-          renderItem={({ item: group }) => (
-            <View className="mb-6">
-              <View className="flex-row items-center mb-3">
-                <View
-                  className={`w-9 h-9 rounded-[12px] items-center justify-center mr-2 ${
-                    group.day === today ? 'bg-accent' : 'bg-glass-strong'
-                  }`}
-                >
-                  <Text
-                    className={`font-headline text-[12px] ${
-                      group.day === today ? 'text-white' : 'text-accent'
-                    }`}
-                  >
-                    {group.day.slice(0, 3).toUpperCase()}
-                  </Text>
-                </View>
-                <Text className="font-headline text-[16px] text-text-primary">{group.day}</Text>
-                {group.day === today && (
-                  <View className="ml-2 px-2 py-0.5 rounded-pill bg-accent-light">
-                    <Text className="font-body-bold text-[10px] text-accent">TODAY</Text>
-                  </View>
-                )}
-              </View>
 
-              {group.items.length === 0 ? (
-                <Text className="font-body text-[12px] text-muted mb-3 ml-1">
-                  No classes
-                </Text>
-              ) : (
-                group.items.map((entry) => {
-                  const cancelled = entry.status === 'cancelled';
-                  return (
+                  {/* Timeline Dot + Line */}
+                  <View className="items-center w-5">
                     <View
-                      key={entry.id}
-                      className={`bg-card rounded-[20px] border p-4 mb-3 shadow-soft ${
-                        cancelled ? 'border-border opacity-60' : 'border-border'
-                      }`}
-                    >
-                      <View className="flex-row items-center">
-                        <View
-                          className={`w-12 h-12 rounded-[16px] items-center justify-center mr-3 ${
-                            cancelled ? 'bg-error/10' : 'bg-accent-light'
-                          }`}
-                        >
-                          <FontAwesome5
-                            name={cancelled ? 'calendar-times' : 'book-open'}
-                            size={17}
-                            color={cancelled ? '#B91C1C' : '#005B96'}
-                          />
-                        </View>
-                        <View className="flex-1">
-                          <View className="flex-row items-center">
-                            <Text
-                              className={`font-body-bold text-[15px] text-primary-dark ${
-                                cancelled ? 'line-through' : ''
-                              }`}
-                            >
-                              {entry.courseCode}
-                            </Text>
-                            {cancelled && (
-                              <View className="ml-2 px-2 py-0.5 rounded-pill bg-error">
-                                <Text className="font-body-bold text-[9px] text-white">CANCELLED</Text>
-                              </View>
-                            )}
-                          </View>
-                          <Text className="font-body-medium text-[13px] text-text-primary mt-0.5" numberOfLines={1}>
-                            {entry.courseTitle ?? entry.courseCode}
-                          </Text>
-                        </View>
-                      </View>
+                      className="w-3 h-3 rounded-full mt-1.5"
+                      style={{
+                        backgroundColor: cancelled ? '#E11D48' : scheme.accent,
+                        borderWidth: 2,
+                        borderColor: '#F8F6F3',
+                      }}
+                    />
+                    {idx < dayEntries.length - 1 && (
+                      <View className="w-[2px] flex-1 mt-1" style={{ backgroundColor: '#E7DDD5' }} />
+                    )}
+                  </View>
 
-                      <View className="flex-row flex-wrap mt-3 pt-3 border-t border-divider/50">
-                        <View className="flex-row items-center mr-5">
-                          <FontAwesome5 name="clock" size={11} color="#8A817C" />
-                          <Text className="font-body-medium text-[12px] text-text-secondary ml-1.5">
-                            {formatTime(entry.startTime)} – {formatTime(entry.endTime)}
-                          </Text>
-                        </View>
-                        <View className="flex-row items-center">
-                          <FontAwesome5 name="map-marker-alt" size={11} color="#8A817C" />
-                          <Text className="font-body-medium text-[12px] text-text-secondary ml-1.5" numberOfLines={1}>
-                            {entry.classroom}
-                          </Text>
-                        </View>
-                      </View>
-
-                      {entry.lecturerName && (
-                        <View className="flex-row items-center mt-2">
-                          <FontAwesome5 name="chalkboard-teacher" size={11} color="#8A817C" />
-                          <Text className="font-body-medium text-[12px] text-muted ml-1.5">
-                            {entry.lecturerName}
-                          </Text>
+                  {/* Event Card */}
+                  <View
+                    className="flex-1 ml-3 rounded-2xl p-4"
+                    style={{
+                      backgroundColor: cancelled ? '#FFF1F2' : scheme.bg,
+                      opacity: cancelled ? 0.7 : 1,
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.04,
+                      shadowRadius: 8,
+                      elevation: 2,
+                    }}
+                  >
+                    <View className="flex-row items-center justify-between mb-1.5">
+                      <Text
+                        className={`font-headline text-[16px] text-text-primary ${
+                          cancelled ? 'line-through' : ''
+                        }`}
+                      >
+                        {entry.courseCode}
+                      </Text>
+                      {cancelled && (
+                        <View className="px-2 py-0.5 rounded-full bg-rose">
+                          <Text className="font-body-bold text-[9px] text-white">CANCELLED</Text>
                         </View>
                       )}
+                    </View>
 
-                      {cancelled && entry.cancellationNote ? (
-                        <View className="mt-2 bg-[#FDE8E8] rounded-[12px] px-3 py-2">
-                          <Text className="font-body-medium text-[12px] text-[#B91C1C]">
-                            {entry.cancellationNote}
+                    <Text
+                      className="font-body-medium text-[13px] text-text-secondary mb-3"
+                      numberOfLines={1}
+                    >
+                      {entry.courseTitle ?? entry.courseCode}
+                    </Text>
+
+                    <View className="flex-row flex-wrap gap-3">
+                      <View className="flex-row items-center">
+                        <FontAwesome5 name="map-marker-alt" size={10} color="#8A817C" />
+                        <Text className="font-body-semibold text-[12px] text-text-secondary ml-1.5">
+                          Room {entry.classroom}
+                        </Text>
+                      </View>
+                      <View className="flex-row items-center">
+                        <FontAwesome5 name="clock" size={10} color="#8A817C" />
+                        <Text className="font-body-medium text-[12px] text-text-secondary ml-1.5">
+                          {formatTime(entry.startTime)} – {formatTime(entry.endTime)}
+                        </Text>
+                      </View>
+                    </View>
+
+                    {entry.lecturerName && (
+                      <View className="flex-row items-center mt-2">
+                        <View
+                          className="w-6 h-6 rounded-full items-center justify-center mr-1.5"
+                          style={{ backgroundColor: 'rgba(255,255,255,0.6)' }}
+                        >
+                          <Text className="font-body-bold text-[8px] text-text-primary">
+                            {entry.lecturerName.split(' ').slice(0, 2).map(s => s[0]).join('')}
                           </Text>
                         </View>
-                      ) : null}
-                    </View>
-                  );
-                })
-              )}
-            </View>
+                        <Text className="font-body-medium text-[11px] text-muted">
+                          {entry.lecturerName}
+                        </Text>
+                      </View>
+                    )}
+
+                    {cancelled && entry.cancellationNote ? (
+                      <View
+                        className="mt-2.5 rounded-xl px-3 py-2"
+                        style={{ backgroundColor: 'rgba(225,29,72,0.08)' }}
+                      >
+                        <Text className="font-body-medium text-[12px] text-rose-dark">
+                          {entry.cancellationNote}
+                        </Text>
+                      </View>
+                    ) : null}
+                  </View>
+                </View>
+              );
+            })
           )}
-        />
+        </ScrollView>
       )}
     </SafeAreaView>
   );

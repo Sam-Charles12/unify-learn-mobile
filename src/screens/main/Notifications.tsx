@@ -16,9 +16,9 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 const TABS: { key: AnnouncementScope | 'all'; label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'course', label: 'Course' },
-  { key: 'department', label: 'Department' },
+  { key: 'department', label: 'Dept' },
   { key: 'faculty', label: 'Faculty' },
-  { key: 'university', label: 'University' },
+  { key: 'university', label: 'Uni' },
 ];
 
 const Notifications: React.FC = () => {
@@ -69,11 +69,20 @@ const Notifications: React.FC = () => {
 
     return (
       <View
-        className={`mb-4 rounded-2xl border p-5 shadow-soft ${
-          isRead ? 'bg-surface border-border/80 opacity-70' : 'bg-surface border-ink/20 shadow-card'
-        }`}
+        className="mb-4 rounded-2xl p-5"
+        style={{
+          backgroundColor: isRead ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.82)',
+          borderWidth: isRead ? 0 : 1,
+          borderColor: isRead ? 'transparent' : 'rgba(26,26,26,0.12)',
+          opacity: isRead ? 0.65 : 1,
+          shadowColor: isRead ? 'transparent' : '#000',
+          shadowOffset: { width: 0, height: isRead ? 0 : 3 },
+          shadowOpacity: isRead ? 0 : 0.05,
+          shadowRadius: isRead ? 0 : 10,
+          elevation: isRead ? 0 : 3,
+        }}
       >
-        <View className="flex-row items-center justify-between mb-2">
+        <View className="flex-row items-center justify-between mb-2.5">
           <View className="flex-row items-center gap-2">
             {!isRead && <View className="w-2 h-2 rounded-full bg-primary" />}
             <Text className="font-body-bold text-[11px] text-primary uppercase tracking-wider">
@@ -95,7 +104,7 @@ const Notifications: React.FC = () => {
           </Text>
         </View>
 
-        <Text className="font-headline text-[16px] text-text-primary leading-6 mb-1">
+        <Text className="font-headline text-[16px] text-text-primary leading-6 mb-1.5">
           {item.title}
         </Text>
 
@@ -103,17 +112,18 @@ const Notifications: React.FC = () => {
           {item.body}
         </Text>
 
-        <View className="flex-row items-center justify-between pt-3 border-t border-divider">
+        <View className="flex-row items-center justify-between pt-3" style={{ borderTopWidth: 1, borderTopColor: '#F0EAE3' }}>
           <Text className="font-body-medium text-[12px] text-muted">
             {item.lecturerName ?? item.senderName ?? 'Faculty Office'}
           </Text>
 
           <Pressable
             onPress={() => markAsRead(item.id, !isRead)}
-            className="py-1 px-2.5 rounded-lg bg-soft active:bg-border"
+            className="py-1 px-3 rounded-full active:opacity-80"
+            style={{ backgroundColor: '#F2EDE8' }}
           >
             <Text className="font-body-semibold text-[11px] text-text-secondary">
-              {isRead ? 'Mark as Unread' : 'Mark as Read'}
+              {isRead ? 'Mark Unread' : 'Mark Read'}
             </Text>
           </Pressable>
         </View>
@@ -124,13 +134,18 @@ const Notifications: React.FC = () => {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       {/* Header */}
-      <View className="px-6 pt-4 pb-4">
+      <View className="px-6 pt-4 pb-3">
         <View className="flex-row items-center justify-between mb-4">
           <Pressable
             onPress={() => navigation.goBack()}
-            className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
+            className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              borderWidth: 1,
+              borderColor: '#E7DDD5',
+            }}
           >
-            <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
+            <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
           </Pressable>
           <Text className="font-body-bold text-text-primary text-[15px]">Academic Feed</Text>
           <Pressable
@@ -144,51 +159,48 @@ const Notifications: React.FC = () => {
           </Pressable>
         </View>
 
-        <Text className="font-headline text-[26px] text-text-primary leading-8 tracking-tight">
-          Notices & Broadcasts
+        <Text className="font-headline text-[28px] text-text-primary leading-[34px] tracking-tight">
+          Notices &{'\n'}Broadcasts
         </Text>
-        <Text className="font-body text-[14px] text-text-secondary mt-1">
+        <Text className="font-body text-[14px] text-text-secondary mt-2">
           {unreadCount > 0
             ? `${unreadCount} unread academic updates`
             : 'All notices are up to date'}
         </Text>
       </View>
 
-      {/* Filter Tabs */}
-      <View className="px-6 py-2">
-        <FlatList
-          data={TABS}
-          keyExtractor={(t) => t.key}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 8 }}
-          renderItem={({ item }) => {
-            const active = tab === item.key;
+      {/* Pill Tab Switcher — Dribbble style */}
+      <View className="px-6 py-3">
+        <View className="flex-row gap-2">
+          {TABS.map((t) => {
+            const active = tab === t.key;
             return (
               <Pressable
-                onPress={() => setTab(item.key)}
-                className={`rounded-full px-4 py-2 border ${
-                  active
-                    ? 'bg-ink border-ink'
-                    : 'bg-surface border-border/80'
-                }`}
+                key={t.key}
+                onPress={() => setTab(t.key)}
+                className="rounded-full px-4 py-2.5"
+                style={{
+                  backgroundColor: active ? '#1A1A1A' : 'rgba(255,255,255,0.7)',
+                  borderWidth: active ? 0 : 1,
+                  borderColor: active ? 'transparent' : '#E7DDD5',
+                }}
               >
                 <Text
                   className={`font-body-semibold text-[13px] ${
                     active ? 'text-white' : 'text-text-secondary'
                   }`}
                 >
-                  {item.label}
+                  {t.label}
                 </Text>
               </Pressable>
             );
-          }}
-        />
+          })}
+        </View>
       </View>
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="small" color="#0F5132" />
+          <ActivityIndicator size="small" color="#059669" />
         </View>
       ) : visible.length === 0 ? (
         <View className="flex-1 items-center justify-center px-8">
@@ -204,7 +216,7 @@ const Notifications: React.FC = () => {
           data={visible}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
-          contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 16, paddingBottom: 60 }}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 12, paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         />
       )}

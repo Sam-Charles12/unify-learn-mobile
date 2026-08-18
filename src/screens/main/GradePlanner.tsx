@@ -23,12 +23,12 @@ interface GradeResult {
 }
 
 const GRADE_BANDS = [
-  { letter: 'A', min: 70, klass: 'First Class (70–100%)', color: '#059669', bg: '#ECFDF5', border: '#A7F3D0' },
-  { letter: 'B', min: 60, klass: 'Second Class Upper (60–69%)', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE' },
-  { letter: 'C', min: 50, klass: 'Second Class Lower (50–59%)', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A' },
+  { letter: 'A', min: 70, klass: 'First Class (70–100%)', color: '#059669', bg: '#E8F0EC', border: '#C8DDCF' },
+  { letter: 'B', min: 60, klass: 'Second Class Upper (60–69%)', color: '#2563EB', bg: '#E4EDF6', border: '#C8D9EA' },
+  { letter: 'C', min: 50, klass: 'Second Class Lower (50–59%)', color: '#D97706', bg: '#F4E9DE', border: '#E2D4C4' },
   { letter: 'D', min: 45, klass: 'Third Class (45–49%)', color: '#EA580C', bg: '#FFF7ED', border: '#FED7AA' },
-  { letter: 'E', min: 40, klass: 'Pass (40–44%)', color: '#64748B', bg: '#F1F5F9', border: '#CBD5E1' },
-  { letter: 'F', min: 0, klass: 'Fail (0–39%)', color: '#E11D48', bg: '#FFF1F2', border: '#FECDD3' },
+  { letter: 'E', min: 40, klass: 'Pass (40–44%)', color: '#64748B', bg: '#F2EDE8', border: '#E7DDD5' },
+  { letter: 'F', min: 0, klass: 'Fail (0–39%)', color: '#E11D48', bg: '#F5EAEA', border: '#E5D0D0' },
 ];
 
 const gradeFor = (score: number): GradeResult => {
@@ -113,52 +113,74 @@ const GradePlanner: React.FC = () => {
         onChangeText={onChange}
         keyboardType="numeric"
         placeholder="0–100"
-        placeholderTextColor="#A1A1AA"
-        className="bg-surface rounded-xl px-3 py-3.5 font-body-bold text-[16px] text-text-primary text-center border border-border"
+        placeholderTextColor="#8A817C"
+        className="rounded-xl px-3 py-3.5 font-body-bold text-[16px] text-text-primary text-center"
+        style={{
+          backgroundColor: 'rgba(255,255,255,0.7)',
+          borderWidth: 1,
+          borderColor: '#E7DDD5',
+        }}
       />
     </View>
   );
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 60 }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         
         {/* Header */}
         <View className="px-6 pt-4 pb-4">
           <View className="flex-row items-center justify-between mb-4">
             <Pressable
               onPress={() => navigation.goBack()}
-              className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
+              className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                borderWidth: 1,
+                borderColor: '#E7DDD5',
+              }}
             >
-              <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
+              <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
             </Pressable>
-            <View className="bg-violet-light px-3 py-1 rounded-full border border-violet-border">
+            <View className="bg-pastel-lavender px-3.5 py-1.5 rounded-full">
               <Text className="font-body-bold text-[11px] text-violet">
                 Grade Calculator
               </Text>
             </View>
-            <View className="w-10" />
+            <View className="w-11" />
           </View>
-          <Text className="font-headline text-[26px] text-text-primary leading-8 tracking-tight">
-            Assessment Forecaster
+          <Text className="font-headline text-[28px] text-text-primary leading-[34px] tracking-tight">
+            Assessment{'\n'}Forecaster
           </Text>
-          <Text className="font-body text-[14px] text-text-secondary mt-1">
-            Calculate your semester Continuous Assessment & target exam standing.
+          <Text className="font-body text-[14px] text-text-secondary mt-2">
+            Calculate your semester CA & target exam standing.
           </Text>
         </View>
 
         {/* Calculator Card */}
         <View className="px-6 mt-4">
-          <View className="bg-surface rounded-2xl border border-border/80 p-6 shadow-soft">
+          <View
+            className="rounded-3xl p-6"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.82)',
+              borderWidth: 1,
+              borderColor: 'rgba(231,221,213,0.5)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.05,
+              shadowRadius: 12,
+              elevation: 4,
+            }}
+          >
             <Text className="font-body-bold text-[12px] text-muted uppercase tracking-wider mb-2">
               Select Enrolled Course
             </Text>
-            <View className="bg-surface rounded-xl overflow-hidden border border-border mb-5">
+            <View className="rounded-xl overflow-hidden mb-5" style={{ borderWidth: 1, borderColor: '#E7DDD5', backgroundColor: '#fff' }}>
               <Picker
                 selectedValue={courseId}
                 onValueChange={setCourseId}
-                style={{ backgroundColor: '#FFFFFF', color: '#09090B' }}
-                dropdownIconColor="#71717A"
+                style={{ backgroundColor: '#FFFFFF', color: '#1A1A1A' }}
+                dropdownIconColor="#8A817C"
               >
                 {courses.map((c) => (
                   <Picker.Item key={c.id} label={`${c.code} — ${c.title}`} value={c.id} />
@@ -183,16 +205,16 @@ const GradePlanner: React.FC = () => {
             {result && (
               <View
                 style={{ backgroundColor: result.bg, borderColor: result.border }}
-                className="mt-5 rounded-2xl p-5 flex-row items-center border shadow-soft"
+                className="mt-5 rounded-2xl p-5 flex-row items-center border"
               >
                 <View
                   style={{ backgroundColor: result.color }}
-                  className="w-12 h-12 rounded-xl items-center justify-center mr-4 shadow-soft"
+                  className="w-14 h-14 rounded-2xl items-center justify-center mr-4"
                 >
-                  <Text className="font-headline text-[22px] text-white">{result.letter}</Text>
+                  <Text className="font-headline text-[24px] text-white">{result.letter}</Text>
                 </View>
                 <View className="flex-1">
-                  <Text className="font-headline text-[20px] text-text-primary">
+                  <Text className="font-headline text-[22px] text-text-primary">
                     {Math.round(result.score * 10) / 10}%
                   </Text>
                   <Text style={{ color: result.color }} className="font-body-bold text-[13px] mt-0.5">
@@ -206,7 +228,19 @@ const GradePlanner: React.FC = () => {
 
         {/* Reverse Target Calculator Card */}
         <View className="px-6 mt-6">
-          <View className="bg-surface rounded-2xl border border-border/80 p-6 shadow-soft">
+          <View
+            className="rounded-3xl p-6"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.82)',
+              borderWidth: 1,
+              borderColor: 'rgba(231,221,213,0.5)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
+          >
             <View className="flex-row items-center gap-2 mb-1">
               <View className="w-2 h-2 rounded-full bg-violet" />
               <Text className="font-headline text-[17px] text-text-primary tracking-tight">
@@ -225,12 +259,12 @@ const GradePlanner: React.FC = () => {
             <Text className="font-body-bold text-[12px] text-muted uppercase tracking-wider mb-2">
               Desired Grade Target
             </Text>
-            <View className="bg-surface rounded-xl overflow-hidden border border-border mb-5">
+            <View className="rounded-xl overflow-hidden mb-5" style={{ borderWidth: 1, borderColor: '#E7DDD5', backgroundColor: '#fff' }}>
               <Picker
                 selectedValue={target}
                 onValueChange={setTarget}
-                style={{ backgroundColor: '#FFFFFF', color: '#09090B' }}
-                dropdownIconColor="#71717A"
+                style={{ backgroundColor: '#FFFFFF', color: '#1A1A1A' }}
+                dropdownIconColor="#8A817C"
               >
                 {GRADE_BANDS.slice(0, 4).map((b) => (
                   <Picker.Item key={b.letter} label={`Grade ${b.letter} (${b.klass})`} value={b.letter} />
@@ -243,29 +277,45 @@ const GradePlanner: React.FC = () => {
             </Button>
 
             {revResult && (
-              <View className="mt-5 bg-violet-light border border-violet-border rounded-2xl p-4">
+              <View
+                className="mt-5 rounded-2xl p-4"
+                style={{ backgroundColor: '#ECEAF4', borderWidth: 1, borderColor: '#D5D2E8' }}
+              >
                 <Text className="font-body-bold text-[13px] text-violet leading-5">{revResult}</Text>
               </View>
             )}
           </View>
         </View>
 
-        {/* Grading Bands Reference with Distinct Band Colors */}
+        {/* Grading Bands Reference */}
         <View className="px-6 mt-6">
-          <View className="bg-surface rounded-2xl border border-border/80 p-6 shadow-soft">
+          <View
+            className="rounded-3xl p-6"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.82)',
+              borderWidth: 1,
+              borderColor: 'rgba(231,221,213,0.5)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
+          >
             <Text className="font-body-bold text-[12px] text-muted uppercase tracking-wider mb-4">
               LASU Grading Scale Standard
             </Text>
             {GRADE_BANDS.map((band, idx) => (
               <View
                 key={band.letter}
-                className={`flex-row items-center py-3 ${idx < GRADE_BANDS.length - 1 ? 'border-b border-divider' : ''}`}
+                className={`flex-row items-center py-3 ${idx < GRADE_BANDS.length - 1 ? 'border-b' : ''}`}
+                style={{ borderBottomColor: '#F0EAE3' }}
               >
                 <View
                   style={{ backgroundColor: band.bg, borderColor: band.border }}
-                  className="w-8 h-8 rounded-lg items-center justify-center mr-3 border"
+                  className="w-9 h-9 rounded-xl items-center justify-center mr-3 border"
                 >
-                  <Text style={{ color: band.color }} className="font-headline text-[13px]">
+                  <Text style={{ color: band.color }} className="font-headline text-[14px]">
                     {band.letter}
                   </Text>
                 </View>

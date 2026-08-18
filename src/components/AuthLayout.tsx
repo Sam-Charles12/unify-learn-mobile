@@ -30,20 +30,25 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, activeTab, chi
         <View className="px-6 pt-4 pb-4">
           <View className="flex-row items-center justify-between mb-6">
             <Pressable
-              className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
+              className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                borderWidth: 1,
+                borderColor: '#E7DDD5',
+              }}
               onPress={() => navigation.goBack()}
             >
-              <FontAwesome5 name="chevron-left" size={14} color="#09090B" />
+              <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
             </Pressable>
-            <View className="flex-row items-center bg-primary-light px-3 py-1.5 rounded-full border border-primary-border">
-              <FontAwesome5 name="graduation-cap" size={12} color="#0F5132" />
+            <View className="flex-row items-center bg-pastel-sage px-3.5 py-2 rounded-full">
+              <FontAwesome5 name="graduation-cap" size={12} color="#059669" />
               <Text className="ml-2 font-body-bold text-[11px] text-primary-dark">
                 LASU Engineering
               </Text>
             </View>
           </View>
 
-          <Text className="font-headline text-[28px] leading-[36px] text-text-primary tracking-tight mb-2">
+          <Text className="font-headline text-[30px] leading-[38px] text-text-primary tracking-tight mb-2">
             {title}
           </Text>
           <Text className="font-body text-[15px] leading-6 text-text-secondary">
@@ -58,13 +63,24 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, activeTab, chi
           keyboardShouldPersistTaps="handled"
         >
           <View className="flex-1 px-6 pt-4 pb-12">
-            {/* Segmented Tab Pill */}
-            <View className="flex-row bg-soft rounded-2xl p-1 mb-8">
+            {/* Segmented Tab Pill — warm glassmorphism style */}
+            <View
+              className="flex-row rounded-2xl p-1 mb-8"
+              style={{ backgroundColor: '#F2EDE8' }}
+            >
               <Pressable
                 className={cn(
-                  'flex-1 py-3 items-center rounded-xl',
-                  activeTab === 'login' && 'bg-surface shadow-soft'
+                  'flex-1 py-3.5 items-center rounded-xl',
+                  activeTab === 'login' && 'shadow-soft'
                 )}
+                style={activeTab === 'login' ? {
+                  backgroundColor: '#FFFFFF',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.06,
+                  shadowRadius: 6,
+                  elevation: 3,
+                } : {}}
                 onPress={() => goTo('Login')}
               >
                 <Text
@@ -78,9 +94,17 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, activeTab, chi
               </Pressable>
               <Pressable
                 className={cn(
-                  'flex-1 py-3 items-center rounded-xl',
-                  activeTab === 'signup' && 'bg-surface shadow-soft'
+                  'flex-1 py-3.5 items-center rounded-xl',
+                  activeTab === 'signup' && 'shadow-soft'
                 )}
+                style={activeTab === 'signup' ? {
+                  backgroundColor: '#FFFFFF',
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.06,
+                  shadowRadius: 6,
+                  elevation: 3,
+                } : {}}
                 onPress={() => goTo('SignUp')}
               >
                 <Text

@@ -13,12 +13,12 @@ import { RootStackParamList } from '@/navigation/types';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const COURSE_COLOR_SCHEMES = [
-  { bg: '#EFF6FF', border: '#BFDBFE', text: '#1D4ED8', dot: '#2563EB' }, // Cobalt
-  { bg: '#ECFDF5', border: '#A7F3D0', text: '#047857', dot: '#059669' }, // Emerald
-  { bg: '#F5F3FF', border: '#DDD6FE', text: '#6D28D9', dot: '#7C3AED' }, // Violet
-  { bg: '#FFFBEB', border: '#FDE68A', text: '#B45309', dot: '#D97706' }, // Amber
-  { bg: '#F0FDFA', border: '#99F6E4', text: '#0F766E', dot: '#0D9488' }, // Teal
+const PASTEL_CARDS = [
+  { bg: '#E8F0EC', border: '#C8DDCF', text: '#047857', icon: '#059669' }, // Sage
+  { bg: '#ECEAF4', border: '#D5D2E8', text: '#6D28D9', icon: '#7C3AED' }, // Lavender
+  { bg: '#F5EAEA', border: '#E5D0D0', text: '#BE123C', icon: '#E11D48' }, // Blush
+  { bg: '#F4E9DE', border: '#E2D4C4', text: '#B45309', icon: '#D97706' }, // Cream
+  { bg: '#E4EDF6', border: '#C8D9EA', text: '#1D4ED8', icon: '#2563EB' }, // Sky
 ];
 
 const Dashboard: React.FC = () => {
@@ -118,12 +118,12 @@ const Dashboard: React.FC = () => {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 60 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Top Header */}
         <View className="px-6 pt-4 pb-2 flex-row items-center justify-between">
-          <View className="flex-row items-center bg-primary-light px-3 py-1.5 rounded-full border border-primary-border">
+          <View className="flex-row items-center bg-pastel-sage px-3.5 py-2 rounded-full">
             <View className="w-2 h-2 rounded-full bg-primary mr-2" />
             <Text className="font-body-bold text-[12px] text-primary-dark">
               {profile?.department
@@ -135,11 +135,18 @@ const Dashboard: React.FC = () => {
           <View className="flex-row items-center gap-3">
             <Pressable
               onPress={() => navigation.navigate('NotificationsTab')}
-              className="w-10 h-10 rounded-full bg-surface border border-border items-center justify-center shadow-soft active:bg-soft"
+              className="w-11 h-11 rounded-full bg-glass-strong items-center justify-center active:bg-soft"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                borderWidth: 1,
+                borderColor: '#E7DDD5',
+              }}
             >
-              <FontAwesome5 name="bell" size={14} color="#09090B" />
+              <FontAwesome5 name="bell" size={15} color="#1A1A1A" />
               {unreadCount > 0 && (
-                <View className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-rose border-2 border-surface items-center justify-center px-1">
+                <View className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-rose items-center justify-center px-1"
+                  style={{ borderWidth: 2, borderColor: '#F8F6F3' }}
+                >
                   <Text className="font-body-bold text-[8px] text-white">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </Text>
@@ -149,7 +156,14 @@ const Dashboard: React.FC = () => {
 
             <Pressable
               onPress={() => navigation.navigate('ProfileTab')}
-              className="w-10 h-10 rounded-full bg-ink items-center justify-center shadow-soft"
+              className="w-11 h-11 rounded-full bg-ink items-center justify-center"
+              style={{
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.12,
+                shadowRadius: 8,
+                elevation: 6,
+              }}
             >
               <Text className="font-headline text-[13px] text-white">
                 {initials}
@@ -158,89 +172,145 @@ const Dashboard: React.FC = () => {
           </View>
         </View>
 
-        {/* Hero Greeting */}
+        {/* Hero Greeting — Bold Display Style */}
         <View className="px-6 pt-6 pb-2">
-          <Text className="font-headline text-[28px] text-text-primary leading-9 tracking-tight">
-            {getGreeting()}, {firstName} 👋
+          <Text className="font-headline text-[32px] text-text-primary leading-[38px] tracking-tight">
+            {getGreeting()},{'\n'}{firstName} 👋
           </Text>
-          <Text className="font-body text-[15px] text-text-secondary mt-1">
-            Track your semester syllabus and active study progress.
+          <Text className="font-body text-[15px] text-text-secondary mt-2 leading-6">
+            Your semester syllabus and study progress at a glance.
           </Text>
         </View>
 
-        {/* Hero Spotlight: Semester Progress */}
+        {/* Hero Progress Card — Glassmorphism Inspired */}
         <View className="px-6 mt-6">
           {dataLoading ? (
-            <View className="bg-surface rounded-2xl border border-border/80 p-8 items-center justify-center shadow-soft">
+            <View
+              className="rounded-3xl p-8 items-center justify-center"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.75)',
+                borderWidth: 1,
+                borderColor: 'rgba(231,221,213,0.6)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: 0.06,
+                shadowRadius: 20,
+                elevation: 8,
+              }}
+            >
               <ActivityIndicator size="small" color="#059669" />
             </View>
           ) : (
-            <View className="bg-surface rounded-2xl border border-border/80 p-6 shadow-soft">
-              <View className="flex-row justify-between items-baseline mb-3">
-                <View className="flex-row items-center">
-                  <View className="w-2 h-2 rounded-full bg-primary mr-2" />
-                  <Text className="font-body-bold text-[12px] text-primary uppercase tracking-wider">
-                    Syllabus Completed
+            <View
+              className="rounded-3xl p-6"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.78)',
+                borderWidth: 1,
+                borderColor: 'rgba(231,221,213,0.5)',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.07,
+                shadowRadius: 24,
+                elevation: 10,
+              }}
+            >
+              <View className="flex-row justify-between items-start mb-4">
+                <View>
+                  <View className="flex-row items-center mb-1">
+                    <View className="w-2 h-2 rounded-full bg-primary mr-2" />
+                    <Text className="font-body-bold text-[11px] text-primary uppercase tracking-wider">
+                      Syllabus Progress
+                    </Text>
+                  </View>
+                  <Text className="font-body text-[13px] text-text-secondary mt-1 leading-5">
+                    {weeksDone ?? 0} of {totalWeeks ?? 0} weekly modules{'\n'}across {courseCount ?? 0} enrolled courses.
                   </Text>
                 </View>
-                <Text className="font-headline text-[28px] text-primary tracking-tight">
+                {/* Large percentage display */}
+                <Text className="font-headline text-[42px] text-primary tracking-tight leading-[42px]">
                   {progressPct}%
                 </Text>
               </View>
 
               {/* Progress Track */}
-              <View className="h-2.5 rounded-full bg-soft overflow-hidden mb-3.5 border border-border/40">
+              <View
+                className="h-3 rounded-full overflow-hidden mb-5"
+                style={{ backgroundColor: '#E8F0EC' }}
+              >
                 <View
                   className="h-full rounded-full bg-primary"
                   style={{ width: `${progressPct}%` }}
                 />
               </View>
 
-              <Text className="font-body text-[13px] text-text-secondary leading-5 mb-5">
-                {weeksDone ?? 0} of {totalWeeks ?? 0} weekly modules passed across {courseCount ?? 0} enrolled courses.
-              </Text>
-
               <Pressable
                 onPress={() => navigation.navigate('CoursesTab')}
-                className="bg-ink h-12 rounded-xl flex-row items-center justify-between px-5 active:bg-ink-secondary"
+                className="bg-ink h-[52px] rounded-2xl flex-row items-center justify-between px-6 active:bg-ink-secondary"
+                style={{
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.12,
+                  shadowRadius: 8,
+                  elevation: 6,
+                }}
               >
                 <Text className="font-body-semibold text-[14px] text-white">
                   Continue Active Week
                 </Text>
-                <FontAwesome5 name="arrow-right" size={11} color="#FFFFFF" />
+                <FontAwesome5 name="arrow-right" size={12} color="#FFFFFF" />
               </Pressable>
             </View>
           )}
         </View>
 
-        {/* 2 Clean Stat Cards */}
-        <View className="px-6 mt-4 flex-row gap-4">
-          <View className="flex-1 bg-surface rounded-2xl border border-border/80 p-5 shadow-soft">
-            <View className="w-9 h-9 rounded-xl bg-cobalt-light border border-cobalt-border items-center justify-center mb-3">
-              <FontAwesome5 name="check-circle" size={14} color="#2563EB" />
+        {/* Pastel Stat Cards */}
+        <View className="px-6 mt-5 flex-row gap-4">
+          <View
+            className="flex-1 rounded-2xl p-5"
+            style={{
+              backgroundColor: '#ECEAF4',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
+          >
+            <View className="w-10 h-10 rounded-xl bg-white/70 items-center justify-center mb-3">
+              <FontAwesome5 name="check-circle" size={16} color="#7C3AED" />
             </View>
-            <Text className="font-headline text-[24px] text-text-primary tracking-tight">
+            <Text className="font-headline text-[26px] text-text-primary tracking-tight">
               {weeksDone ?? 0}
             </Text>
             <Text className="font-body-bold text-[13px] text-text-primary mt-0.5">
               Weeks Cleared
             </Text>
-            <Text className="font-body text-[11px] text-muted mt-0.5">
+            <Text className="font-body text-[11px] text-text-secondary mt-0.5">
               Verified by quizzes
             </Text>
           </View>
 
-          <View className="flex-1 bg-surface rounded-2xl border border-border/80 p-5 shadow-soft">
-            <View className="w-9 h-9 rounded-xl bg-amber-light border border-amber-border items-center justify-center mb-3">
-              <FontAwesome5 name="award" size={14} color="#D97706" />
+          <View
+            className="flex-1 rounded-2xl p-5"
+            style={{
+              backgroundColor: '#F4E9DE',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
+          >
+            <View className="w-10 h-10 rounded-xl bg-white/70 items-center justify-center mb-3">
+              <FontAwesome5 name="award" size={16} color="#D97706" />
             </View>
-            <Text className="font-headline text-[24px] text-text-primary tracking-tight">
+            <Text className="font-headline text-[26px] text-text-primary tracking-tight">
               {points}
             </Text>
             <Text className="font-body-bold text-[13px] text-text-primary mt-0.5">
               Study Points
             </Text>
-            <Text className="font-body text-[11px] text-muted mt-0.5">
+            <Text className="font-body text-[11px] text-text-secondary mt-0.5">
               +10 pts per pass
             </Text>
           </View>
@@ -251,17 +321,25 @@ const Dashboard: React.FC = () => {
           <View className="px-6 mt-6">
             <Pressable
               onPress={() => navigation.navigate('NotificationsTab')}
-              className="bg-surface rounded-2xl border border-border/80 p-5 shadow-soft active:bg-soft"
+              className="rounded-2xl p-5 active:opacity-90"
+              style={{
+                backgroundColor: '#F5EAEA',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.04,
+                shadowRadius: 8,
+                elevation: 3,
+              }}
             >
               <View className="flex-row items-center justify-between mb-2">
-                <View className="flex-row items-center bg-rose-light px-2.5 py-0.5 rounded-full border border-rose-border">
+                <View className="flex-row items-center bg-rose-light px-2.5 py-1 rounded-full">
                   <Text className="font-body-bold text-[10px] text-rose uppercase tracking-wider">
                     Academic Notice
                   </Text>
                 </View>
-                <FontAwesome5 name="chevron-right" size={10} color="#A1A1AA" />
+                <FontAwesome5 name="chevron-right" size={10} color="#8A817C" />
               </View>
-              <Text className="font-headline text-[15px] text-text-primary leading-5" numberOfLines={1}>
+              <Text className="font-headline text-[16px] text-text-primary leading-6" numberOfLines={1}>
                 {announcements[0].title}
               </Text>
               <Text className="font-body text-[13px] text-text-secondary mt-1 leading-5" numberOfLines={2}>
@@ -275,11 +353,24 @@ const Dashboard: React.FC = () => {
         <View className="px-6 mt-6">
           <Pressable
             onPress={() => navigation.navigate('PlannerTab')}
-            className="bg-surface rounded-2xl border border-border/80 p-5 flex-row items-center justify-between shadow-soft active:bg-soft"
+            className="rounded-2xl p-5 flex-row items-center justify-between active:opacity-90"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.78)',
+              borderWidth: 1,
+              borderColor: 'rgba(231,221,213,0.5)',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
           >
             <View className="flex-row items-center flex-1 pr-3">
-              <View className="w-11 h-11 rounded-xl bg-violet-light border border-violet-border items-center justify-center mr-3.5">
-                <FontAwesome5 name="calculator" size={16} color="#7C3AED" />
+              <View
+                className="w-12 h-12 rounded-2xl items-center justify-center mr-4"
+                style={{ backgroundColor: '#ECEAF4' }}
+              >
+                <FontAwesome5 name="calculator" size={17} color="#7C3AED" />
               </View>
               <View className="flex-1">
                 <Text className="font-headline text-[15px] text-text-primary">
@@ -290,8 +381,8 @@ const Dashboard: React.FC = () => {
                 </Text>
               </View>
             </View>
-            <View className="w-8 h-8 rounded-full bg-soft items-center justify-center">
-              <FontAwesome5 name="arrow-right" size={10} color="#09090B" />
+            <View className="w-9 h-9 rounded-full bg-soft items-center justify-center">
+              <FontAwesome5 name="arrow-right" size={10} color="#1A1A1A" />
             </View>
           </Pressable>
         </View>
@@ -299,8 +390,8 @@ const Dashboard: React.FC = () => {
         {/* Enrolled Courses */}
         <View className="px-6 mt-8">
           <View className="flex-row justify-between items-center mb-4">
-            <Text className="font-headline text-[18px] text-text-primary tracking-tight">
-              Enrolled Courses
+            <Text className="font-headline text-[20px] text-text-primary tracking-tight">
+              Your Courses
             </Text>
             <Pressable onPress={() => navigation.navigate('CoursesTab')}>
               <Text className="font-body-semibold text-[13px] text-primary">
@@ -310,7 +401,14 @@ const Dashboard: React.FC = () => {
           </View>
 
           {courses.length === 0 ? (
-            <View className="bg-surface rounded-2xl border border-border/80 p-6 items-center shadow-soft">
+            <View
+              className="rounded-2xl p-6 items-center"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.78)',
+                borderWidth: 1,
+                borderColor: 'rgba(231,221,213,0.5)',
+              }}
+            >
               <Text className="font-body-semibold text-[14px] text-text-primary mb-1">
                 No Enrolled Courses Found
               </Text>
@@ -321,35 +419,48 @@ const Dashboard: React.FC = () => {
           ) : (
             <View className="gap-3">
               {courses.slice(0, 3).map((course, idx) => {
-                const scheme = COURSE_COLOR_SCHEMES[idx % COURSE_COLOR_SCHEMES.length];
+                const scheme = PASTEL_CARDS[idx % PASTEL_CARDS.length];
                 return (
                   <Pressable
                     key={course.id}
                     onPress={() => navigation.navigate('Course', { courseId: course.id })}
-                    className="bg-surface rounded-2xl border border-border/80 p-4 flex-row items-center justify-between shadow-soft active:bg-soft"
+                    className="rounded-2xl p-5 flex-row items-center justify-between active:opacity-90"
+                    style={{
+                      backgroundColor: scheme.bg,
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.03,
+                      shadowRadius: 6,
+                      elevation: 2,
+                    }}
                   >
                     <View className="flex-1 pr-3">
-                      <View className="flex-row items-center gap-2 mb-1">
+                      <View className="flex-row items-center gap-2 mb-1.5">
                         <View
-                          style={{ backgroundColor: scheme.bg, borderColor: scheme.border }}
-                          className="px-2.5 py-0.5 rounded-full border"
+                          className="px-2.5 py-0.5 rounded-full"
+                          style={{ backgroundColor: 'rgba(255,255,255,0.7)', borderWidth: 1, borderColor: scheme.border }}
                         >
                           <Text style={{ color: scheme.text }} className="font-body-bold text-[11px]">
                             {course.code}
                           </Text>
                         </View>
                         {course.credits ? (
-                          <Text className="font-body text-[11px] text-muted">
+                          <Text className="font-body text-[11px] text-text-secondary">
                             {course.credits} Units
                           </Text>
                         ) : null}
                       </View>
 
-                      <Text className="font-headline text-[15px] text-text-primary mt-0.5" numberOfLines={1}>
+                      <Text className="font-headline text-[16px] text-text-primary mt-0.5 leading-6" numberOfLines={1}>
                         {course.title}
                       </Text>
                     </View>
-                    <FontAwesome5 name="chevron-right" size={11} color="#A1A1AA" />
+                    <View
+                      className="w-9 h-9 rounded-full items-center justify-center"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.6)' }}
+                    >
+                      <FontAwesome5 name="chevron-right" size={11} color={scheme.icon} />
+                    </View>
                   </Pressable>
                 );
               })}

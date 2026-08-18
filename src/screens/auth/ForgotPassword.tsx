@@ -42,22 +42,27 @@ const ForgotPassword: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1"
       >
-        <View className="px-6 pt-3 pb-6 border-b border-border bg-surface">
+        <View className="px-6 pt-3 pb-6 bg-background">
           <View className="flex-row items-center justify-between mb-4">
             <Pressable
               onPress={() => navigation.goBack()}
-              className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+              className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                borderWidth: 1,
+                borderColor: '#E7DDD5',
+              }}
             >
-              <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
+              <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
             </Pressable>
             <Text className="font-body-bold text-text-primary text-[15px]">Reset Password</Text>
             <View className="w-10" />
           </View>
           
-          <View className="w-14 h-14 rounded-2xl bg-primary-light border border-primary-border items-center justify-center mb-3">
+          <View className="w-14 h-14 rounded-2xl items-center justify-center mb-3" style={{ backgroundColor: '#E8F0EC' }}>
             <FontAwesome5 name="key" size={20} color="#059669" />
           </View>
-          <Text className="font-headline text-[24px] text-text-primary leading-8">
+          <Text className="font-headline text-[26px] text-text-primary leading-[32px] tracking-tight">
             Forgot your password?
           </Text>
           <Text className="font-body text-[14px] text-text-secondary mt-1 leading-5">
@@ -67,7 +72,7 @@ const ForgotPassword: React.FC = () => {
 
         <View className="px-6 mt-6">
           <Text className="font-body-semibold text-[13px] text-text-primary mb-2">Student Email</Text>
-          <View className="flex-row items-center bg-surface rounded-xl px-4 border border-border">
+          <View className="flex-row items-center rounded-xl px-4" style={{ backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E7DDD5' }}>
             <FontAwesome5 name="envelope" size={14} color="#94A3B8" />
             <TextInput
               value={email}

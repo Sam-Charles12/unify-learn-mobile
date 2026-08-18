@@ -102,11 +102,11 @@ const SignUp: React.FC = () => {
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Password
         </Text>
-        <View className="flex-row items-center bg-surface rounded-2xl border border-border">
+        <View className="flex-row items-center rounded-2xl" style={{ backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E7DDD5' }}>
           <TextInput
             className="flex-1 pl-4 pr-2 py-4 font-body text-[15px] text-text-primary"
             placeholder="Minimum 6 characters"
-            placeholderTextColor="#A1A1AA"
+            placeholderTextColor="#8A817C"
             value={formData.password}
             onChangeText={(val) => handleInputChange('password', val)}
             secureTextEntry={!showPassword}
@@ -115,7 +115,7 @@ const SignUp: React.FC = () => {
             <FontAwesome5
               name={showPassword ? 'eye-slash' : 'eye'}
               size={15}
-              color="#71717A"
+              color="#8A817C"
             />
           </Pressable>
         </View>
@@ -125,7 +125,7 @@ const SignUp: React.FC = () => {
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
           Confirm Password
         </Text>
-        <View className="flex-row items-center bg-surface rounded-2xl border border-border">
+        <View className="flex-row items-center rounded-2xl" style={{ backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E7DDD5' }}>
           <TextInput
             className="flex-1 pl-4 pr-2 py-4 font-body text-[15px] text-text-primary"
             placeholder="Repeat password"
@@ -138,7 +138,7 @@ const SignUp: React.FC = () => {
             <FontAwesome5
               name={showConfirm ? 'eye-slash' : 'eye'}
               size={15}
-              color="#71717A"
+              color="#8A817C"
             />
           </Pressable>
         </View>
@@ -156,22 +156,22 @@ const SignUp: React.FC = () => {
 
       {/* Clean Divider */}
       <View className="flex-row items-center mb-8">
-        <View className="flex-1 h-[1px] bg-border" />
+        <View className="flex-1 h-[1px]" style={{ backgroundColor: '#E7DDD5' }} />
         <Text className="font-body text-[12px] text-muted mx-4 uppercase tracking-wider">
           Or sign up with
         </Text>
-        <View className="flex-1 h-[1px] bg-border" />
+        <View className="flex-1 h-[1px]" style={{ backgroundColor: '#E7DDD5' }} />
       </View>
 
       <View className="flex-row gap-3">
-        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-2xl py-4 gap-2.5 border border-border shadow-soft active:bg-soft">
-          <FontAwesome5 name="google" size={15} color="#09090B" />
+        <Pressable className="flex-1 flex-row items-center justify-center rounded-2xl py-4 gap-2.5 active:opacity-80" style={{ backgroundColor: 'rgba(255,255,255,0.7)', borderWidth: 1, borderColor: '#E7DDD5' }}>
+          <FontAwesome5 name="google" size={15} color="#1A1A1A" />
           <Text className="font-body-semibold text-[14px] text-text-primary">
             Google
           </Text>
         </Pressable>
-        <Pressable className="flex-1 flex-row items-center justify-center bg-surface rounded-2xl py-4 gap-2.5 border border-border shadow-soft active:bg-soft">
-          <FontAwesome5 name="facebook-f" size={15} color="#09090B" />
+        <Pressable className="flex-1 flex-row items-center justify-center rounded-2xl py-4 gap-2.5 active:opacity-80" style={{ backgroundColor: 'rgba(255,255,255,0.7)', borderWidth: 1, borderColor: '#E7DDD5' }}>
+          <FontAwesome5 name="facebook-f" size={15} color="#1A1A1A" />
           <Text className="font-body-semibold text-[14px] text-text-primary">
             Facebook
           </Text>

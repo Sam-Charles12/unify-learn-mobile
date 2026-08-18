@@ -43,6 +43,7 @@ scripts/firebase-admin-key.json
 
 # Uploaded course materials (local only)
 contents/
+*.pdf
 
 # typescript
 *.tsbuildinfo

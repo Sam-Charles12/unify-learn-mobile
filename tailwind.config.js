@@ -8,60 +8,80 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Core Neutral Foundation
+        // Core Neutral Foundation — Warm Palette
         ink: {
-          DEFAULT: '#09090B', // Zinc 950
-          secondary: '#27272A', // Zinc 800
-          muted: '#52525B',     // Zinc 600
+          DEFAULT: '#1A1A1A',       // Slightly softer black
+          secondary: '#2D2D2D',
+          muted: '#5C5550',
         },
-        background: '#FAFAFA',        // Ultra-clean warm off-white
-        'background-subtle': '#F4F4F5', // Zinc 100
-        surface: '#FFFFFF',          // Pure White
+        background: '#F8F6F3',         // Warm linen
+        'background-subtle': '#F2EDE8', // Warm sand
+        surface: '#FFFFFF',            // Pure White
         card: '#FFFFFF',
-        soft: '#F4F4F5',
-        cream: '#FAF8F5',
-        border: '#E4E4E7',           // Zinc 200 (crisp hairline)
-        divider: '#F4F4F5',
-        'text-primary': '#09090B',
-        'text-secondary': '#52525B',
-        muted: '#71717A',
+        soft: '#F2EDE8',               // Warm sand (used for muted backgrounds)
+        cream: '#FAF5EF',              // Warm cream
+        border: '#E7DDD5',             // Warm stone
+        divider: '#F0EAE3',            // Softer warm divider
+
+        'text-primary': '#1A1A1A',
+        'text-secondary': '#6B6560',
+        muted: '#8A817C',
+
+        // Glassmorphism tokens
+        glass: 'rgba(255,255,255,0.65)',
+        'glass-strong': 'rgba(255,255,255,0.82)',
+        'glass-tinted': 'rgba(0,168,107,0.06)',
+
+        // Pastel card backgrounds (Dribbble-inspired variety)
+        'pastel-sage': '#E8F0EC',
+        'pastel-lavender': '#ECEAF4',
+        'pastel-blush': '#F5EAEA',
+        'pastel-cream': '#F4E9DE',
+        'pastel-sky': '#E4EDF6',
 
         // Curated Sophisticated Accent Palette
         primary: {
-          DEFAULT: '#059669', // Emerald 600
-          dark: '#047857',    // Emerald 700
-          light: '#ECFDF5',   // Emerald 50
-          border: '#A7F3D0',  // Emerald 200
+          DEFAULT: '#059669', // Emerald 600 — Unify brand stays
+          dark: '#047857',
+          light: '#ECFDF5',
+          border: '#A7F3D0',
         },
         cobalt: {
-          DEFAULT: '#2563EB', // Blue 600
-          dark: '#1D4ED8',    // Blue 700
-          light: '#EFF6FF',   // Blue 50
-          border: '#BFDBFE',  // Blue 200
+          DEFAULT: '#2563EB',
+          dark: '#1D4ED8',
+          light: '#EFF6FF',
+          border: '#BFDBFE',
         },
         amber: {
-          DEFAULT: '#D97706', // Amber 600
-          dark: '#B45309',    // Amber 700
-          light: '#FFFBEB',   // Amber 50
-          border: '#FDE68A',  // Amber 200
+          DEFAULT: '#D97706',
+          dark: '#B45309',
+          light: '#FFFBEB',
+          border: '#FDE68A',
         },
         violet: {
-          DEFAULT: '#7C3AED', // Violet 600
-          dark: '#6D28D9',    // Violet 700
-          light: '#F5F3FF',   // Violet 50
-          border: '#DDD6FE',  // Violet 200
+          DEFAULT: '#7C3AED',
+          dark: '#6D28D9',
+          light: '#F5F3FF',
+          border: '#DDD6FE',
         },
         rose: {
-          DEFAULT: '#E11D48', // Rose 600
-          dark: '#BE123C',    // Rose 700
-          light: '#FFF1F2',   // Rose 50
-          border: '#FECDD3',  // Rose 200
+          DEFAULT: '#E11D48',
+          dark: '#BE123C',
+          light: '#FFF1F2',
+          border: '#FECDD3',
         },
         teal: {
-          DEFAULT: '#0D9488', // Teal 600
-          dark: '#0F766E',    // Teal 700
-          light: '#F0FDFA',   // Teal 50
-          border: '#99F6E4',  // Teal 200
+          DEFAULT: '#0D9488',
+          dark: '#0F766E',
+          light: '#F0FDFA',
+          border: '#99F6E4',
+        },
+
+        // Accent (for timetable header etc.)
+        accent: {
+          DEFAULT: '#005B96',
+          light: '#DCEEFF',
+          border: '#B3D4F0',
         },
 
         // Semantic
@@ -92,17 +112,19 @@ module.exports = {
         'body-bold': ['Manrope_700Bold'],
       },
       borderRadius: {
-        sm: '8px',
-        md: '14px',
-        lg: '20px',
-        xl: '26px',
+        sm: '10px',
+        md: '16px',
+        lg: '22px',
+        xl: '28px',
         '2xl': '32px',
+        '3xl': '36px',
         pill: '999px',
       },
       boxShadow: {
-        soft: '0px 1px 3px rgba(0, 0, 0, 0.03)',
-        card: '0px 2px 8px rgba(0, 0, 0, 0.04)',
-        elevated: '0px 12px 32px rgba(0, 0, 0, 0.06)',
+        soft: '0px 2px 8px rgba(0, 0, 0, 0.04)',
+        card: '0px 4px 16px rgba(0, 0, 0, 0.06)',
+        elevated: '0px 12px 40px rgba(0, 0, 0, 0.08)',
+        'float': '0px 8px 30px rgba(0, 0, 0, 0.10)',
       },
     },
   },

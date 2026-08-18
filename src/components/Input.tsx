@@ -29,7 +29,7 @@ const Input: React.FC<InputProps> = ({
           secureTextEntry && { paddingRight: 50 },
         ]}
         secureTextEntry={secureTextEntry}
-        placeholderTextColor="#9a9a9a"
+        placeholderTextColor="#8A817C"
         {...props}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -42,29 +42,34 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   label: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'Manrope_500Medium',
     fontSize: 14,
-    color: '#0a0a0a',
+    color: '#1A1A1A',
   },
   input: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#dededa',
-    borderRadius: 12,
+    borderColor: '#E7DDD5',
+    borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    fontFamily: 'DMSans_400Regular',
+    fontFamily: 'Manrope_400Regular',
     fontSize: 16,
-    color: '#0a0a0a',
+    color: '#1A1A1A',
+    // Soft elevation
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
     elevation: 1,
   },
   inputError: {
-    borderColor: '#ef4444',
+    borderColor: '#E11D48',
   },
   errorText: {
-    fontFamily: 'DMSans_400Regular',
+    fontFamily: 'Manrope_400Regular',
     fontSize: 12,
-    color: '#ef4444',
+    color: '#E11D48',
     textAlign: 'right',
   },
 });

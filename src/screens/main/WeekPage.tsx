@@ -88,36 +88,53 @@ const WeekPage: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      {/* Top Header */}
-      <View className="px-5 pt-3 pb-4 bg-surface border-b border-border">
-        <View className="flex-row items-center justify-between mb-3">
+      {/* Top Header — Display Typography */}
+      <View className="px-6 pt-3 pb-5">
+        <View className="flex-row items-center justify-between mb-4">
           <Pressable
             onPress={() => navigation.goBack()}
-            className="w-10 h-10 rounded-xl bg-background border border-border items-center justify-center shadow-soft"
+            className="w-11 h-11 rounded-full items-center justify-center active:opacity-80"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              borderWidth: 1,
+              borderColor: '#E7DDD5',
+            }}
           >
-            <FontAwesome5 name="chevron-left" size={14} color="#0F172A" />
+            <FontAwesome5 name="chevron-left" size={14} color="#1A1A1A" />
           </Pressable>
-          <View className="bg-primary-light px-3 py-1 rounded-full border border-primary-border">
+          <View className="bg-pastel-sage px-3.5 py-1.5 rounded-full">
             <Text className="font-body-bold text-[12px] text-primary-dark">
               Week {week.weekNumber}
             </Text>
           </View>
-          <View className="w-10" />
+          <View className="w-11" />
         </View>
 
-        <Text className="font-headline text-[22px] text-text-primary leading-7" numberOfLines={2}>
+        <Text className="font-headline text-[26px] text-text-primary leading-[32px] tracking-tight" numberOfLines={2}>
           {week.title}
         </Text>
-        <Text className="font-body text-[12px] text-muted mt-1">
+        <Text className="font-body text-[13px] text-muted mt-2">
           {blockCount} interactive section{blockCount === 1 ? '' : 's'} in this module
         </Text>
       </View>
 
       {/* Completion Pass Banner */}
       {passBanner && (
-        <View className="mx-4 mt-4 bg-primary-light border border-primary-border rounded-2xl p-4 flex-row items-center shadow-card">
-          <View className="w-10 h-10 rounded-xl bg-primary items-center justify-center mr-3.5">
-            <FontAwesome5 name="award" size={16} color="#ffffff" />
+        <View
+          className="mx-5 mb-3 rounded-2xl p-4 flex-row items-center"
+          style={{
+            backgroundColor: '#E8F0EC',
+            borderWidth: 1,
+            borderColor: '#A7F3D0',
+            shadowColor: '#059669',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.12,
+            shadowRadius: 12,
+            elevation: 6,
+          }}
+        >
+          <View className="w-11 h-11 rounded-xl bg-primary items-center justify-center mr-3.5">
+            <FontAwesome5 name="award" size={17} color="#ffffff" />
           </View>
           <View className="flex-1">
             <Text className="font-headline text-[15px] text-primary-dark">
@@ -136,16 +153,31 @@ const WeekPage: React.FC = () => {
         renderItem={({ item }) => (
           <ContentBlockRenderer block={item} onPass={handlePass} weekNumber={week.weekNumber} />
         )}
-        contentContainerStyle={{ padding: 16, paddingBottom: 60 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
           passed ? (
-            <View className="mt-6 bg-surface rounded-2xl border border-primary-border p-5 items-center shadow-card">
-              <View className="w-12 h-12 rounded-xl bg-primary-light items-center justify-center mb-3">
-                <FontAwesome5 name="check-double" size={18} color="#059669" />
+            <View
+              className="mt-6 rounded-3xl p-6 items-center"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.82)',
+                borderWidth: 1,
+                borderColor: '#A7F3D0',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.06,
+                shadowRadius: 16,
+                elevation: 6,
+              }}
+            >
+              <View
+                className="w-14 h-14 rounded-2xl items-center justify-center mb-3"
+                style={{ backgroundColor: '#E8F0EC' }}
+              >
+                <FontAwesome5 name="check-double" size={20} color="#059669" />
               </View>
-              <Text className="font-headline text-[17px] text-text-primary">Week Completed</Text>
-              <Text className="font-body text-[13px] text-text-secondary mt-1 text-center leading-5">
+              <Text className="font-headline text-[18px] text-text-primary">Week Completed</Text>
+              <Text className="font-body text-[13px] text-text-secondary mt-1.5 text-center leading-5">
                 Your progress has been recorded. You can proceed to Week {week.weekNumber + 1}.
               </Text>
               <Button
