@@ -1,0 +1,2069 @@
+[
+  {
+    "id": "gst-111",
+    "code": "GST 111",
+    "title": "Communication in English",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "gst-112",
+    "code": "GST 112",
+    "title": "Nigerian Peoples and Cultures 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "chm-101",
+    "code": "CHM 101",
+    "title": "General Chemistry I 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "chm-102",
+    "code": "CHM 102",
+    "title": "General Chemistry II 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "chm-107",
+    "code": "CHM 107",
+    "title": "General Practical Chemistry I 1 C -",
+    "credits": 6,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "chm-108",
+    "code": "CHM 108",
+    "title": "General Practical Chemistry II 1 C -",
+    "credits": 6,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mth-101",
+    "code": "MTH 101",
+    "title": "Elementary Mathematics I 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mth-102",
+    "code": "MTH 102",
+    "title": "Elementary Mathematics II 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "phy-101",
+    "code": "PHY 101",
+    "title": "General Physics I 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "phy-102",
+    "code": "PHY 102",
+    "title": "General Physics II 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "phy-107",
+    "code": "PHY 107",
+    "title": "General Practical Physics I 1 C -",
+    "credits": 6,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "phy-108",
+    "code": "PHY 108",
+    "title": "General Practical Physics II 1 C -",
+    "credits": 6,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-101",
+    "code": "GET 101",
+    "title": "Engineer in Society 1 C 15 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-102",
+    "code": "GET 102",
+    "title": "Engineering Graphics and Solid Modelling",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-101",
+    "code": "AAE 101",
+    "title": "Introduction to Aerospace Engineering 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "gst-212",
+    "code": "GST 212",
+    "title": "Philosophy, Logic and Human Existence 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ent-211",
+    "code": "ENT 211",
+    "title": "Entrepreneurship and Innovation 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-202",
+    "code": "GET 202",
+    "title": "Engineering Materials 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-204",
+    "code": "GET 204",
+    "title": "Students Workshop Practice",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-205",
+    "code": "GET 205",
+    "title": "Fundamental of Fluid Mechanics 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-206",
+    "code": "GET 206",
+    "title": "Fundamentals of Thermodynamics 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-209",
+    "code": "GET 209",
+    "title": "Engineering Mathematics I 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-210",
+    "code": "GET 210",
+    "title": "Engineering Mathematics II 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-211",
+    "code": "GET 211",
+    "title": "Computing and Software Engineering",
+    "credits": 3,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-201",
+    "code": "AAE 201",
+    "title": "Introduction to Aerospace Systems",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-202",
+    "code": "AAE 202",
+    "title": "MATLAB Application to Aerospace",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-204",
+    "code": "AAE 204",
+    "title": "Aircraft Flight Principle/Flight Mechanics 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "gst-312",
+    "code": "GST 312",
+    "title": "Peace and Conflict Resolution 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ent-312",
+    "code": "ENT 312",
+    "title": "Venture Creation",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-301",
+    "code": "GET 301",
+    "title": "Engineering Mathematics III 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-302",
+    "code": "GET 302",
+    "title": "Engineering Mathematics IV 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-304",
+    "code": "GET 304",
+    "title": "Technical Writing and Communication 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-305",
+    "code": "GET 305",
+    "title": "Engineering Statistics and Data Analytics 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-306",
+    "code": "GET 306",
+    "title": "Renewable Energy Systems and Technology",
+    "credits": 3,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-307",
+    "code": "GET 307",
+    "title": "Introduction to Artificial Intelligence &",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "300",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-301",
+    "code": "AAE 301",
+    "title": "Aircraft Structural Materials and Fracture 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-302",
+    "code": "AAE 302",
+    "title": "Aerospace Technology Lab II",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-401",
+    "code": "AAE 401",
+    "title": "Aircraft/Spacecraft Conceptual Design",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-403",
+    "code": "AAE 403",
+    "title": "Computer Aided Design and Manufacturing 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-405",
+    "code": "AAE 405",
+    "title": "Aircraft/Rocket Propulsion Technology 3 E 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-407",
+    "code": "AAE 407",
+    "title": "Aerodynamics Experiment Methods,",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-499",
+    "code": "GET 499",
+    "title": "SIWES III: Students Work Experience",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "400",
+      "100",
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-299",
+    "code": "GET 299",
+    "title": "SIWES I: SWEP 3 C 9 weeks",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "400",
+      "200",
+      "100",
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-399",
+    "code": "GET 399",
+    "title": "SIWES II 4 C 12 weeks",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "400",
+      "300",
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-501",
+    "code": "GET 501",
+    "title": "Engineering Project Management 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "500",
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-502",
+    "code": "GET 502",
+    "title": "Engineering Law 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "aerospace",
+      "chem",
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "500",
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-501",
+    "code": "AAE 501",
+    "title": "Aircraft/Spacecraft Design 2 C -",
+    "credits": 6,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-503",
+    "code": "AAE 503",
+    "title": "Aerodynamics of V/STOL Aircraft",
+    "credits": 3,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-504",
+    "code": "AAE 504",
+    "title": "Aircraft Maintenance Management",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "aae-505",
+    "code": "AAE 505",
+    "title": "Computational Fluid Mechanics and Mass",
+    "credits": 2,
+    "departments": [
+      "aerospace"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-101",
+    "code": "TCH 101",
+    "title": "Introduction to Chemical",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-201",
+    "code": "TCH 201",
+    "title": "Chemical Engineering",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-202",
+    "code": "TCH 202",
+    "title": "Material Science 3 E 45 -",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-206",
+    "code": "TCH 206",
+    "title": "Statistics for Chemical",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-301",
+    "code": "TCH 301",
+    "title": "Transfer Processes I 2 C 15 TUT",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-302",
+    "code": "TCH 302",
+    "title": "Chemical Engineering",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-303",
+    "code": "TCH 303",
+    "title": "Separation Processes I",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-304",
+    "code": "TCH 304",
+    "title": "Process Instrumentation",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-305",
+    "code": "TCH 305",
+    "title": "Chemical Engineering",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-307",
+    "code": "TCH 307",
+    "title": "Biochemical Engineering",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-308",
+    "code": "TCH 308",
+    "title": "Numerical Methods in",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-501",
+    "code": "TCH 501",
+    "title": "Plant Design II",
+    "credits": 4,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-555",
+    "code": "TCH 555",
+    "title": "Chemical Engineering",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-401",
+    "code": "TCH 401",
+    "title": "Chemical Product Design",
+    "credits": 3,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "100",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-402",
+    "code": "TCH 402",
+    "title": "Chemical Reaction Engineering I 3 E 45 -",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "100",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-404",
+    "code": "TCH 404",
+    "title": "Plant Design and Economics",
+    "credits": 3,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "100",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-405",
+    "code": "TCH 405",
+    "title": "Process Control 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "100",
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "tch-406",
+    "code": "TCH 406",
+    "title": "Process Modelling and",
+    "credits": 2,
+    "departments": [
+      "chem"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mth-103",
+    "code": "MTH 103",
+    "title": "Elementary Mathematics III (Vectors, Geometry and Dynamics)",
+    "credits": 2,
+    "departments": [
+      "chem",
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-101",
+    "code": "CEE 101",
+    "title": "Introduction to Civil",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-201",
+    "code": "GET 201",
+    "title": "Applied Electricity I 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "civil",
+      "industrial",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-208",
+    "code": "GET 208",
+    "title": "Strength of Materials 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "civil",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-201",
+    "code": "CEE 201",
+    "title": "Civil Engineering Drawing",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-301",
+    "code": "CEE 301",
+    "title": "Fluid Mechanics",
+    "credits": 3,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-303",
+    "code": "CEE 303",
+    "title": "Engineering Geology",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-304",
+    "code": "CEE 304",
+    "title": "Civil Engineering materials",
+    "credits": 3,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-307",
+    "code": "CEE 307",
+    "title": "Structural Mechanics I 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-308",
+    "code": "CEE 308",
+    "title": "Engineering Surveying and",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-406",
+    "code": "CEE 406",
+    "title": "Engineering Surveying and Photo-",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-506",
+    "code": "CEE 506",
+    "title": "Construction Engineering",
+    "credits": 3,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-599",
+    "code": "CEE 599",
+    "title": "Project 6 C -",
+    "credits": 6,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-302",
+    "code": "CEE 302",
+    "title": "Strength of Structural Materials (2 Units C:L H 30)",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-305",
+    "code": "CEE 305",
+    "title": "Soil Mechanics I (3 Units C: LH 30; PH 45)",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cee-306",
+    "code": "CEE 306",
+    "title": "Design of Structures I (2 Units C: LH 30)",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "cpe-112",
+    "code": "CPE 112",
+    "title": "Introduction to Computer",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "gst-211",
+    "code": "GST 211",
+    "title": "Entrepreneurship and",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-203",
+    "code": "GET 203",
+    "title": "Engineering Graphics and Solid",
+    "credits": 2,
+    "departments": [
+      "civil",
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "get-207",
+    "code": "GET 207",
+    "title": "Applied Mechanics 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "civil"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-102",
+    "code": "IPE 102",
+    "title": "Introduction to Industrial and",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-301",
+    "code": "IPE 301",
+    "title": "Manufacturing Technology 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-311",
+    "code": "IPE 311",
+    "title": "Design of Machine Elements",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-317",
+    "code": "IPE 317",
+    "title": "Systems Engineering 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-411",
+    "code": "IPE 411",
+    "title": "Mathematical Methods in Industrial",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-421",
+    "code": "IPE 421",
+    "title": "Production and Inventory Systems",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-431",
+    "code": "IPE 431",
+    "title": "Automation and Control",
+    "credits": 3,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-461",
+    "code": "IPE 461",
+    "title": "Industrial Engineering Techniques 3 E 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-471",
+    "code": "IPE 471",
+    "title": "Principles of Operations Research",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-522",
+    "code": "IPE 522",
+    "title": "Design and Analysis of Industrial",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "100",
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-531",
+    "code": "IPE 531",
+    "title": "Production Management I 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "100",
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "ipe-532",
+    "code": "IPE 532",
+    "title": "Production Management II 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "100",
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-124",
+    "code": "MAR 124",
+    "title": "Introduction to Marine",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-201",
+    "code": "MAR 201",
+    "title": "Navigation and Meteorology 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-203",
+    "code": "MAR 203",
+    "title": "Introduction to Naval",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-311",
+    "code": "MAR 311",
+    "title": "Marine Diesel Engines I",
+    "credits": 3,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-314",
+    "code": "MAR 314",
+    "title": "Marine Steam and Gas",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-323",
+    "code": "MAR 323",
+    "title": "Naval Architecture I 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-352",
+    "code": "MAR 352",
+    "title": "Marine Electrical Tech &",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-421",
+    "code": "MAR 421",
+    "title": "Ship Resistance and",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-431",
+    "code": "MAR 431",
+    "title": "Marine Auxiliary Machinery 2 E 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-433",
+    "code": "MAR 433",
+    "title": "Ship Engines and Power",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-516",
+    "code": "MAR 516",
+    "title": "Refrigeration and Air-",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-521",
+    "code": "MAR 521",
+    "title": "Ship Design and Construction 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-531",
+    "code": "MAR 531",
+    "title": "Marine Diesel Engines II 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-532",
+    "code": "MAR 532",
+    "title": "Running and Maintenance of",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-417",
+    "code": "MAR 417",
+    "title": "Computer Aided Design",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-423",
+    "code": "MAR 423",
+    "title": "Ship Structures and Strength 3 E 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-515",
+    "code": "MAR 515",
+    "title": "Ship Vibration and Rotor",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-523",
+    "code": "MAR 523",
+    "title": "Naval Architecture II 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-525",
+    "code": "MAR 525",
+    "title": "Shipyard Technology",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mar-465",
+    "code": "MAR 465",
+    "title": "Offshore and Coastal",
+    "credits": 2,
+    "departments": [
+      "industrial"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-101",
+    "code": "MEE 101",
+    "title": "Introduction to Mechanical Engineering 1 C 15 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-306",
+    "code": "MEE 306",
+    "title": "Computer-Aided Design and",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-401",
+    "code": "MEE 401",
+    "title": "Mechanical (Machine) Engineering Design",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-402",
+    "code": "MEE 402",
+    "title": "Theory (Mechanics) of Machines I 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-403",
+    "code": "MEE 403",
+    "title": "Applied (Engineering) Thermodynamics I 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-404",
+    "code": "MEE 404",
+    "title": "Applied Fluid Mechanics 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-405",
+    "code": "MEE 405",
+    "title": "Heat and Mass Transfer 3 E 45 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-407",
+    "code": "MEE 407",
+    "title": "Advanced Mechanics of Materials 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-501",
+    "code": "MEE 501",
+    "title": "Applied Design",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-590",
+    "code": "MEE 590",
+    "title": "B.Eng. Project 6 C -",
+    "credits": 6,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-301",
+    "code": "MEE 301",
+    "title": "Computer-Aided Design and Manufacture (3 Units C: LH 30; PH 45)",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-406",
+    "code": "MEE 406",
+    "title": "Advanced Mechanics of Materials (2 Units C:LH 30)",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-503",
+    "code": "MEE 503",
+    "title": "Applied Design (3 Units C: LH 45)",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-509",
+    "code": "MEE 509",
+    "title": "Project (6 Units C:L H/PH 270)",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "gst-113",
+    "code": "GST 113",
+    "title": "Nigerian Peoples and Culture 2 C 30 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "pyh-108",
+    "code": "PYH 108",
+    "title": "General Practical Physics II 1 C -",
+    "credits": 6,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-101",
+    "code": "MCE 101",
+    "title": "Introduction to Mechatronic",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "100"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mee-207",
+    "code": "MEE 207",
+    "title": "Applied Mechanics 3 C 45 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "200"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-321",
+    "code": "MCE 321",
+    "title": "Design of Mechatronic Engineering and",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "300"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-401",
+    "code": "MCE 401",
+    "title": "Computer Vision and Image",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-403",
+    "code": "MCE 403",
+    "title": "Microcontroller and Embedded",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-405",
+    "code": "MCE 405",
+    "title": "Control Engineering",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-407",
+    "code": "MCE 407",
+    "title": "Industrial Automation & Control 2 E 30 -",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-409",
+    "code": "MCE 409",
+    "title": "Sensors and Actuators for",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "400"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-501",
+    "code": "MCE 501",
+    "title": "Design of Mechatronic Engineering",
+    "credits": 2,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  },
+  {
+    "id": "mce-590",
+    "code": "MCE 590",
+    "title": "BEng Project 6 C -",
+    "credits": 6,
+    "departments": [
+      "mech"
+    ],
+    "levels": [
+      "500"
+    ],
+    "semester": "2"
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "aerospace": {
+    "name": "Aerospace Engineering",
+    "count": 0,
+    "courses": []
+  },
+  "chem": {
+    "name": "Chemical Engineering",
+    "count": 0,
+    "courses": []
+  },
+  "civil": {
+    "name": "Civil Engineering",
+    "count": 0,
+    "courses": []
+  },
+  "industrial": {
+    "name": "Industrial Engineering",
+    "count": 0,
+    "courses": []
+  },
+  "mech": {
+    "name": "Mechanical Engineering",
+    "count": 0,
+    "courses": []
+  }
+}
