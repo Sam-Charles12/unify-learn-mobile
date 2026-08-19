@@ -45,40 +45,22 @@ const CourseList: React.FC = () => {
       const snap = await getDocs(collection(db, 'courses'));
       const allCourses = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Course));
 
-      let matchedCourses = allCourses;
+      let matchedCourses: Course[] = [];
 
       if (profile?.enrolledCourses && Array.isArray(profile.enrolledCourses) && profile.enrolledCourses.length > 0) {
-        const enrolled = allCourses.filter((c) =>
+        matchedCourses = allCourses.filter((c) =>
           profile.enrolledCourses!.includes(c.id) || profile.enrolledCourses!.includes(c.code)
         );
-        if (enrolled.length > 0) {
-          matchedCourses = enrolled;
-        }
       } else if (profile?.department) {
         const userDept = profile.department.toLowerCase().trim();
-        const deptMatches = allCourses.filter((c) => {
-          if (!c.departments || !Array.isArray(c.departments) || c.departments.length === 0) {
-            return true;
-          }
-          return c.departments.some(
+        matchedCourses = allCourses.filter((c) => {
+          if (!c.departments || !Array.isArray(c.departments) || c.departments.length === 0) return false;
+          const matchDept = c.departments.some(
             (d) => String(d).toLowerCase().trim() === userDept || String(d).toLowerCase().includes(userDept)
           );
+          const matchLvl = !profile?.level || !c.levels || !Array.isArray(c.levels) || c.levels.map(String).includes(String(profile.level).trim());
+          return matchDept && matchLvl;
         });
-
-        if (deptMatches.length > 0) {
-          matchedCourses = deptMatches;
-        }
-
-        if (profile?.level) {
-          const userLevel = String(profile.level).trim();
-          const levelMatches = matchedCourses.filter((c) => {
-            if (!c.levels || !Array.isArray(c.levels) || c.levels.length === 0) return true;
-            return c.levels.map((l) => String(l).trim()).includes(userLevel);
-          });
-          if (levelMatches.length > 0) {
-            matchedCourses = levelMatches;
-          }
-        }
       }
 
       setCourses(matchedCourses);
@@ -94,7 +76,7 @@ const CourseList: React.FC = () => {
     if (!profileLoading) {
       fetchCourses();
     }
-  }, [profile?.department, profile?.level, profileLoading]);
+  }, [profile?.department, profile?.level, profile?.enrolledCourses, profileLoading]);
 
   const onRefresh = () => {
     setRefreshing(true);
