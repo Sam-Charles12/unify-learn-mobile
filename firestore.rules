@@ -66,5 +66,12 @@ service cloud.firestore {
       allow create: if isAdmin() || (signedIn() && request.resource.data.userUID == request.auth.uid);
       allow update, delete: if isAdmin();
     }
+
+    // Analytics events: any authenticated user appends, admin reads
+    match /_analytics/{eventId} {
+      allow create: if signedIn();
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
   }
 }

@@ -3,6 +3,7 @@ import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-nati
 import { FontAwesome5 } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
 import { QuizQuestion } from './PulseCheck';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 interface EoqQuizProps {
   weekNumber: number;
@@ -38,7 +39,18 @@ const EoqQuiz: React.FC<EoqQuizProps> = ({ weekNumber, questions, onPass }) => {
   const handleSubmit = async () => {
     setSubmitted(true);
     setPassed(passedThisRound);
+    logEvent(ANALYTICS_EVENTS.eoqSubmitted, {
+      weekNumber,
+      score,
+      total: shuffled.length,
+      round: round + 1,
+    });
     if (passedThisRound) {
+      logEvent(ANALYTICS_EVENTS.eoqPassed, {
+        weekNumber,
+        score,
+        total: shuffled.length,
+      });
       setSaving(true);
       try {
         await onPass(weekNumber);
@@ -47,6 +59,12 @@ const EoqQuiz: React.FC<EoqQuizProps> = ({ weekNumber, questions, onPass }) => {
       } finally {
         setSaving(false);
       }
+    } else {
+      logEvent(ANALYTICS_EVENTS.eoqFailed, {
+        weekNumber,
+        score,
+        total: shuffled.length,
+      });
     }
   };
 

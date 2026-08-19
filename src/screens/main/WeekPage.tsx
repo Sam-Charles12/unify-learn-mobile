@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Pressable, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, FlatList, Pressable, ActivityIndicator, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -10,6 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import { RootStackParamList } from '@/navigation/types';
 import ContentBlockRenderer, { Block } from '@/components/week/ContentBlockRenderer';
 import { Button } from '@/components/ui/button';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type WeekRouteProp = RouteProp<RootStackParamList, 'Week'>;
@@ -31,6 +32,7 @@ const WeekPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [passed, setPassed] = useState(false);
   const [passBanner, setPassBanner] = useState(false);
+  const scroll80Logged = useRef(false);
 
   useEffect(() => {
     const load = async () => {
@@ -48,6 +50,22 @@ const WeekPage: React.FC = () => {
     load();
   }, [courseId, weekId]);
 
+  useEffect(() => {
+    if (week) {
+      logEvent(ANALYTICS_EVENTS.weekOpen, { courseId, weekId, weekNumber: week.weekNumber });
+    }
+  }, [week, courseId, weekId]);
+
+  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (scroll80Logged.current) return;
+    const { contentOffset, contentSize, layoutMeasurement } = e.nativeEvent;
+    const maxScroll = contentSize.height - layoutMeasurement.height;
+    if (maxScroll > 0 && contentOffset.y / maxScroll >= 0.8) {
+      scroll80Logged.current = true;
+      logEvent(ANALYTICS_EVENTS.blockScroll80, { courseId, weekId });
+    }
+  };
+
   const handlePass = async () => {
     if (!user || !week) return;
     await setDoc(
@@ -58,6 +76,11 @@ const WeekPage: React.FC = () => {
       },
       { merge: true }
     );
+    logEvent(ANALYTICS_EVENTS.weekUnlocked, {
+      courseId,
+      weekNumber: week.weekNumber,
+      nextWeekNumber: week.weekNumber + 1,
+    });
     setPassed(true);
     setPassBanner(true);
     setTimeout(() => setPassBanner(false), 6000);
@@ -155,6 +178,8 @@ const WeekPage: React.FC = () => {
         )}
         contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={100}
         ListFooterComponent={
           passed ? (
             <View

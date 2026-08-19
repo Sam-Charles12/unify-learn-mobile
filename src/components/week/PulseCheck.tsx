@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 export interface QuizQuestion {
   question: string;
@@ -21,7 +22,13 @@ const PulseCheck: React.FC<PulseCheckProps> = ({ title, questions }) => {
   const allAnswered = answers.every((a) => a !== null);
   const score = questions.filter((q, i) => answers[i] === q.correctIndex).length;
 
-  const handleSubmit = () => setSubmitted(true);
+  const handleSubmit = () => {
+    setSubmitted(true);
+    logEvent(ANALYTICS_EVENTS.pulseCheckSubmitted, {
+      score,
+      total: questions.length,
+    });
+  };
 
   return (
     <View className="bg-card rounded-[24px] border border-border p-5 shadow-soft mt-6">

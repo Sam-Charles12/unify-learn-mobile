@@ -10,6 +10,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 interface AuthContextType {
   user: FirebaseUser | null;
@@ -64,6 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       role: 'student',
       createdAt: new Date(),
     });
+    logEvent(ANALYTICS_EVENTS.signUpCompleted, { department: userData.department, level: userData.level });
   };
 
   const signIn = async (email: string, password: string) => {

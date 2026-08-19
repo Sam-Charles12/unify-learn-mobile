@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
@@ -21,9 +21,25 @@ import LecturerTabs from '@/navigation/LecturerNavigator';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { View, ActivityIndicator } from 'react-native';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const RootNavigator: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navRef = useNavigationContainerRef();
+
+  useEffect(() => {
+    return navRef.addListener('state', () => {
+      const route = navRef.getCurrentRoute() as { name?: string } | undefined;
+      if (route?.name) {
+        logEvent(ANALYTICS_EVENTS.screenView, { screen: route.name });
+      }
+    });
+  }, [navRef]);
+
+  return <NavigationContainer ref={navRef}>{children}</NavigationContainer>;
+};
 
 const AuthStack = () => (
   <Stack.Navigator initialRouteName="Login">
@@ -135,9 +151,9 @@ const SessionGate = () => {
 export default function App() {
   return (
     <AuthProvider>
-      <NavigationContainer>
+      <RootNavigator>
         <SessionGate />
-      </NavigationContainer>
+      </RootNavigator>
     </AuthProvider>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 interface McqBlockProps {
   question: string;
@@ -19,6 +20,7 @@ const McqBlock: React.FC<McqBlockProps> = ({ question, options, correctIndex, sh
     if (answered) return;
     setSelected(index);
     setAnswered(true);
+    logEvent(ANALYTICS_EVENTS.miniCheckAnswer, { type: 'mcq', correct: index === correctIndex });
     onAnswered?.(index === correctIndex);
   };
 

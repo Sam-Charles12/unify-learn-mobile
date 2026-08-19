@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 interface RevealBlockProps {
   statement: string;
@@ -27,7 +28,10 @@ const RevealBlock: React.FC<RevealBlockProps> = ({ statement, explanation }) => 
 
       {!revealed ? (
         <Pressable
-          onPress={() => setRevealed(true)}
+          onPress={() => {
+            setRevealed(true);
+            logEvent(ANALYTICS_EVENTS.miniCheckAnswer, { type: 'reveal' });
+          }}
           className="flex-row items-center justify-center bg-primary-light rounded-[16px] px-4 py-3.5"
         >
           <FontAwesome5 name="eye" size={13} color="#00895A" />

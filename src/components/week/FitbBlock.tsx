@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 interface FitbBlockProps {
   prompt: string;
@@ -39,7 +40,13 @@ const FitbBlock: React.FC<FitbBlockProps> = ({ prompt, answer }) => {
           className="flex-1 bg-surface border border-border rounded-[16px] px-4 py-3 font-body-medium text-[14px] text-text-primary"
         />
         <Pressable
-          onPress={() => setChecked(true)}
+          onPress={() => {
+            setChecked(true);
+            logEvent(ANALYTICS_EVENTS.miniCheckAnswer, {
+              type: 'fitb',
+              correct: normalize(value) === normalize(answer),
+            });
+          }}
           className={cn(
             'rounded-[16px] px-5 py-3.5',
             checked ? (isCorrect ? 'bg-primary' : 'bg-[#DC2626]') : 'bg-primary'

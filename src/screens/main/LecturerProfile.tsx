@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Lecturer } from '@/hooks/useLecturers';
 import { RootStackParamList } from '@/navigation/types';
 import { Button } from '@/components/ui/button';
+import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type LecturerRouteProp = RouteProp<RootStackParamList, 'Lecturer'>;
@@ -22,6 +23,7 @@ const LecturerProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    logEvent(ANALYTICS_EVENTS.lecturerProfileOpen, { lecturerId });
     (async () => {
       try {
         const snap = await getDoc(doc(db, 'lecturers', lecturerId));
