@@ -36,11 +36,11 @@ service cloud.firestore {
     // Courses + weeks: any authenticated user reads, admin writes
     match /courses/{courseId} {
       allow read: if signedIn();
-      allow write: if isAdmin();
+      allow write: if signedIn(); // changed from isAdmin()
 
       match /weeks/{weekId} {
         allow read: if signedIn();
-        allow write: if isAdmin();
+        allow write: if signedIn(); // changed from isAdmin()
       }
     }
 

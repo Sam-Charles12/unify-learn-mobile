@@ -87,7 +87,7 @@ const SignUp: React.FC = () => {
 
       <View className="mb-5">
         <Text className="font-body-semibold text-[13px] text-text-primary mb-2">
-          University Email
+           Email Address
         </Text>
         <Input
           placeholder="e.g. student@lasu.edu.ng"
