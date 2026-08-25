@@ -9,6 +9,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { RootStackParamList } from '@/navigation/types';
 import { useLecturers } from '@/hooks/useLecturers';
+import { SAMPLE_COURSES } from '@/lib/seedCourses';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type CourseRouteProp = RouteProp<RootStackParamList, 'Course'>;
@@ -47,6 +48,10 @@ const CoursePage: React.FC = () => {
   useEffect(() => {
     const load = async () => {
       try {
+        const sampleCourse = SAMPLE_COURSES.find(
+          (c) => c.id === courseId || c.code.toLowerCase().replace(/\s+/g, '-') === courseId.toLowerCase()
+        );
+
         const [courseSnap, weeksSnap, progressSnap] = await Promise.all([
           getDoc(doc(db, 'courses', courseId)),
           getDocs(collection(db, 'courses', courseId, 'weeks')),
@@ -55,12 +60,33 @@ const CoursePage: React.FC = () => {
 
         if (courseSnap.exists()) {
           setCourse({ id: courseSnap.id, ...courseSnap.data() } as CourseDoc);
+        } else if (sampleCourse) {
+          setCourse({
+            id: sampleCourse.id,
+            code: sampleCourse.code,
+            title: sampleCourse.title,
+            departments: sampleCourse.departments,
+            levels: sampleCourse.levels,
+            lecturers: sampleCourse.lecturers,
+          });
         }
 
-        const weekList = weeksSnap.docs
+        let weekList = weeksSnap.docs
           .map((d) => ({ id: d.id, ...d.data() }) as WeekDoc)
           .filter((w) => w.isPublished !== false)
           .sort((a, b) => a.weekNumber - b.weekNumber);
+
+        if (weekList.length === 0 && sampleCourse?.weeks) {
+          weekList = sampleCourse.weeks
+            .filter((w) => w.isPublished !== false)
+            .map((w) => ({
+              id: w.id,
+              weekNumber: w.weekNumber,
+              title: w.title,
+              isPublished: w.isPublished,
+            }));
+        }
+
         setWeeks(weekList);
 
         if (progressSnap?.exists()) {

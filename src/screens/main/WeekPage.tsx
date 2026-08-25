@@ -11,6 +11,7 @@ import { RootStackParamList } from '@/navigation/types';
 import ContentBlockRenderer, { Block } from '@/components/week/ContentBlockRenderer';
 import { Button } from '@/components/ui/button';
 import { logEvent, ANALYTICS_EVENTS } from '@/lib/analytics';
+import { SAMPLE_COURSES } from '@/lib/seedCourses';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type WeekRouteProp = RouteProp<RootStackParamList, 'Week'>;
@@ -40,6 +41,21 @@ const WeekPage: React.FC = () => {
         const snap = await getDoc(doc(db, 'courses', courseId, 'weeks', weekId));
         if (snap.exists()) {
           setWeek({ id: snap.id, ...snap.data() } as WeekDoc);
+        } else {
+          const sampleCourse = SAMPLE_COURSES.find(
+            (c) => c.id === courseId || c.code.toLowerCase().replace(/\s+/g, '-') === courseId.toLowerCase()
+          );
+          const sampleWeek = sampleCourse?.weeks.find(
+            (w) => w.id === weekId || `week-${w.weekNumber}` === weekId
+          );
+          if (sampleWeek) {
+            setWeek({
+              id: sampleWeek.id,
+              weekNumber: sampleWeek.weekNumber,
+              title: sampleWeek.title,
+              contentBlocks: sampleWeek.contentBlocks,
+            });
+          }
         }
       } catch (e) {
         console.warn('Failed to load week:', e);

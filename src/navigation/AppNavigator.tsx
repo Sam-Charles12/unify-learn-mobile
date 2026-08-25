@@ -59,6 +59,9 @@ const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Dashboard" component={Dashboard} />
     <Stack.Screen name="Timetable" component={Timetable} />
+    <Stack.Screen name="Course" component={CoursePage} />
+    <Stack.Screen name="Week" component={WeekPage} />
+    <Stack.Screen name="Lecturer" component={LecturerProfile} />
   </Stack.Navigator>
 );
 

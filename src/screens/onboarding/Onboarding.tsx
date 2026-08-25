@@ -74,14 +74,10 @@ const Onboarding: React.FC = () => {
     return getSuggestedCourses(department, level);
   }, [department, level]);
 
-  // Pre-select all available courses when availableCourses changes
+  // Reset selected courses when department or level changes
   React.useEffect(() => {
-    if (availableCourses.length > 0) {
-      setSelectedCourseIds(availableCourses.map((c) => c.id));
-    } else {
-      setSelectedCourseIds([]);
-    }
-  }, [availableCourses]);
+    setSelectedCourseIds([]);
+  }, [department, level]);
 
   const toggleCourse = (courseId: string) => {
     setSelectedCourseIds((prev) =>
